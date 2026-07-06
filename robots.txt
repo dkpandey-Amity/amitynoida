@@ -1,0 +1,87 @@
+# robots.txt for noida.amity.edu
+# SEO, AEO and GEO-friendly crawling setup
+
+User-agent: *
+Allow: /
+
+# Block private, system and non-public areas
+Disallow: /admin/
+Disallow: /cgi-bin/
+Disallow: /temp/
+Disallow: /search/
+Disallow: /login/
+Disallow: /user/
+Disallow: /register/
+Disallow: /error/
+Disallow: /private/
+
+# Block unnecessary crawl parameter URLs
+Disallow: /*?s=
+Disallow: /*?search=
+Disallow: /*?utm_
+Disallow: /*?fbclid=
+Disallow: /*?gclid=
+
+# Allow important public discovery files
+Allow: /robots.txt
+Allow: /sitemap.xml
+Allow: /llms.txt
+
+# Google Search and AI systems
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# Bing / Microsoft search systems
+User-agent: Bingbot
+Allow: /
+
+# OpenAI crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic / Claude crawlers
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+# Perplexity search crawler
+User-agent: PerplexityBot
+Allow: /
+
+# Apple search and AI crawler controls
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Common Crawl, widely used in AI/search datasets
+User-agent: CCBot
+Allow: /
+
+# Other AI/search discovery crawlers
+User-agent: YouBot
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+# Sitemap
+Sitemap: https://noida.amity.edu/sitemap.xml

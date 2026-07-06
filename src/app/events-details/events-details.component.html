@@ -1,0 +1,43 @@
+@for (item of eventsData; track item.iEventId) {
+<div class="breadcumb-wrapper">
+    <div class="container">
+        <div class="breadcumb-content text-center">
+            <p class="breadcumb-title">Event Details</p>
+            <ul class="breadcumb-menu">
+                <li><a routerLink="/home">Home</a></li>
+                 <li><a routerLink="/events">Events</a></li>
+                <li>{{item.sEventName}}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<section class="th-blog-wrapper blog-details space-top space-extra2-bottom">
+    <div class="container">
+        <div class="row gx-30">
+            <div class="col-md-12 col-lg-12 wow fadeInUp">
+                <div class="th-blog blog-single">
+                    <div class="blog-content">
+                        <div>
+                            <h3 style="font-weight: 600;font-size: 32px;">{{item.sEventName}}</h3>
+                            <p>
+                                <span style="margin-right: 10px;">
+                                        <i class="fa-light fa-calendar-days" style="color: #f5c113;"></i> {{item.dEventStartDate}} to
+                                        {{item.dEventEndDate}}</span>
+                                <span><i class="fal fa-school"  style="color: #f5c113;"></i> {{item.sEventVenue}}</span>
+                            </p>
+                        </div>
+                        <img src="https://portal.amity.edu/backoffice/Uploads/Event/{{item.eimage}}" alt="Blog Image"
+                            style="width: 49%;background: #eee;padding: 5px;float: left;margin-right: 20px;" />
+                        <div class="blog-meta">
+                        </div>
+                        <div>
+                            <!-- {{item.sEventDetails}} -->
+                            <div [innerHTML]="item.sEventDetails | eventpipe"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+}

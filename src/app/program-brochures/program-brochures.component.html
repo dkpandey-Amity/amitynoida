@@ -1,0 +1,51 @@
+<img src="assets/img/Brochurebanner.jpg" class="img-fluid w-100" alt="Amity University brochure banner">
+
+<section class="background-sec">
+    <div class="why-sec-v2 overflow-hidden space">
+        <div class="container">
+
+            <!-- 🔍 SEARCH -->
+            <div class="row mb-4">
+                <div class="col-md-4 mx-auto">
+                    <input type="text" class="form-control" placeholder="Search brochure..."
+                        (input)="onSearch($event)" />
+                </div>
+            </div>
+
+            <!-- 📦 CARDS -->
+            <div class="row">
+                <div class="col-md-4" *ngFor="let item of filteredBrochures">
+                    <div class="mt-5">
+                        <div class="custom-card d-flex align-items-center">
+
+                            <div class="card-content">
+                                <h6>{{ item.Name }}</h6>
+
+                                <a [href]="item.PDFPath" target="_blank" class="btn-read">
+                                    READ MORE
+                                </a>
+                            </div>
+
+                            <div class="card-image">
+                                <img [src]="item.ImagePath" alt="Brochure" class="img-fluid">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="filteredBrochures.length === 0" class="text-center mt-4">
+                    <p>No brochures found</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<div>
+    <a href="https://noida.amity.edu/admissions-2026/?utm_source=organic&utm_medium=brochure" target="_blank"
+        class="scholarship-rotate-btn">
+        Apply Now
+    </a>
+</div>

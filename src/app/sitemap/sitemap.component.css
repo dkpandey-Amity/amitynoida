@@ -1,0 +1,16 @@
+.checklist .mega_menu_head:before {
+  display: none !important;
+}
+.mega_menu_head {
+  color: #000 !important;
+}
+
+.mega-wrapper {
+  column-count: 2;
+  column-gap: 20px;
+}
+
+.mega-wrapper ul {
+  break-inside: avoid;
+  margin-bottom: 20px;
+}

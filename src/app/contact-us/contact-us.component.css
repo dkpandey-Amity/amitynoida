@@ -1,0 +1,12 @@
+.admission-card h5 {
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+.admission-card p a {
+    color: #1e1200;
+}
+
+.disabled-class{
+    opacity: .5;
+}

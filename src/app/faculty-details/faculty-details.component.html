@@ -1,0 +1,178 @@
+<div class="breadcumb-wrapper">
+  <div class="container">
+      <div class="breadcumb-content text-center">
+          <p class="breadcumb-title">Faculty</p>
+          <ul class="breadcumb-menu">
+              <li><a routerLink="/home">Home</a></li>
+              <li><a routerLink="/faculty">Faculty</a></li>
+              <li>{{facultyData.Name}}</li>
+          </ul>
+      </div>
+  </div>
+</div>
+
+<div class="team-area overflow-hidden space background-sec">
+  <div class="container">
+      <div class="parentbox shadow">
+          <div class="row">
+              <div class="col-md-3">
+                  <img src="https://img.amizone.net/AzureFileHandler.ashx?FileName=amitywebsite/userfiles/Noida2024/{{facultyData.ImagePath}}" alt="Team" class="img-fluid img-thumbnail"/>
+              </div>
+              <div class="col-md-9 facultycontent" style="padding: 20px;">
+                  <h1 style="margin: 0px;">{{facultyData.Name}}</h1>
+                  <hr/>
+                  <p>
+                      <b>{{facultyData.Designation}}</b>
+                  </p>
+                  <div [innerHTML]="facultyData.Qualification | cleanHtml"></div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- <div class="team-area overflow-hidden space">
+<div class="container">
+  <div class="row g-5">
+    <div class="col-md-4 wow fadeInUp">
+      <div class="instructor-profile">
+        <div class="inner">
+          <div class="thumbnail">
+            <img src="{{item.FacultyUpload}}" alt="About Images">
+          </div>
+          <div class="content">
+            <h5 class="title">{{item.Facname}}</h5>
+            <span class="subtitle">Assistant Director</span>
+            <div class="contact-with-info">
+              <h5>Qualification</h5>
+              <p>Ph.D<br />
+                M.Phil<br />
+                MBA(IT &amp; Mktg)<br />
+                PG(Applied&nbsp;Statistics)<br />
+                UGC NET&nbsp;(Management)<br />
+                B.Sc (Statistics)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8 wow fadeInUp">
+      <div class="instructor-profile-right">
+        <div class="inner">
+          <div class="section-title text-start">
+            <span class="pre-title">About Me</span>
+            <h3 class="title">Hello, {{item.Facname}}</h3>
+            <p class="description mt--40">
+              Grursus mal suada faci lisis Lorem ipsum dolarorit more
+              ametion consectetur elit. Vesti bulum a nec odio aea the dumm ipsumm ipsum that
+              dolocons rsus suada and fadolorit consectetur elit. All the Lorem Ipsum
+              generators on the Internet tend repeat predefined chunks dummt necessary, making
+              this the first true dummy generator on the Internet.
+            </p>
+          </div>
+
+          <div class="accordion-area accordion" id="faqAccordion">
+            <div class="accordion-card wow fadeInUp">
+              <div class="accordion-header" id="collapse-item-1">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#collapse-1" aria-expanded="false" aria-controls="collapse-1">
+                  Experience
+                </button>
+              </div>
+              <div id="collapse-1" class="accordion-collapse collapse" aria-labelledby="collapse-item-1"
+                data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  <p class="faq-text">
+                    {{item.Experience}}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-card wow fadeInUp">
+              <div class="accordion-header" id="collapse-item-2">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#collapse-2" aria-expanded="true" aria-controls="collapse-2">
+                  Current Courses Taught
+                </button>
+              </div>
+              <div id="collapse-2" class="accordion-collapse collapse" aria-labelledby="collapse-item-2"
+                data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  <p class="faq-text">
+                    Business Statistics<br />Research Methodology<br />Strategic Management
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-card wow fadeInUp">
+              <div class="accordion-header" id="collapse-item-3">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
+                  Research Interests
+                </button>
+              </div>
+              <div id="collapse-3" class="accordion-collapse collapse" aria-labelledby="collapse-item-3"
+                data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  <p class="faq-text">
+                    Virtual Leadership<br />
+                    Team Building
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-card wow fadeInUp">
+              <div class="accordion-header" id="collapse-item-4">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
+                  Publications
+                </button>
+              </div>
+              <div id="collapse-4" class="accordion-collapse collapse" aria-labelledby="collapse-item-4"
+                data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  <p class="faq-text">
+                    {{item.Publication}}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-card wow fadeInUp">
+              <div class="accordion-header" id="collapse-item-5">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
+                  Professional Affiliations
+                </button>
+              </div>
+              <div id="collapse-5" class="accordion-collapse collapse" aria-labelledby="collapse-item-5"
+                data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  <p>Member of AIMA</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-card wow fadeInUp">
+              <div class="accordion-header" id="collapse-item-6">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#collapse-6" aria-expanded="false" aria-controls="collapse-6">
+                  Professional Activities
+                </button>
+              </div>
+              <div id="collapse-6" class="accordion-collapse collapse" aria-labelledby="collapse-item-6"
+                data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  <p>Member-Board of Management, Member- Board of Studies, Corporate Coach, Convener (Entrepreneurship
+                    Development Cell), NAAC Committee member</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div> -->
+

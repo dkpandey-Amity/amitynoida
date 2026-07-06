@@ -1,0 +1,70 @@
+/* .app-loader {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  z-index: 999999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader-content {
+  text-align: center;
+}
+
+.loader-logo {
+  width: 140px;
+  height: auto;
+  animation: pulseFade 1.8s infinite ease-in-out;
+}
+
+.loader-line {
+  width: 180px;
+  height: 4px;
+  margin: 20px auto;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #e5e5e5;
+  position: relative;
+}
+
+.loader-line::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: #ffc107;
+  animation: slide 1.5s infinite;
+}
+
+.loader-content p {
+  color: #666;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+@keyframes pulseFade {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.95);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  100% {
+    opacity: 0.4;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes slide {
+  100% {
+    left: 100%;
+  }
+} */

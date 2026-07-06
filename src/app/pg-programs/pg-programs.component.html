@@ -1,0 +1,354 @@
+<div class="breadcumb-wrapper">
+    <div class="container">
+        <div class="breadcumb-content text-center">
+            <h1 class="breadcumb-title">Postgraduate Programs</h1>
+            <ul class="breadcumb-menu">
+                <li><a routerLink="/home">Home</a></li>
+                <li>Postgraduate Programs</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<app-pg-program-search></app-pg-program-search>
+<section class="background-sec">
+    <div style="padding: 50px 0px 50px 0px">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-xl-12"
+                    style="box-shadow: 0px 0px 10px 2px #ddd; background: #e9fbff; padding: 0px;">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#menu1">PG Programs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#menu2">Industry Collaborative Programs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#menu3">3 Continent Programs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#menu4">International Programs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#menu5">Integrated Programs</a>
+                        </li>
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#menu6">Evening Programs</a>
+                        </li> -->
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div id="menu1" class="tab-pane active">
+                            <div class="">
+
+                                <div class="row">
+                                    <div class="col-md-3" *ngIf="selectedCategory !== 'discipline'">
+                                        <h6 class="h5-head">Programs by Discipline</h6>
+                                        <div class="dicipline-bg">
+                                            @for (item of getPgDisciplineData; track item.iDisciplineId) {
+                                            <ul class="course-li">
+                                                <li>
+                                                    <!-- <a
+                                                        [routerLink]="['/pg', formatFacultyName(item.sDiscipline), item.iDisciplineId]">
+                                                        <h3>{{item.sDiscipline}}</h3>
+                                                    </a> -->
+
+                                                    <a [routerLink]="['/pg', item.Disciplineslugname]">
+                                                        <h3>{{item.sDiscipline}}</h3>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div [ngClass]="selectedCategory === 'discipline' ? 'col-md-12' : 'col-md-9'">
+                                        <div class="row mb-3 align-items-center">
+
+                                            <label class="col-md-2 ms-auto col-form-label text-end"><b>Sort by
+                                                </b></label>
+                                            <div class="col-md-2">
+                                                <select class="form-select select-outline"
+                                                    (change)="onCategoryChange($event)">
+                                                    <option class="text-center" value="">---Select---</option>
+                                                    <option value="popularity" selected>Popularity</option>
+                                                    <option value="name">Name</option>
+                                                    <option value="discipline">Discipline</option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                        <div *ngIf="selectedCategory === 'discipline'; else noDiscipline">
+                                            <div class="accordion" id="disciplineAccordion">
+                                                <div class="accordion-item shadow mb-3"
+                                                    *ngFor="let group of groupedData; let i = index">
+                                                    <h2 class="accordion-header" id="heading{{i}}">
+                                                        <button class="accordion-button collapsed" type="button"
+                                                            data-bs-toggle="collapse"
+                                                            [attr.data-bs-target]="'#collapse' + i"
+                                                            aria-expanded="false" [attr.aria-controls]="'collapse' + i">
+                                                            {{ group.discipline }}
+                                                        </button>
+                                                    </h2>
+                                                    <div [id]="'collapse' + i" class="accordion-collapse collapse"
+                                                        [attr.aria-labelledby]="'heading' + i"
+                                                        data-bs-parent="#disciplineAccordion">
+                                                        <div class="accordion-body">
+                                                            <ul class="course-li list-unstyled">
+                                                                <li *ngFor="let item of group.courses" class="mb-3">
+                                                                    <div class="row align-items-center">
+                                                                        <div class="col-md-7">
+                                                                            <p class="mb-0">{{ item.sfullname }}</p>
+                                                                        </div>
+                                                                        <div class="col-md-5 text-end">
+                                                                            <a [routerLink]="['/pg', item.Disciplineslugname, item.SlugName]"
+                                                                                class="view-detailsBtn me-2" (click)="onPGViewClick('pg_view_details_clicked')">
+                                                                                View Details
+                                                                            </a>
+
+                                                                            <ng-container
+                                                                                *ngIf="item.bAdmissionOpen == 1">
+                                                                                <a [href]="'https://noida.amity.edu/admissions-2026/?utm_source=organic&utm_medium=Google_SERP&utm_campaign=PG_Apply_Now&utm_term=keywordcoursecode_'+ item.sCourseCode" target="_blank"
+                                                                                    class="apply-nowBtn" (click)="onPGApplyClick('pg_apply_now_clicked')">
+                                                                                    Apply Now
+                                                                                </a>
+                                                                            </ng-container>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <ng-template #noDiscipline>
+                                            <div class="overlay-loader text-center" *ngIf="loading">
+                                                <div class="spinner-border text-light loader-size"></div>
+                                                <p class="loader-text"><b>Loading Programs...</b></p>
+                                            </div>
+                                        </ng-template>
+                                        <div *ngIf="selectedCategory !== 'discipline'; else noFlat">
+                                            <ul class="course-li">
+                                                <li *ngFor="let item of flatData">
+                                                    <div class="row">
+                                                        <div class="col-md-7">
+                                                            <p>{{ item.sfullname }}</p>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            <a [routerLink]="['/pg', item.Disciplineslugname, item.SlugName]"
+                                                                class="view-detailsBtn" (click)="onPGViewClick('pg_view_details_clicked')">
+                                                                View Details
+                                                            </a>
+
+                                                            <ng-container *ngIf="item.bAdmissionOpen == 1">
+                                                                <a [href]="'https://noida.amity.edu/admissions-2026/?utm_source=organic&utm_medium=Google_SERP&utm_campaign=PG_Apply_Now&utm_term=keywordcoursecode_'+ item.sCourseCode"
+                                                                    target="_blank" class="apply-nowBtn" (click)="onPGApplyClick('pg_apply_now_clicked')">
+                                                                    Apply Now
+                                                                </a>
+                                                            </ng-container>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <ng-template #noFlat>
+                                            <div class="overlay-loader text-center" *ngIf="loading">
+                                                <div class="spinner-border text-light loader-size"></div>
+                                                <p class="loader-text"><b>Loading Programs...</b></p>
+                                            </div>
+                                        </ng-template>
+                                        <!-- <ul class="course-li" *ngFor="let item of GetPgDisciplineCourseData">
+                                            <li>
+                                                <div class="row">
+                                                    <div class="col-md-7">
+                                                        <p>{{ item.sfullname }}</p>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <a [routerLink]="['/pg', formatFacultyName(item.sDiscipline), item.SlugName]"
+                                                            [state]="{ code: item.sCourseCode }"
+                                                            class="view-detailsBtn">View Details</a>
+
+                                                        <ng-container
+                                                            *ngIf="item.bAdmissionOpen == 1; else admissionClosed">
+                                                            <a href="https://noida.amity.edu/admissions-2026/?utm_source=organic&utm_medium=Google_SERP&utm_campaign=PG_Apply_Now&utm_term={keyword}"
+                                                                target="_blank" class="apply-nowBtn">Apply Now</a>
+                                                        </ng-container>
+                                                        <ng-template #admissionClosed></ng-template>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="menu2" class="container tab-pane fade">
+                            <div class="container-fluid">
+                                <div class="row gy-4">
+                                    <div class="col-md-12">
+                                        <ul class="course-li">
+                                            @for (item of IndustryPGData; track item.sCourseCode) {
+                                            <li>
+                                                <p class="bdr-bottom">{{item.sfullname}}
+                                                    <!-- <a [routerLink]="['/pg-industry-program', item.SlugName, item.sCourseCode]"
+                                                        class="view-detailsBtn">View Details</a> -->
+
+                                                    <a [routerLink]="['/pg-industry-program', item.SlugName]"
+                                                        class="view-detailsBtn" (click)="onPGViewClick('pg_view_details_clicked')">View Details</a>
+
+
+                                                    @if (item.bAdmissionOpen == 1) {
+                                                    <a [href]="'https://noida.amity.edu/admissions-2026/?utm_source=organic&utm_medium=Google_SERP&utm_campaign=PG_Apply_Now&utm_term=keywordcoursecode_'+ item.sCourseCode" target="_blank"
+                                                        class="apply-nowBtn" (click)="onPGApplyClick('pg_apply_now_clicked')">Apply Now</a>
+                                                    }
+                                                    @else {
+                                                    <!-- <span class="apply-nowBtn">Admission Closed</span> -->
+                                                    }
+
+                                                </p>
+                                            </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="menu3" class="container tab-pane fade">
+                            <div class="container-fluid">
+                                <div class="row gy-4">
+                                    <div class="col-md-12">
+                                        <ul class="course-li">
+                                            @for (item of PG3ContinentData; track item.sCourseCode) {
+                                            <li>
+                                                <p class="bdr-bottom">{{item.sfullname}}
+                                                    <!-- <a [routerLink]="['/pg-3-continent', item.SlugName, item.sCourseCode]"
+                                                        class="view-detailsBtn">View Details</a> -->
+
+                                                    <a [routerLink]="['/pg-3-continent', item.SlugName]"
+                                                        class="view-detailsBtn" (click)="onPGViewClick('pg_view_details_clicked')">View Details</a>
+
+
+                                                    @if (item.bAdmissionOpen == 1) {
+                                                    <a [href]="'https://noida.amity.edu/admissions-2026/?utm_source=organic&utm_medium=Google_SERP&utm_campaign=PG_Apply_Now&utm_term=keywordcoursecode_'+ item.sCourseCode" target="_blank"
+                                                        class="apply-nowBtn" (click)="onPGApplyClick('pg_apply_now_clicked')">Apply Now</a>
+                                                    }
+                                                    @else {
+                                                    <!-- <span class="apply-nowBtn">Admission Closed</span> -->
+                                                    }
+
+                                                </p>
+                                            </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="menu4" class="container tab-pane fade">
+                            <div class="container-fluid">
+                                <div class="row gy-4">
+                                    <div class="col-md-12">
+                                        <ul class="course-li">
+                                            @for (item of PGInternationalData; track item.sCourseCode) {
+                                            <li>
+                                                <p class="bdr-bottom">{{item.sfullname}}
+                                                    <!-- <a [routerLink]="['/pg-international-programmes', item.SlugName, item.sCourseCode]"
+                                                        class="view-detailsBtn">View Details</a> -->
+
+                                                    <a [routerLink]="['/pg-international-programmes', item.SlugName]"
+                                                        class="view-detailsBtn" (click)="onPGViewClick('pg_view_details_clicked')">View Details</a>
+
+
+                                                    @if (item.bAdmissionOpen == 1) {
+                                                    <a [href]="'https://noida.amity.edu/admissions-2026/?utm_source=organic&utm_medium=Google_SERP&utm_campaign=PG_Apply_Now&utm_term=keywordcoursecode_'+ item.sCourseCode" target="_blank"
+                                                        class="apply-nowBtn" (click)="onPGApplyClick('pg_apply_now_clicked')" >Apply Now</a>
+                                                    }
+                                                    @else {
+                                                    <!-- <span class="apply-nowBtn">Admission Closed</span> -->
+                                                    }
+
+                                                </p>
+                                            </li>
+                                            }
+
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="menu5" class="container tab-pane fade">
+                            <div class="container-fluid">
+                                <div class="row gy-4">
+                                    <div class="col-md-12">
+                                        <ul class="course-li">
+
+                                            @for (item of PGIntegratedData; track item.sCourseCode) {
+                                            <li>
+                                                <p class="bdr-bottom">{{item.sfullname}}
+                                                    <!-- <a [routerLink]="['/pg-integrated-programmes', item.SlugName, item.sCourseCode]"
+                                                        class="view-detailsBtn">View Details</a> -->
+
+                                                    <a [routerLink]="['/pg-integrated-programmes', item.SlugName]"
+                                                        class="view-detailsBtn" (click)="onPGViewClick('pg_view_details_clicked')">View Details</a>
+
+
+                                                    @if (item.bAdmissionOpen == 1) {
+                                                    <a [href]="'https://noida.amity.edu/admissions-2026/?utm_source=organic&utm_medium=Google_SERP&utm_campaign=PG_Apply_Now&utm_term=keywordcoursecode_'+ item.sCourseCode" target="_blank"
+                                                        class="apply-nowBtn" (click)="onPGApplyClick('pg_apply_now_clicked')">Apply Now</a>
+                                                    }
+                                                    @else {
+                                                    <!-- <span class="apply-nowBtn">Admission Closed</span> -->
+                                                    }
+
+                                                </p>
+                                            </li>
+                                            }
+
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="menu6" class="container tab-pane fade">
+                            <div class="container-fluid">
+                                <div class="row gy-4">
+                                    <div class="col-md-12">
+                                        <ul class="course-li">
+                                            @for (item of PGEveningData; track item.sCourseCode) {
+                                            <li>
+                                                <p class="bdr-bottom">{{item.sfullname}}
+                                                    <!-- <a [routerLink]="['/pg-evening-program', item.SlugName, item.sCourseCode]"
+                                                        class="view-detailsBtn">View Details</a> -->
+
+                                                    <a [routerLink]="['/pg-evening-program', item.SlugName]"
+                                                        class="view-detailsBtn" (click)="onPGViewClick('pg_view_details_clicked')">View Details</a>
+ 
+
+                                                    @if (item.bAdmissionOpen == 1) {
+                                                    <a [href]="'https://noida.amity.edu/admissions-2026/?utm_source=organic&utm_medium=Google_SERP&utm_campaign=PG_Apply_Now&utm_term=keywordcoursecode_'+ item.sCourseCode" target="_blank"
+                                                        class="apply-nowBtn" (click)="onPGApplyClick('pg_apply_now_clicked')" >Apply Now</a>
+                                                    }
+                                                    @else {
+                                                    <!-- <span class="apply-nowBtn">Admission Closed</span> -->
+                                                    }
+
+                                                </p>
+                                            </li>
+                                            }
+
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

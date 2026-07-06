@@ -1,0 +1,1081 @@
+@for (item of GetPG3ContinentProgramsData; track $index) {
+<div class="breadcumb-wrapper">
+    <div class="container">
+        <div class="breadcumb-content text-center">
+            <p class="breadcumb-title">{{item.sDiscipline}}</p>
+            <ul class="breadcumb-menu">
+                <li><a routerLink="/home">Home</a></li>
+                <li><a routerLink="/pg">PG Programs</a></li>
+                <li>{{item.sfullname}}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<section class="overflow-hidden space background-sec">
+    <div class="container wow fadeInUp">
+        <div class="title-area">
+            <h1 class="sec-title d-block" style="font-weight: 100;">{{item.sfullname}}</h1>
+            <p style="display: inline-block;">Program Code {{item.sCourseCode}}</p>
+
+            @if (item.CourseBroucher) {
+            <a href="javascript:void(0)" class="th-btn" style="padding:8px 14px;font-size:12px;float:right;"
+                (click)="openBrochurePopup(item)">
+                Download Brochure
+            </a>
+            }
+
+            <div [innerHTML]="item.Overview | cleanHtml"></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row gy-4" style="justify-content: center;">
+            <div class="col-md-12 wow fadeInUp">
+                <div style="background: #fff;">
+                    <div class="collapse-box">
+                        <div>
+                            <p><i class="fa-light fa-school"></i><strong>Institute :
+                                </strong>
+                                <span>{{item.InstituteName}}</span>
+                            </p>
+                            <!-- <p> <a href="{{item.sInstURL}}" target="_blank" class="th-btn"
+                                        style="padding: 8px 14px; font-size: 12px;">
+                                        Click Here
+                                    </a>
+                                    <span style="color: #0b2d4c;"> to visit this institute's website</span>
+                                </p> -->
+                            <p><i class="fa-light fa-clock"></i><strong>Duration: </strong><span>{{item.sDuration}}
+                                    Years</span></p>
+                            <p>
+                                <i class="fa-light fa-user"></i><strong>Minimum Eligibility </strong>
+
+                            </p>
+                            <div [innerHTML]="item.sEligibility | cleanHtml"></div>
+
+                            <p>
+                                <i class="fa-light fa-puzzle-piece"></i>
+                                <strong>Selection Process:</strong>
+                                <span [innerHTML]="item.CourseAspects | cleanHtml"></span>
+                            </p>
+
+                        </div>
+
+                        @if (item.sAdmissionOfficeRemark) {
+                        <p style="margin-bottom: 0px;"><b>Remark</b> </p>
+                        <div [innerHTML]="item.sAdmissionOfficeRemark | cleanHtml"></div>
+
+                        }
+
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr style="background: #e8f1ff; color: #000;">
+                                    <td>
+                                        <strong>Program Fee</strong>
+                                    </td>
+                                    <td>(Rs. in Lacs)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>1st Year Non Sponsored Semester Fee
+                                    </td>
+                                    <td>
+
+                                        @if(item.sFeeNS_PFS){
+                                        <s style="color: #f00; font-weight: 600; margin-right: 5px;">{{item.sFeeNS}}</s>
+                                        <b>{{item.sFeeNS_PFS}}</b>
+                                        <small>&nbsp;(Fee after Foundation Scholarship)</small>
+                                        }
+                                        @else {
+                                        <b>{{item.sFeeNS}}</b>
+                                        }
+
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>1st Year Sponsored Semester Fee
+                                    </td>
+                                    <td>
+                                        @if(item.sFeeSponsor_PFS){
+                                        <s
+                                            style="color: #f00; font-weight: 600; margin-right: 5px;">{{item.sfeesponsor}}</s>
+                                        <b>{{item.sFeeSponsor_PFS}}</b>
+                                        <small>&nbsp;(Fee after Foundation Scholarship)</small>
+                                        }
+                                        @else {
+                                        <b>{{item.sfeesponsor}}</b>
+                                        }
+
+
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                        @if (item.bAdmissionOpen == 1) {
+                        <p style="text-align: center;">
+                            <a href="https://noida.amity.edu/admissions-2026/" target="_blank"
+                                style="padding: 15px 20px;" class="th-btn">Apply Now <i
+                                    class="fas fa-arrow-right ms-1"></i></a>
+                        </p>
+                        }
+                        @else {
+                        <p style="text-align: center;">
+                            <a disabled style="padding: 15px 20px;" class="th-btn">Admission Closed</a>
+                        </p>
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="row gy-4 wow fadeInUp" style="justify-content: center;">
+            <div class="col-md-12 col-xl-12"
+                style="box-shadow: 0px 0px 10px 2px #ddd; background: #e9fbff; padding: 0px;">
+                <ul class="nav nav-tabs" role="tablist">
+
+                    @if (hasSemesterRange(1,2)) {
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#menu1">
+                            1st Year
+                        </a>
+                    </li>
+                    }
+
+                    @if (hasSemesterRange(3,4)) {
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#menu2">
+                            2nd Year
+                        </a>
+                    </li>
+                    }
+
+                    @if (hasSemesterRange(5,6)) {
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#menu3">
+                            3rd Year
+                        </a>
+                    </li>
+                    }
+
+                    @if (hasSemesterRange(7,8)) {
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#menu4">
+                            4th Year
+                        </a>
+                    </li>
+                    }
+
+                    @if (hasSemesterRange(9,10)) {
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#menu5">
+                            5th Year
+                        </a>
+                    </li>
+                    }
+
+                </ul>
+
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <!-- 1st Year (Semesters 1 and 2) -->
+                    <div id="menu1" class="container tab-pane active">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <!-- Semester 1 -->
+                                <div class="row">
+
+                                    @if (isNewProgram) {
+
+                                    <div class="col-md-6">
+                                        <h6>Semester 1</h6>
+
+                                        @for (group of groupedSemestersArray[1] || []; track group.type) {
+
+                                        <p class="mb-0"><b>{{ group.type }}</b></p>
+
+                                        @for (remark of group.remarksGroup; track remark.remarks) {
+
+                                        @if (remark.remarks) {
+                                        <p class="mb-2">
+                                            {{ remark.remarks }}
+                                        </p>
+                                        }
+
+                                        <ul class="semester_list">
+                                            @for (course of remark.courses; track course.SrNo) {
+                                            <li>{{ course.CourseName }}</li>
+                                            }
+                                        </ul>
+
+                                        }
+
+                                        }
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <h6>Semester 2</h6>
+
+                                        @for (group of groupedSemestersArray[2] || []; track group.type) {
+
+                                        <p class="mb-0"><b>{{ group.type }}</b></p>
+
+                                        @for (remark of group.remarksGroup; track remark.remarks) {
+
+                                        @if (remark.remarks) {
+                                        <p class="mb-2">
+                                            {{ remark.remarks }}
+                                        </p>
+                                        }
+
+                                        <ul class="semester_list">
+                                            @for (course of remark.courses; track course.SrNo) {
+                                            <li>{{ course.CourseName }}</li>
+                                            }
+                                        </ul>
+
+                                        }
+
+                                        }
+                                    </div>
+
+                                    }
+
+
+                                    @else {
+
+                                    <!-- Semester 1 -->
+                                    <div class="col-md-6">
+                                        <h6>Semester 1</h6>
+                                        <ul class="semester_list">
+                                            @for (item of getPgSemesterDetails; track $index) {
+                                            @if (item.Semester == 1) {
+                                            <li>{{ item.CourseName }}</li>
+                                            }
+                                            }
+                                        </ul>
+                                    </div>
+
+                                    <!-- Semester 2 -->
+                                    <div class="col-md-6">
+                                        <h6>Semester 2</h6>
+                                        <ul class="semester_list">
+                                            @for (item of getPgSemesterDetails; track $index) {
+                                            @if (item.Semester == 2) {
+                                            <li>{{ item.CourseName }}</li>
+                                            }
+                                            }
+                                        </ul>
+                                    </div>
+
+                                    }
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2nd Year (Semesters 3 and 4) -->
+                    <div id="menu2" class="container tab-pane fade">
+                        <div class="container-fluid">
+                            <div class="row">
+
+                                @if (isNewProgram) {
+
+                                <div class="col-md-6">
+                                    <h6>Semester 3</h6>
+
+                                    @for (group of groupedSemestersArray[3] || []; track group.type) {
+
+                                    <p class="mb-0"><b>{{ group.type }}</b></p>
+
+                                    @for (remark of group.remarksGroup; track remark.remarks) {
+
+                                    @if (remark.remarks) {
+                                    <p class="mb-2">
+                                        {{ remark.remarks }}
+                                    </p>
+                                    }
+
+                                    <ul class="semester_list">
+                                        @for (course of remark.courses; track course.SrNo) {
+                                        <li>{{ course.CourseName }}</li>
+                                        }
+                                    </ul>
+
+                                    }
+
+                                    }
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6>Semester 4</h6>
+
+                                    @for (group of groupedSemestersArray[4] || []; track group.type) {
+
+                                    <p class="mb-0"><b>{{ group.type }}</b></p>
+
+                                    @for (remark of group.remarksGroup; track remark.remarks) {
+
+                                    @if (remark.remarks) {
+                                    <p class="mb-2">
+                                        {{ remark.remarks }}
+                                    </p>
+                                    }
+
+                                    <ul class="semester_list">
+                                        @for (course of remark.courses; track course.SrNo) {
+                                        <li>{{ course.CourseName }}</li>
+                                        }
+                                    </ul>
+
+                                    }
+
+                                    }
+                                </div>
+
+                                }
+
+                                @else {
+
+                                <!-- Semester 1 -->
+                                <div class="col-md-6">
+                                    <h6>Semester 3</h6>
+                                    <ul class="semester_list">
+                                        @for (item of getPgSemesterDetails; track $index) {
+                                        @if (item.Semester == 3) {
+                                        <li>{{ item.CourseName }}</li>
+                                        }
+                                        }
+                                    </ul>
+                                </div>
+
+                                <!-- Semester 2 -->
+                                <div class="col-md-6">
+                                    <h6>Semester 4</h6>
+                                    <ul class="semester_list">
+                                        @for (item of getPgSemesterDetails; track $index) {
+                                        @if (item.Semester == 4) {
+                                        <li>{{ item.CourseName }}</li>
+                                        }
+                                        }
+                                    </ul>
+                                </div>
+
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3rd Year (Semesters 5 and 6) -->
+                    <div id="menu3" class="container tab-pane fade">
+                        <div class="container-fluid">
+                            <div class="row">
+
+                                @if (isNewProgram) {
+
+                                <div class="col-md-6">
+                                    <h6>Semester 5</h6>
+
+                                    @for (group of groupedSemestersArray[5] || []; track group.type) {
+
+                                    <p class="mb-0"><b>{{ group.type }}</b></p>
+
+                                    @for (remark of group.remarksGroup; track remark.remarks) {
+
+                                    @if (remark.remarks) {
+                                    <p class="mb-2">
+                                        {{ remark.remarks }}
+                                    </p>
+                                    }
+
+                                    <ul class="semester_list">
+                                        @for (course of remark.courses; track course.SrNo) {
+                                        <li>{{ course.CourseName }}</li>
+                                        }
+                                    </ul>
+
+                                    }
+
+                                    }
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6>Semester 6</h6>
+
+                                    @for (group of groupedSemestersArray[6] || []; track group.type) {
+
+                                    <p class="mb-0"><b>{{ group.type }}</b></p>
+
+                                    @for (remark of group.remarksGroup; track remark.remarks) {
+
+                                    @if (remark.remarks) {
+                                    <p class="mb-2">
+                                        {{ remark.remarks }}
+                                    </p>
+                                    }
+
+                                    <ul class="semester_list">
+                                        @for (course of remark.courses; track course.SrNo) {
+                                        <li>{{ course.CourseName }}</li>
+                                        }
+                                    </ul>
+
+                                    }
+
+                                    }
+                                </div>
+
+                                }
+
+                                @else {
+
+                                <!-- Semester 1 -->
+                                <div class="col-md-6">
+                                    <h6>Semester 5</h6>
+                                    <ul class="semester_list">
+                                        @for (item of getPgSemesterDetails; track $index) {
+                                        @if (item.Semester == 5) {
+                                        <li>{{ item.CourseName }}</li>
+                                        }
+                                        }
+                                    </ul>
+                                </div>
+
+                                <!-- Semester 2 -->
+                                <div class="col-md-6">
+                                    <h6>Semester 6</h6>
+                                    <ul class="semester_list">
+                                        @for (item of getPgSemesterDetails; track $index) {
+                                        @if (item.Semester == 6) {
+                                        <li>{{ item.CourseName }}</li>
+                                        }
+                                        }
+                                    </ul>
+                                </div>
+
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4th Year (Semesters 7 and 8) -->
+                    <div id="menu4" class="container tab-pane fade">
+                        <div class="container-fluid">
+                            <div class="row">
+
+                                @if (isNewProgram) {
+
+                                <div class="col-md-6">
+                                    <h6>Semester 7</h6>
+
+                                    @for (group of groupedSemestersArray[7] || []; track group.type) {
+
+                                    <p class="mb-0"><b>{{ group.type }}</b></p>
+
+                                    @for (remark of group.remarksGroup; track remark.remarks) {
+
+                                    @if (remark.remarks) {
+                                    <p class="mb-2">
+                                        {{ remark.remarks }}
+                                    </p>
+                                    }
+
+                                    <ul class="semester_list">
+                                        @for (course of remark.courses; track course.SrNo) {
+                                        <li>{{ course.CourseName }}</li>
+                                        }
+                                    </ul>
+
+                                    }
+
+                                    }
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6>Semester 8</h6>
+
+                                    @for (group of groupedSemestersArray[8] || []; track group.type) {
+
+                                    <p class="mb-0"><b>{{ group.type }}</b></p>
+
+                                    @for (remark of group.remarksGroup; track remark.remarks) {
+
+                                    @if (remark.remarks) {
+                                    <p class="mb-2">
+                                        {{ remark.remarks }}
+                                    </p>
+                                    }
+
+                                    <ul class="semester_list">
+                                        @for (course of remark.courses; track course.SrNo) {
+                                        <li>{{ course.CourseName }}</li>
+                                        }
+                                    </ul>
+
+                                    }
+
+                                    }
+                                </div>
+
+                                }
+
+                                @else {
+
+                                <!-- Semester 1 -->
+                                <div class="col-md-6">
+                                    <h6>Semester 7</h6>
+                                    <ul class="semester_list">
+                                        @for (item of getPgSemesterDetails; track $index) {
+                                        @if (item.Semester == 7) {
+                                        <li>{{ item.CourseName }}</li>
+                                        }
+                                        }
+                                    </ul>
+                                </div>
+
+                                <!-- Semester 2 -->
+                                <div class="col-md-6">
+                                    <h6>Semester 8</h6>
+                                    <ul class="semester_list">
+                                        @for (item of getPgSemesterDetails; track $index) {
+                                        @if (item.Semester == 8) {
+                                        <li>{{ item.CourseName }}</li>
+                                        }
+                                        }
+                                    </ul>
+                                </div>
+
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5th Year (Semesters 7 and 8) -->
+                    <div id="menu5" class="container tab-pane fade">
+                        <div class="container-fluid">
+                            <div class="row">
+
+                                @if (isNewProgram) {
+
+                                <div class="col-md-6">
+                                    <h6>Semester 9</h6>
+
+                                    @for (group of groupedSemestersArray[9] || []; track group.type) {
+
+                                    <p class="mb-0"><b>{{ group.type }}</b></p>
+
+                                    @for (remark of group.remarksGroup; track remark.remarks) {
+
+                                    @if (remark.remarks) {
+                                    <p class="mb-2">
+                                        {{ remark.remarks }}
+                                    </p>
+                                    }
+
+                                    <ul class="semester_list">
+                                        @for (course of remark.courses; track course.SrNo) {
+                                        <li>{{ course.CourseName }}</li>
+                                        }
+                                    </ul>
+
+                                    }
+
+                                    }
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6>Semester 10</h6>
+
+                                    @for (group of groupedSemestersArray[10] || []; track group.type) {
+
+                                    <p class="mb-0"><b>{{ group.type }}</b></p>
+
+                                    @for (remark of group.remarksGroup; track remark.remarks) {
+
+                                    @if (remark.remarks) {
+                                    <p class="mb-2">
+                                        {{ remark.remarks }}
+                                    </p>
+                                    }
+
+                                    <ul class="semester_list">
+                                        @for (course of remark.courses; track course.SrNo) {
+                                        <li>{{ course.CourseName }}</li>
+                                        }
+                                    </ul>
+
+                                    }
+
+                                    }
+                                </div>
+
+                                }
+
+                                @else {
+
+                                <!-- Semester 1 -->
+                                <div class="col-md-6">
+                                    <h6>Semester 9</h6>
+                                    <ul class="semester_list">
+                                        @for (item of getPgSemesterDetails; track $index) {
+                                        @if (item.Semester == 9) {
+                                        <li>{{ item.CourseName }}</li>
+                                        }
+                                        }
+                                    </ul>
+                                </div>
+
+                                <!-- Semester 2 -->
+                                <div class="col-md-6">
+                                    <h6>Semester 10</h6>
+                                    <ul class="semester_list">
+                                        @for (item of getPgSemesterDetails; track $index) {
+                                        @if (item.Semester == 10) {
+                                        <li>{{ item.CourseName }}</li>
+                                        }
+                                        }
+                                    </ul>
+                                </div>
+
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="col-md-12">
+                @if (item.bAdmissionOpen == 1) {
+                <p style="text-align: center;">
+                    <a href="https://noida.amity.edu/admissions-2026/" target="_blank" style="padding: 15px 20px;"
+                        class="th-btn">Apply Now <i class="fas fa-arrow-right ms-1"></i></a>
+                </p>
+                }
+                @else {
+                <p style="text-align: center;">
+                    <a disabled style="padding: 15px 20px;" class="th-btn">Admission Closed</a>
+                </p>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            @if (item.FaqQuestion) {
+            <div class="col-md-12">
+                <h2 class="faq-title">FAQ's</h2>
+            </div>
+            }
+            <div class="col-md-12">
+                <div class="accordion-area accordion" id="faqAccordion">
+                    @if (item.FaqQuestion) {
+                    <div class="accordion-card wow fadeInUp">
+                        <div class="accordion-header" id="collapse-item-1">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-1" aria-expanded="false" aria-controls="collapse-1">
+                                <span [innerHTML]="item.FaqQuestion | cleanHtmlPtag"></span>
+                            </button>
+                        </div>
+                        <div id="collapse-1" class="accordion-collapse collapse" aria-labelledby="collapse-item-1"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div [innerHTML]="item.FaqAnswer | cleanHtml"></div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    @if (item.FaqQuestion2) {
+                    <div class="accordion-card wow fadeInUp">
+                        <div class="accordion-header" id="collapse-item-2">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-2" aria-expanded="true" aria-controls="collapse-2">
+                                <span [innerHTML]="item.FaqQuestion2 | cleanHtmlPtag"></span>
+                            </button>
+                        </div>
+                        <div id="collapse-2" class="accordion-collapse collapse" aria-labelledby="collapse-item-2"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div [innerHTML]="item.FaqAnswer2 | cleanHtml"></div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    @if (item.FaqQuestion3) {
+                    <div class="accordion-card wow fadeInUp">
+                        <div class="accordion-header" id="collapse-item-3">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
+                                <span [innerHTML]="item.FaqQuestion3 | cleanHtmlPtag"></span>
+                            </button>
+                        </div>
+                        <div id="collapse-3" class="accordion-collapse collapse" aria-labelledby="collapse-item-3"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div [innerHTML]="item.FaqAnswer3 | cleanHtml"></div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    @if (item.FaqQuestion4) {
+                    <div class="accordion-card wow fadeInUp">
+                        <div class="accordion-header" id="collapse-item-4">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
+                                <span [innerHTML]="item.FaqQuestion4 | cleanHtmlPtag"></span>
+                            </button>
+                        </div>
+                        <div id="collapse-4" class="accordion-collapse collapse" aria-labelledby="collapse-item-4"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div [innerHTML]="item.FaqAnswer4 | cleanHtml"></div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    @if (item.FaqQuestion5) {
+                    <div class="accordion-card wow fadeInUp">
+                        <div class="accordion-header" id="collapse-item-5">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
+                                <span [innerHTML]="item.FaqQuestion5 | cleanHtmlPtag"></span>
+                            </button>
+                        </div>
+                        <div id="collapse-5" class="accordion-collapse collapse" aria-labelledby="collapse-item-5"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div [innerHTML]="item.FaqAnswer5 | cleanHtml"></div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                    @if (item.FaqQuestion6) {
+                    <div class="accordion-card wow fadeInUp">
+                        <div class="accordion-header" id="collapse-item-6">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-6" aria-expanded="false" aria-controls="collapse-6">
+                                <span [innerHTML]="item.FaqQuestion6 | cleanHtmlPtag"></span>
+                            </button>
+                        </div>
+                        <div id="collapse-6" class="accordion-collapse collapse" aria-labelledby="collapse-item-6"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div [innerHTML]="item.FaqAnswer6 | cleanHtml"></div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                    @if (item.FaqQuestion7) {
+                    <div class="accordion-card wow fadeInUp">
+                        <div class="accordion-header" id="collapse-item-7">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-7" aria-expanded="false" aria-controls="collapse-7">
+                                <span [innerHTML]="item.FaqQuestion7 | cleanHtmlPtag"></span>
+                            </button>
+                        </div>
+                        <div id="collapse-7" class="accordion-collapse collapse" aria-labelledby="collapse-item-7"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div [innerHTML]="item.FaqAnswer7 | cleanHtml"></div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                    @if (item.FaqQuestion8) {
+                    <div class="accordion-card wow fadeInUp">
+                        <div class="accordion-header" id="collapse-item-8">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-8" aria-expanded="false" aria-controls="collapse-8">
+                                <span [innerHTML]="item.FaqQuestion8 | cleanHtmlPtag"></span>
+                            </button>
+                        </div>
+                        <div id="collapse-8" class="accordion-collapse collapse" aria-labelledby="collapse-item-8"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div [innerHTML]="item.FaqAnswer8 | cleanHtml"></div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                    @if (item.FaqQuestion9) {
+                    <div class="accordion-card wow fadeInUp">
+                        <div class="accordion-header" id="collapse-item-9">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-9" aria-expanded="false" aria-controls="collapse-9">
+                                <span [innerHTML]="item.FaqQuestion9 | cleanHtmlPtag"></span>
+                            </button>
+                        </div>
+                        <div id="collapse-9" class="accordion-collapse collapse" aria-labelledby="collapse-item-9"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div [innerHTML]="item.FaqAnswer9 | cleanHtml"></div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                    @if (item.FaqQuestion10) {
+                    <div class="accordion-card wow fadeInUp">
+                        <div class="accordion-header" id="collapse-item-10">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-10" aria-expanded="false" aria-controls="collapse-10">
+                                <span [innerHTML]="item.FaqQuestion10 | cleanHtmlPtag"></span>
+                            </button>
+                        </div>
+                        <div id="collapse-10" class="accordion-collapse collapse" aria-labelledby="collapse-item-10"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div [innerHTML]="item.FaqAnswer10 | cleanHtml"></div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                    @if (item.FaqQuestion11) {
+                    <div class="accordion-card wow fadeInUp">
+                        <div class="accordion-header" id="collapse-item-11">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-11" aria-expanded="false" aria-controls="collapse-11">
+                                <span [innerHTML]="item.FaqQuestion11 | cleanHtmlPtag"></span>
+                            </button>
+                        </div>
+                        <div id="collapse-11" class="accordion-collapse collapse" aria-labelledby="collapse-item-11"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div [innerHTML]="item.FaqAnswer11 | cleanHtml"></div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                    @if (item.FaqQuestion12) {
+                    <div class="accordion-card wow fadeInUp">
+                        <div class="accordion-header" id="collapse-item-12">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-12" aria-expanded="false" aria-controls="collapse-12">
+                                <span [innerHTML]="item.FaqQuestion12 | cleanHtmlPtag"></span>
+                            </button>
+                        </div>
+                        <div id="collapse-12" class="accordion-collapse collapse" aria-labelledby="collapse-item-12"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <div [innerHTML]="item.FaqAnswer12 | cleanHtml"></div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<div class="modal fade show" *ngIf="showBrochurePopup" style="display:block;background:rgba(0,0,0,.5)">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Download Brochure</h5>
+
+                <button type="button" class="btn-close" (click)="showBrochurePopup=false">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <form [formGroup]="brochureForm">
+
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Name" formControlName="name">
+
+                        <div class="text-danger mt-1"
+                            *ngIf="brochureForm.get('name')?.touched && brochureForm.get('name')?.invalid">
+
+                            <small *ngIf="brochureForm.get('name')?.errors?.['required']">
+                                Name is required
+                            </small>
+
+                            <small *ngIf="brochureForm.get('name')?.errors?.['pattern']">
+                                Only letters are allowed
+                            </small>
+
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+
+                        <div class="input-group">
+
+                            <input type="email" class="form-control" placeholder="Email" formControlName="email">
+
+                            <button *ngIf="!isIndian" type="button" class="btn btn-warning"
+                                (click)="otpSent ? resendOtp() : sendOtp()" [disabled]="otpSent && otpTimer > 0">
+
+                                {{ otpSent
+                                ? (otpTimer > 0
+                                ? 'Resend OTP (' + otpTimer + 's)'
+                                : 'Resend OTP')
+                                : 'Send OTP'
+                                }}
+
+                            </button>
+
+                        </div>
+
+                        <div class="text-danger mt-1"
+                            *ngIf="brochureForm.get('email')?.touched && brochureForm.get('email')?.invalid">
+
+                            <small *ngIf="brochureForm.get('email')?.errors?.['required']">
+                                Email is required
+                            </small>
+
+                            <small *ngIf="brochureForm.get('email')?.errors?.['email']">
+                                Enter valid email address
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Mobile -->
+                    <div class="mb-3">
+
+                        <div class="input-group">
+
+                            <select class="form-select" style="max-width:90px" formControlName="countryCode">
+
+                                <option *ngFor="let code of countryCodes" [value]="code">
+                                    {{ code }}
+                                </option>
+
+                            </select>
+
+                            <input type="text" class="form-control" placeholder="Mobile Number" formControlName="phone"
+                                [maxlength]="isIndian ? 10 : 15">
+
+                            <button *ngIf="isIndian" type="button" class="btn btn-warning"
+                                (click)="otpSent ? resendOtp() : sendOtp()" [disabled]="otpSent && otpTimer > 0">
+
+                                {{ otpSent
+                                ? (otpTimer > 0
+                                ? 'Resend OTP (' + otpTimer + 's)'
+                                : 'Resend OTP')
+                                : 'Send OTP'
+                                }}
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <!-- OTP -->
+                    <div *ngIf="otpSent" class="mt-3">
+
+                        <input type="text" class="form-control" placeholder="Enter OTP" formControlName="otp"
+                            maxlength="4" (input)="onOtpInput()">
+
+                        <!-- OTP Status -->
+                        <div class="mt-2" *ngIf="otpMessage">
+                            <small [class.text-success]="otpStatus === 'success'"
+                                [class.text-danger]="otpStatus === 'error'">
+                                {{ otpMessage }}
+                            </small>
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" [disabled]="!otpVerified" (click)="submitBrochureForm()">
+                    Submit & Download
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@if (GetPG3ContinentProgramsData[0]?.CourseImage1 || GetPG3ContinentProgramsData[0]?.CourseImage2) {
+
+<div class="floating-course-images" *ngIf="showQuickLinks && !quickLinksClosed">
+
+    <div class="quick-links-header">
+        Quick Links
+
+        <button class="quick-links-close" (click)="closeQuickLinks()">
+            ×
+        </button>
+    </div>
+
+    @if (GetPG3ContinentProgramsData[0]?.CourseImage1) {
+    <img class="floating-img"
+        [src]="'https://img.amizone.net/AzureFileHandler.ashx?FileName=amitywebsite/userfiles/Noida2024/' + GetPG3ContinentProgramsData[0]?.CourseImage1"
+        (click)="openImageModal(
+          'https://img.amizone.net/AzureFileHandler.ashx?FileName=amitywebsite/userfiles/Noida2024/' + GetPG3ContinentProgramsData[0]?.CourseImage1,
+          GetPG3ContinentProgramsData[0]?.Courseurl1
+        )">
+    }
+
+    @if (GetPG3ContinentProgramsData[0]?.CourseImage2) {
+    <img class="floating-img"
+        [src]="'https://img.amizone.net/AzureFileHandler.ashx?FileName=amitywebsite/userfiles/Noida2024/' + GetPG3ContinentProgramsData[0]?.CourseImage2"
+        (click)="openImageModal(
+          'https://img.amizone.net/AzureFileHandler.ashx?FileName=amitywebsite/userfiles/Noida2024/' + GetPG3ContinentProgramsData[0]?.CourseImage2,
+          GetPG3ContinentProgramsData[0]?.Courseurl2
+        )">
+    }
+
+</div>
+
+}
+
+<div class="image-modal" *ngIf="showImageModal">
+    <div class="image-modal-content">
+
+        <button class="close-btn" (click)="showImageModal = false">
+            ×
+        </button>
+
+        <a [href]="selectedImageLink || 'https://noida.amity.edu/admissions-2026/?utm_source=organic&utm_medium=course_pages&utm_campaign=pop_up'"
+            target="_blank">
+            <img [src]="selectedImage" class="zoom-image">
+        </a>
+
+        <p class="text-center mt-2 text-white">
+            Click image to visit page
+        </p>
+
+    </div>
+</div>
+}
+<!-- @empty{
+<p style="text-align: center; font-weight: 600; font-size: 28px; padding: 50px 0px;">Data not found</p>
+} -->

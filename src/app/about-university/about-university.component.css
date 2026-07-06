@@ -1,0 +1,8 @@
+.mega_menu_head {
+    color: #000000 !important;
+    list-style-type: none;
+}
+
+.mega_menu_head:before{
+    display: none;
+}

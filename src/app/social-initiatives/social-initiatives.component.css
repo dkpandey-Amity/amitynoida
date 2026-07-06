@@ -1,0 +1,33 @@
+.instructor-profile-right p {
+    font-size: 18px;
+}
+
+.content .subtitle {
+    font-size: 18px;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.social-initiatives .row {
+    box-shadow: 0 4px 20px 0 rgb(199 199 199);
+    margin-bottom: 30px;
+    padding: 20px;
+}
+
+.core-programmes{
+    padding: 20px;
+}
+
+.core-programmes img{
+    float: left;
+    width: 90px;
+    padding: 15px;
+    box-shadow: 0 -9px 0px 0 rgb(245 193 19);
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.core-programmes .admission-card{
+    padding: 20px;
+    border-radius: 10px;
+}

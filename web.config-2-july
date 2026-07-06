@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <system.webServer>
+
+    <handlers>
+      <remove name="WebDAV" />
+      <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
+      <remove name="OPTIONSVerbHandler" />
+      <remove name="TRACEVerbHandler" />
+
+      <add name="ExtensionlessUrlHandler-Integrated-4.0"
+           path="*."
+           verb="GET,HEAD,POST,PUT,PATCH,DELETE,OPTIONS"
+           type="System.Web.Handlers.TransferRequestHandler"
+           preCondition="integratedMode,runtimeVersionv4.0" />
+    </handlers>
+
+    <httpErrors errorMode="Custom" existingResponse="Replace">
+      <remove statusCode="404"/>
+      <error statusCode="404"
+             path="404.html"
+             responseMode="File"/>
+    </httpErrors>
+
+    <rewrite>
+
+      <rewriteMaps configSource="RedirectMap.config" />
+
+      <rules>
+        <!-- 1. COURSE REDIRECTS - Must be FIRST -->
+        <rule name="Course Redirect" stopProcessing="true">
+          <match url="^(.+)$" />
+          <conditions>
+            <add input="{CourseRedirects:{R:1}}" pattern="(.+)" />
+          </conditions>
+
+          <action
+              type="Redirect"
+              url="/{C:1}"
+              redirectType="Permanent" />
+        </rule>
+
+        <!-- 2. SPECIAL PROGRAM REDIRECTS -->
+        <rule name="Special Program Redirect" stopProcessing="true">
+          <match url="(.*)" />
+          <conditions>
+            <add input="{SpecialProgramRedirects:{R:1}}" pattern="(.+)" />
+          </conditions>
+          <action type="Redirect" url="/{C:1}" redirectType="Permanent" />
+        </rule>
+
+        <rule name="Invalid Special Program URL" stopProcessing="true">
+          <match url="^([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)$" />
+          <conditions logicalGrouping="MatchAll">
+            <add input="{SpecialPrograms:{R:0}}" pattern="1" negate="true" />
+            <add input="{R:1}" pattern="^(ug|pg|phd)$" negate="true" />
+            <add input="{R:1}" pattern="^(faculty|events)$" negate="true" />
+          </conditions>
+          <action type="CustomResponse" statusCode="404" statusReason="Not Found" statusDescription="Page Not Found" />
+        </rule>
+
+        <!-- 3. VALIDATE COURSE URLs - For detail pages (3 segments) -->
+        <rule name="Invalid Course URL" stopProcessing="true">
+          <match url="^(ug|pg|phd)/([^/]+)/([^/]+)$" />
+          <conditions>
+            <add input="{ValidCourses:{R:0}}" pattern="1" negate="true" />
+          </conditions>
+          <action type="CustomResponse" statusCode="404" statusReason="Not Found" statusDescription="Page Not Found" />
+        </rule>
+
+        <!-- 4. VALIDATE DISCIPLINE URLs - ONLY for discipline level (2 segments) -->
+        <rule name="Invalid Discipline URL" stopProcessing="true">
+          <match url="^(pg|ug|phd)/([^/]+)$" />
+          <conditions>
+            <add input="{ValidDisciplines:{R:0}}" pattern="1" negate="true" />
+          </conditions>
+          <action type="CustomResponse" statusCode="404" statusReason="Not Found" statusDescription="Page Not Found" />
+        </rule>
+
+        <!-- 5. VALIDATE FACULTY URLs -->
+        <rule name="Invalid Faculty URL" stopProcessing="true">
+          <match url="^faculty/(.*)$" />
+          <conditions>
+            <add input="{ValidFaculty:{R:0}}" pattern="1" negate="true" />
+          </conditions>
+          <action type="CustomResponse" statusCode="404" statusReason="Not Found" statusDescription="Page Not Found" />
+        </rule>
+
+        <!-- 6. VALIDATE EVENT URLs -->
+        <rule name="Invalid Event URL" stopProcessing="true">
+          <match url="^events/(.*)$" />
+          <conditions>
+            <add input="{ValidEvents:{R:0}}" pattern="1" negate="true" />
+          </conditions>
+          <action type="CustomResponse" statusCode="404" statusReason="Not Found" statusDescription="Page Not Found" />
+        </rule>
+
+        <!-- 7. VALIDATE STATIC CMS PAGES -->
+        <rule name="Invalid Static URL 404" stopProcessing="true">
+          <match url="^([a-zA-Z0-9\-]+)$" />
+          <conditions logicalGrouping="MatchAll">
+            <add input="{ValidUrls:{R:1}}" pattern="1" negate="true" />
+            <add input="{CourseRedirects:{R:1}}" pattern="(.+)" negate="true" />
+            <add input="{SpecialProgramRedirects:{R:1}}" pattern="(.+)" negate="true" />
+          </conditions>
+          <action type="CustomResponse" statusCode="404" statusReason="Not Found" statusDescription="Page Not Found" />
+        </rule>
+
+        <!-- 8. ANGULAR ROUTES - Process LAST (for all other URLs) -->
+       
+
+        <rule name="Angular Routes" stopProcessing="true">
+          <match url=".*" />
+          <conditions logicalGrouping="MatchAll">
+            <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+            <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+            <add input="{REQUEST_URI}" pattern="^/(api|admission-2026|blog)" negate="true" />
+          </conditions>
+          <action type="Rewrite" url="/" />
+        </rule>
+
+
+      </rules>
+
+    </rewrite>
+
+  </system.webServer>
+</configuration>

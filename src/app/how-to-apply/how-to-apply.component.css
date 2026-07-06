@@ -1,0 +1,34 @@
+textarea.form-control, textarea {
+    min-height: 150px;
+}
+
+.how-to-apply ul{
+    padding: 0px;
+    list-style-type: none;
+}
+
+.how-to-apply li{
+    display: inline-block;
+    width: 33%;
+}
+
+.icon-img{
+    width: 100px;
+}
+
+.form-text-how{
+    float: left;
+    text-align: center;
+    width: 74%;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.checklist li {
+    margin-bottom: 5px !important;
+}
+
+.checklist ul {
+    margin-left: 20px;
+    margin-bottom: 28px;
+}

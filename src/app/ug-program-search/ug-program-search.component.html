@@ -1,0 +1,58 @@
+<section class="background-sec" style="padding: 30px 0px 0px 0px">
+  <form>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-3 text-end">
+          <p class="sec-title" style="padding-top: 2%;">Find Your UG Program</p>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <input class="form-control" type="text" name="search" placeholder="Search UG Programs"
+              [(ngModel)]="searchTerm" (ngModelChange)="onSearchTermChange()" required />
+            <i class="far fa-search"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="container">
+    <div class="row">
+
+      <div *ngIf="showUndergraduateCourses" class="col-md-12">
+        <ul class="course-li" *ngFor="let item of filteredCourses">
+          <li>
+            <div class="row">
+              <!-- Course Full Name -->
+              <div class="col-md-7">
+                <p>{{ item.sfullname }}</p>
+              </div>
+
+              <div class="col-md-5">
+                <!-- <a [routerLink]="['/ug', formatFacultyName(item.sDiscipline), item.SlugName, item.sCourseCode]"
+                  class="view-detailsBtn">
+                  View Details
+                </a> -->
+
+                <a [routerLink]="['/ug', item.Disciplineslugname, item.SlugName]" class="view-detailsBtn">
+                  View Details
+                </a>
+
+                <ng-container *ngIf="item.bAdmissionOpen == 1; else admissionClosed">
+                  <a [href]="'https://noida.amity.edu/admissions-2026/?utm_term=keywordcoursecode_'+ item.sCourseCode" target="_blank" class="apply-nowBtn">
+                    Apply Now
+                  </a>
+                </ng-container>
+
+                <ng-template #admissionClosed>
+                  <!-- <span class="admission-closed">Admission Closed</span> -->
+                </ng-template>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>

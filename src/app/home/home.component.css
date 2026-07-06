@@ -1,0 +1,479 @@
+.btn-warning {
+  text-transform: uppercase;
+}
+
+.testi-area-1 .carousel-inner {
+  box-shadow: 0px 0px 20px 0px #dddddd7d;
+  border-radius: 10px;
+}
+
+.scholarship-title {
+  font-size: 28px !important;
+}
+
+.p-top200 {
+  padding-top: 200px;
+}
+
+.feature-area-1 .fal {
+  margin-right: 0px !important;
+}
+
+.th-btn.style3 {
+  background: transparent;
+  border: 1px solid #f6c214;
+  color: #f6c214;
+  height: 45px;
+  line-height: 45px;
+  padding-top: 0px;
+}
+
+.th-btn.style2 {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  height: 45px;
+  line-height: 45px;
+  padding-top: 0px;
+}
+
+.c-white {
+  color: #fff;
+}
+
+.c-yellow {
+  color: #f6c214;
+}
+
+.th-btn.style3:hover {
+  color: #0b2d4c !important;
+}
+
+.th-btn.style2:hover {
+  color: #000 !important;
+}
+
+@media (max-width: 767px) {
+  .program-box {
+    padding: 0px;
+    text-align: left;
+  }
+
+  .counter-area-2 .mb-4 {
+    margin-bottom: 0px !important;
+  }
+
+  .homesec p {
+    margin: 0 0 14px;
+    line-height: 24px;
+  }
+
+  .space,
+  .space-bottom {
+    padding: 25px 0px !important;
+  }
+
+  .homesec .mt-20 {
+    margin-top: 0px !important;
+  }
+  .sub-title {
+    margin-bottom: 0px;
+    font-size: 11px;
+  }
+
+  .btn-wrap .btn-warning {
+    font-size: 8px;
+    padding: 2px 7px;
+  }
+  .th-btn.style3 {
+    background: transparent;
+    border: 1px solid #f6c214;
+    color: #f6c214;
+    height: 30px !important;
+    line-height: 28px !important;
+    padding-top: 0px;
+  }
+
+  .th-btn.style2 {
+    background: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    height: 30px;
+    line-height: 28px;
+    padding: 0px 10px;
+    font-size: 10px;
+    font-weight: 100;
+  }
+}
+
+/* Custom Carousel Caption Animation */
+.carousel-caption {
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+/* Apply fade-in effect when carousel item is visible */
+.carousel-item.active .carousel-caption {
+  opacity: 1;
+  animation: fadeInUp 1.5s ease;
+}
+
+.carousel-indicators [data-bs-target] {
+  background-color: #f5c113;
+}
+
+.admission-card_text {
+  text-align: left !important;
+}
+
+/* Keyframes for a smooth fade-in effect */
+@keyframes fadeInUp {
+  from {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ====================================
+BOTTOM STICKY BAR
+==================================== */
+
+.admission-sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #f4be27;
+  z-index: 99;
+  padding: 12px 50px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.sticky-bar-link {
+  color: #000;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  line-height: 1.6;
+}
+
+.sticky-bar-link:hover {
+  color: #000;
+}
+
+/* ====================================
+COUNTDOWN BOX
+==================================== */
+
+.countdown-box {
+  display: inline-block;
+  background: #fff;
+  color: #000;
+  padding: 4px 8px;
+  margin: 0 3px;
+  border-radius: 4px;
+  font-size: 19px;
+  font-weight: 700;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* ====================================
+POPUP DESIGN
+==================================== */
+
+.scholarship-popup {
+  position: fixed;
+  left: 30px;
+  bottom: 70px;
+  width: 270px;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  z-index: 99999;
+  padding: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  animation: popupFade 0.4s ease;
+}
+
+/* ====================================
+POPUP ANIMATION
+==================================== */
+
+@keyframes popupFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ====================================
+COUNTDOWN AREA
+==================================== */
+
+.popup-countdown {
+  background: #0b2d4c;
+  padding: 12px 12px;
+  display: flex;
+  border-radius: 10px;
+  justify-content: space-between;
+}
+
+.time-box {
+  flex: 1;
+  text-align: center;
+  color: #fff;
+  position: relative;
+}
+
+.time-box:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 10%;
+  width: 1px;
+  height: 80%;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.time-box span {
+  display: block;
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 0px;
+}
+
+.time-box small {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* ====================================
+CONTENT AREA
+==================================== */
+
+.popup-content {
+  padding-top: 15px;
+  text-align: center;
+}
+
+.popup-content h4 {
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 15px;
+}
+
+/* ====================================
+BUTTON
+==================================== */
+
+.popup-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4be27;
+  color: #000;
+  text-decoration: none;
+  padding: 5px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: 0.3s;
+}
+
+.popup-btn:hover {
+  background: #e2ac16;
+  color: #000;
+}
+
+/* ====================================
+NOTIFICATION BELL
+==================================== */
+
+.notification-bell {
+  position: fixed;
+  left: 18px;
+  bottom: 8px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: none;
+  background: #000;
+  color: #fff;
+  z-index: 999999;
+  font-size: 22px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+
+  transition: 0.3s;
+}
+
+.notification-bell:hover {
+  transform: scale(1.08);
+}
+
+.notification-bell i {
+  animation: bellShake 1.2s infinite;
+}
+
+/* Bell Ring Animation */
+@keyframes bellShake {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  20% {
+    transform: rotate(15deg);
+  }
+
+  40% {
+    transform: rotate(-15deg);
+  }
+
+  60% {
+    transform: rotate(10deg);
+  }
+
+  80% {
+    transform: rotate(-10deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Bell Pulse Animation */
+@keyframes bellPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 12px rgba(0, 0, 0, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+/* ====================================
+RESPONSIVE
+==================================== */
+
+@media (max-width: 768px) {
+  .admission-sticky-bar {
+    padding: 6px 30px 6px 30px;
+    min-height: auto;
+  }
+
+  .sticky-bar-link {
+    font-size: 10px;
+    line-height: 24px;
+    display: inline-block;
+    font-weight: 600;
+  }
+
+  .countdown-box {
+    min-width: 28px;
+    padding: 2px 4px;
+    font-size: 10px;
+    margin: 0 1px;
+    border-radius: 3px;
+  }
+
+  /* Popup */
+  .scholarship-popup {
+    width: 165px;
+
+    left: 10px;
+
+    bottom: 42px;
+
+    border-radius: 8px;
+
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Countdown Top */
+  .popup-countdown {
+    padding: 8px 6px;
+  }
+
+  .time-box span {
+    font-size: 14px;
+    margin-bottom: 0px;
+  }
+
+  .time-box small {
+    font-size: 8px;
+  }
+
+  /* Content */
+  .popup-content {
+    padding: 10px 8px;
+  }
+
+  .popup-content h4 {
+    font-size: 10px;
+
+    line-height: 1.4;
+
+    margin-bottom: 10px;
+  }
+
+  /* Button */
+  .popup-btn {
+    width: 100%;
+
+    padding: 7px 10px;
+
+    font-size: 11px;
+
+    border-radius: 4px;
+  }
+
+  /* Bell / Cross Button */
+  .notification-bell {
+    width: 34px;
+
+    height: 34px;
+
+    left: 6px;
+
+    bottom: 6px;
+
+    font-size: 12px;
+  }
+
+  .popup-btn {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .popup-content h6 {
+    font-size: 16px;
+  }
+
+  .time-box span {
+    font-size: 22px;
+  }
+}

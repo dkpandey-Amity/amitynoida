@@ -1,0 +1,83 @@
+.shadow {
+  height: 100%;
+}
+
+.team-card .team-content {
+  padding: 10px 0px 0px 15px;
+  position: absolute;
+  bottom: -120px;
+  z-index: 1;
+}
+
+.team-card {
+  overflow: inherit;
+}
+
+.team-card .team-content .back-white {
+  background-color: #ffffff;
+}
+
+.team-card .team-content .back-white p {
+  background-color: snow;
+  box-shadow: none;
+  border-radius: 0px;
+  padding: 4px 15px;
+  font-size: 16px;
+  width: fit-content;
+  margin-bottom: 0px;
+}
+
+.team-card.style3 {
+  margin-top: 0;
+  margin-bottom: 100px;
+}
+
+.tab-content > .active {
+  display: block;
+  background: #d6e5ff;
+  height: 100%;
+  padding: 20px 10px;
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+  background: #d6e5ff;
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 1px;
+}
+
+.nav-tabs li {
+  flex: 1;
+  background: #ffc107;
+}
+
+.nav-tabs li a {
+  color: #000;
+  font-weight: 600;
+}
+
+.team-content2 {
+  bottom: 10px !important;
+}
+
+.card-img {
+  height: 200px;
+  object-fit: cover;
+  object-position: top;
+}
+
+.card-body h6 {
+  font-size: 13px;
+  margin-bottom: 0px;
+}
+
+.card-body p {
+  margin-bottom: 0px;
+}
+
+.text-justify {
+  text-align: justify !important;
+}

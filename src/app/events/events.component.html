@@ -1,0 +1,63 @@
+<div class="breadcumb-wrapper">
+    <div class="container">
+        <div class="breadcumb-content text-center">
+            <h1 class="breadcumb-title">Campus Events</h1>
+            <ul class="breadcumb-menu">
+                <li><a routerLink="/home">Home</a></li>
+                <li>Events</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<section class="space bg-smoke">
+    <div class="container">
+        @if (paginatedEvents.length > 0;){
+        <div class="row gy-4">
+            @for (item of paginatedEvents; track item.iEventId){
+            <div class="col-md-4 col-xl-4 mb-4">
+                <div class="th-blog blog-single style2">
+                    <div class="blog-img">
+                        <a [routerLink]="['/events', item.SlugName]"> 
+                            <img src="https://portal.amity.edu/backoffice/Uploads/Event/{{item.eimage}}"
+                                alt="Blog Image" /></a>
+                    </div>
+                    <div class="blog-content">
+                        <h4 class="box-title">
+                            <a [routerLink]="['/events', item.SlugName]"> 
+                                {{ item.sEventName | slice:0:100 }}{{ item.sEventName.length > 100 ? '...' : '' }}
+                            </a>
+                        </h4>
+                        <a [routerLink]="['/events', item.SlugName]" class="blob-btn" (click)="oneEventExploreClick('explore_more_event_clicked')" >
+                            Explore More <i class="fas fa-arrow-right"></i>
+                            <span class="blob-btn__inner">
+                                <span class="blob-btn__blobs">
+                                    <span class="blob-btn__blob"></span>
+                                    <span class="blob-btn__blob"></span>
+                                    <span class="blob-btn__blob"></span>
+                                    <span class="blob-btn__blob"></span>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            }
+            <div style="display: flex; justify-content: center;">
+                <div class="col-md-4">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-outline-primary" (click)="previousPage()"
+                            [disabled]="currentPage === 1">Previous</button>
+                        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+                        <button class="btn btn-outline-primary" (click)="nextPage()"
+                            [disabled]="currentPage === totalPages">Next</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        }@else {
+        <!-- <h3 class="text-center">Event Loading...</h3> -->
+        }
+
+    </div>
+</section>

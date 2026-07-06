@@ -1,0 +1,72 @@
+.course-li li h3 {
+    margin-bottom: 0px;
+}
+
+.tab-content>.active {
+    display: block;
+    background: #fff;
+    height: 100%;
+    padding: 20px 10px;
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+    background: #fff;
+}
+
+.nav-tabs {
+    display: flex;
+    gap: 1px;;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.nav-tabs li {
+    flex: 1 0 auto;
+    background: #ffc107;
+}
+
+.nav-tabs li a {
+    color: #000;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 10px 0px;
+    text-align: center;
+}
+
+.course-li p{
+    margin-bottom: 0px;
+}
+
+.dicipline-bg{
+    background-color: #ffeaab;
+    padding: 10px;
+}
+
+.dicipline-bg .course-li li{
+    background-color: #fff !important;
+}
+
+.h5-head{
+    background: #0c2d4d;
+    color: #fff;
+    font-size: 19px;
+    padding: 5px 10px;
+    margin-bottom: 0px;
+}
+
+@media only screen and (max-width: 768px) {
+    .nav-tabs li a {
+        color: #000;
+        font-weight: 500;
+        font-size: 10px;
+        padding: 10px 1px;
+        text-align: center;
+        line-height: 18px;
+    }
+    .nav-tabs li {
+        flex: 1;    
+    }
+  }

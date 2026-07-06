@@ -1,0 +1,90 @@
+<div class="breadcumb-wrapper">
+    <div class="container text-center">
+        <h1 class="breadcumb-title">Academic Fee Structure</h1>
+    </div>
+</div>
+
+<section class="fee-section">
+    <div class="container">
+
+        <!-- 🔸 Tabs -->
+    <ul class="custom-tabs">
+  <li>
+    <button type="button"
+      [class.active]="activeTab === 'UG'"
+      (click)="setTab('UG')">
+      UG Programs
+    </button>
+  </li>
+
+  <li>
+    <button type="button"
+      [class.active]="activeTab === 'PG'"
+      (click)="setTab('PG')">
+      PG Programs
+    </button>
+  </li>
+
+  <li>
+    <button type="button"
+      [class.active]="activeTab === 'PHD'"
+      (click)="setTab('PHD')">
+      PhD Programs
+    </button>
+  </li>
+</ul>
+
+        <!-- 🔸 Search -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-5">
+                <input type="text" class="form-control" placeholder="Search Program" [(ngModel)]="searchTerm"
+                    (input)="filterCourses()" />
+            </div>
+        </div>
+
+        <!-- 🔸 Accordion -->
+        <div class="accordion" id="feeAccordion">
+
+            <div class="accordion-item" *ngFor="let course of filteredCourses; let i = index">
+
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        [attr.data-bs-target]="'#collapse' + i">
+                        {{ course.sfullname }}
+                    </button>
+                </h2>
+
+                <div [id]="'collapse' + i" class="accordion-collapse collapse" data-bs-parent="#feeAccordion">
+
+                    <div class="accordion-body">
+
+                        <table class="table table-bordered fee-table">
+                            <thead>
+                                <tr>
+                                    <th>Program Fee</th>
+                                    <th>(Rs. in Lacs)</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td>1st Year Non Sponsored Semester Fee</td>
+                                    <td>₹ {{ course.sFeeNS }} Lakh</td>
+                                </tr>
+                                <tr>
+                                    <td>1st Year Sponsored Semester Fee</td>
+                                    <td>₹ {{ course.sfeesponsor }} Lakh</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>

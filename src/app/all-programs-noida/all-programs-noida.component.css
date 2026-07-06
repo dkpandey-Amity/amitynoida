@@ -1,0 +1,23 @@
+.course-li {
+    padding: 0px;
+    margin-right: 10px;
+    width: 49%;
+    display: inline-block;
+}
+
+.course-li p{
+    margin-bottom: 0px;
+}
+
+.course-li p{
+    text-align: left;
+}
+
+@media screen and (max-width: 768px) {
+    .course-li {
+        width: 100% !important;
+    }
+    .text-end{
+        text-align: center !important;
+    }
+}

@@ -1,0 +1,8 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#f8f9fa"></rect>
+  <text x="50%" y="40%" text-anchor="middle" font-size="120" fill="#dc3545" font-family="Arial, sans-serif">404</text>
+  <text x="50%" y="52%" text-anchor="middle" font-size="28" fill="#6c757d" font-family="Arial, sans-serif">Page Not Found</text>
+  <text x="50%" y="60%" text-anchor="middle" font-size="18" fill="#6c757d" font-family="Arial, sans-serif">
+    The page you're looking for doesn't exist.
+  </text>
+</svg>

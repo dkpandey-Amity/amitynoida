@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <system.webServer>
+    <handlers>
+      <remove name="WebDAV" />
+      <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
+      <remove name="OPTIONSVerbHandler" />
+      <remove name="TRACEVerbHandler" />
+      <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="GET,HEAD,POST,PUT,PATCH,DELETE,OPTIONS" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
+    </handlers>
+    <rewrite>
+      <rules>
+        <rule name="Angular Routes" stopProcessing="true">
+          <conditions logicalGrouping="MatchAll">
+            <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+            <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+			  <add input="{REQUEST_URI}" pattern="^/(api|admission-2026)" negate="true" />
+          </conditions>
+          <action type="Rewrite" url="/" />
+        </rule>
+		 <rule name="http_to_https" enabled="true" stopProcessing="true">
+			<match url="(.*)" />
+			<conditions>
+				<add input="{HTTPS}" pattern="^OFF$" />
+			</conditions>
+			<action type="Redirect" url="https://{HTTP_HOST}{REQUEST_URI}" appendQueryString="false" />
+		</rule>
+      </rules>
+    </rewrite>
+  </system.webServer>
+</configuration>

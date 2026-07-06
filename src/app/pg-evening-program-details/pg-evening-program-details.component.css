@@ -1,0 +1,46 @@
+.tab-content>.active {
+    display: block;
+    background: #e9fbff;
+    height: 100%;
+    padding: 20px 10px;
+    margin: 0px;
+    width: 100%;
+    box-shadow: none;
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+    background: #e9fbff;
+    height: 100%;
+    border: none;
+}
+
+.nav-tabs {
+    display: flex;
+    gap: 1px;
+}
+
+.nav-tabs li {
+    flex: 1;
+    background: #ffc107;
+}
+
+.nav-tabs li a {
+    color: #000;
+    font-weight: 600;
+}
+
+.form-control, .form-select, input, select, textarea {
+    height: 35px;
+    padding: 0 10px 0 10px;
+    font-size: 14px;
+}
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+    font-weight: 600;
+    height: 35px;
+    padding: 0 10px 0 10px;
+    font-size: 14px;
+}

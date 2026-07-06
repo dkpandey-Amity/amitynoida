@@ -1,0 +1,46 @@
+<div class="breadcumb-wrapper">
+    <div class="container">
+        <div class="breadcumb-content text-center">
+            <h1 class="breadcumb-title">International Programs</h1>
+            <ul class="breadcumb-menu">
+                <li><a routerLink="/home">Home</a></li>
+                <li>International Programs</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<section>
+    <div style="padding: 50px 0px 50px 0px">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="course-li">
+
+                        @for (item of getAllnternationalProgramsData; track item.sCourseCode) {
+                        <li class="wow fadeInUp">
+                            <p class="bdr-bottom">{{item.sfullname}}
+                                <!-- <a [routerLink]="['/ug-international-programmes', item.SlugName, item.sCourseCode]"
+                                    class="view-detailsBtn">View Details</a> -->
+                                    
+                                <a [routerLink]="['/ug-international-programmes', item.SlugName]" class="view-detailsBtn">View Details</a>
+
+                                
+                                @if (item.bAdmissionOpen == 1) {
+                                <a [href]="'https://noida.amity.edu/admissions-2026/?utm_term=keywordcoursecode_'+ item.sCourseCode" target="_blank"
+                                    class="apply-nowBtn">Apply Now</a>
+                                }
+                                @else {
+                                <span class="apply-nowBtn">Admission Closed</span>
+                                }
+                                
+                            </p>
+                        </li>
+                        }
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

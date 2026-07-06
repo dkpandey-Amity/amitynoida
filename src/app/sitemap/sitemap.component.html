@@ -1,0 +1,236 @@
+<div class="breadcumb-wrapper">
+    <div class="container">
+        <div class="breadcumb-content text-center">
+            <h1 class="breadcumb-title">Website Sitemap</h1>
+            <ul class="breadcumb-menu">
+                <li><a routerLink="/">Home</a></li>
+                <li>Sitemap</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<section class="overflow-hidden space background-sec">
+    <div class="container">
+        <div class="title-area text-center">
+            <h2 class="sec-title fw-light">Sitemap</h2>
+        </div>
+
+        <div class="row checklist">
+
+            <!-- HOME & QUICK LINKS -->
+            <div class="col-md-3">
+                <ul class="mega_menu_nav shadow">
+                    <li class="mega_menu_head"><b>HOME</b></li>
+                    <li><a routerLink="/">Home Page</a></li>
+                    <li>
+                        <a href="https://portal.amity.edu/login.aspx" target="_blank">
+                            Admission Portal
+                        </a>
+                    </li>
+                    <li><a routerLink="/infrastructure">Infrastructure</a></li>
+                    <li><a href="https://noida.amity.edu/blog/" target="_blank">Blogs</a></li>
+                    <li><a routerLink="/news">News</a></li>
+                    <li>
+                        <a href="https://alumni.amity.edu/" target="_blank">Alumni</a>
+                    </li>
+                    <li><a routerLink="/events">Events</a></li>
+                    <li><a routerLink="/careers-at-amity">Careers at Amity</a></li>
+                    <li><a routerLink="/contact-us">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <!-- ABOUT US -->
+            <div class="col-md-3">
+                <ul class="mega_menu_nav shadow">
+                    <li class="mega_menu_head"><b>ABOUT US</b></li>
+                    <li><a routerLink="/rankings">Rankings</a></li>
+                    <li><a routerLink="/accreditations">Accreditations</a></li>
+                    <li><a routerLink="/leadership">Leadership</a></li>
+                    <li><a routerLink="/testimonials">Testimonials</a></li>
+                    <li><a routerLink="/vision-mission">Vision / Mission</a></li>
+                    <li><a routerLink="/tie-ups">Tie Ups</a></li>
+                    <li>
+                        <a href="https://www.youtube.com/watch?v=byEQ07OirOM" target="_blank">
+                            Virtual Tour
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- ADMISSIONS -->
+            <div class="col-md-3">
+                <ul class="mega_menu_nav shadow">
+                    <li class="mega_menu_head"><b>ADMISSIONS</b></li>
+                    <li><a routerLink="/how-to-apply">How to Apply</a></li>
+                    <li><a routerLink="/admission-career-test">Career Test</a></li>
+                    <li><a routerLink="/scholarships">Scholarships</a></li>
+                    <li><a routerLink="/education-loan">Education Loan</a></li>
+                    <li><a routerLink="/faq">FAQs</a></li>
+                    <li><a routerLink="/withdrawal">Withdrawal</a></li>
+                    <li><a routerLink="/international-students">International Students</a></li>
+                    <li><a routerLink="/phd">Ph.D Admission</a></li>
+                    <li>
+                        <a href="assets/pdf/admission-prospectus-2026.pdf" target="_blank">
+                            Admission Prospectus 2026
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.amity.edu/Lateral/" target="_blank">
+                            Lateral Admission
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- PROGRAMS -->
+            <div class="col-md-3">
+                <ul class="mega_menu_nav shadow">
+                    <li class="mega_menu_head"><b>PROGRAMS</b></li>
+                    <li><a routerLink="/ug">Undergraduate Programs</a></li>
+                    <li><a routerLink="/pg">Postgraduate Programs</a></li>
+                    <li><a routerLink="/phd">Doctoral Programs</a></li>
+                    <li><a routerLink="/all-programs">Find a Program</a></li>
+                </ul>
+            </div>
+
+
+            <div class="col-md-12 text-center mt-4">
+                <h4>Undergraduate Programs</h4>
+            </div>
+
+            <div class="col-md-12 mega-wrapper">
+
+                <ul class="mega_menu_nav shadow" *ngFor="let group of ugGroupedPrograms">
+                    <li class="mega_menu_head">
+                        <b>{{ group.disciplineName | uppercase }}</b>
+                    </li>
+
+                    <li *ngFor="let program of group.programs">
+                        <a [routerLink]="['/ug', program.Disciplineslugname, program.SlugName]">
+                            {{ program.sfullname }}
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="col-md-12 text-center mt-5">
+                <h4>Postgraduate Programs</h4>
+            </div>
+
+            <div class="col-md-12 mega-wrapper">
+
+                <ul class="mega_menu_nav shadow" *ngFor="let group of pgGroupedPrograms">
+                    <li class="mega_menu_head">
+                        <b>{{ group.disciplineName | uppercase }}</b>
+                    </li>
+
+                    <li *ngFor="let program of group.programs">
+                        <a [routerLink]="['/pg', program.Disciplineslugname, program.SlugName]">
+                            {{ program.sfullname }}
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="col-md-12 text-center mt-5">
+                <h4>Ph.D Programs</h4>
+            </div>
+
+            <div class="col-md-12 mega-wrapper mb-4">
+
+                <ul class="mega_menu_nav shadow" *ngFor="let group of phdGroupedPrograms">
+                    <li class="mega_menu_head">
+                        <b>{{ group.disciplineName | uppercase }}</b>
+                    </li>
+
+                    <li *ngFor="let program of group.programs">
+                        <a [routerLink]="['/phd', program.Disciplineslugname, program.SlugName]">
+                            {{ program.sfullname }}
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+
+
+
+
+            <!-- ACADEMICS -->
+            <div class="col-md-3">
+                <ul class="mega_menu_nav shadow">
+                    <li class="mega_menu_head"><b>ACADEMICS</b></li>
+                    <li><a routerLink="/faculty">Faculty</a></li>
+                    <li><a routerLink="/study-abroad-program">Study Abroad</a></li>
+                    <li><a routerLink="/flexible-credit-system">Flexible Credit System</a></li>
+                    <li><a routerLink="/mentoring-system">Mentoring System</a></li>
+                    <li><a routerLink="/guest-lectures">Guest Lectures</a></li>
+                    <li>
+                        <a href="https://amityfinishingschool.com/" target="_blank">
+                            Amity Finishing School
+                        </a>
+                    </li>
+                    <li><a routerLink="/foreign-language">Foreign Language</a></li>
+                    <li><a routerLink="/academia">The Academia</a></li>
+                    <li><a routerLink="/behavioral-science">Behavioral Science Modules</a></li>
+                    <li><a routerLink="/industry-interacton">Industry Interaction</a></li>
+                    <li><a routerLink="/beyond-academics">Beyond Academics</a></li>
+                    <li>
+                        <a href="https://amity.edu/summerschool/" target="_blank">
+                            Summer School
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- PLACEMENTS -->
+            <div class="col-md-3">
+                <ul class="mega_menu_nav shadow">
+                    <li class="mega_menu_head"><b>PLACEMENTS</b></li>
+                    <li><a routerLink="/career-resource-centre">Career Resource Centre</a></li>
+                    <li><a routerLink="/placements">Placements</a></li>
+                    <li><a routerLink="/higher-education">Higher Education</a></li>
+                    <li><a routerLink="/placement-statistics">Placement Statistics</a></li>
+                    <li><a routerLink="/corporate-partners">Corporate Partners</a></li>
+                    <li>
+                        <a href="https://www.amity.edu/placement/default.aspx" target="_blank">
+                            Placement Drives
+                        </a>
+                    </li>
+                    <li><a routerLink="/incubator">Amity Incubator</a></li>
+                </ul>
+            </div>
+
+            <!-- RESEARCH -->
+            <div class="col-md-3">
+                <ul class="mega_menu_nav shadow">
+                    <li class="mega_menu_head"><b>RESEARCH</b></li>
+                    <li><a routerLink="/patents">Patents</a></li>
+                    <li><a routerLink="/publications">Publications</a></li>
+                    <li><a routerLink="/case-studies">Case Studies</a></li>
+                    <li><a routerLink="/sponsored-projects">Sponsored Projects</a></li>
+                    <li><a routerLink="/conferences">Conferences</a></li>
+                    <li><a routerLink="/research-centres">Research Centres</a></li>
+                    <li><a routerLink="/student-research">Student Research</a></li>
+                </ul>
+            </div>
+
+            <!-- BLOG CATEGORIES -->
+            <div class="col-md-3">
+                <ul class="mega_menu_nav shadow">
+                    <li class="mega_menu_head"><b>BLOGS</b></li>
+                    <p><a>Explore By Category</a></p>
+                    <li><a href="https://noida.amity.edu/blog/academics" target="_blank">Academics</a></li>
+                    <li><a href="https://noida.amity.edu/blog/career-guide" target="_blank">Career Guide</a></li>
+                    <li><a href="https://noida.amity.edu/blog/courses-after-10th" target="_blank">Courses after 10th</a></li>
+                    <li><a href="https://noida.amity.edu/blog/courses-after-12th" target="_blank">Courses after 12th</a></li>
+                    <li><a href="https://noida.amity.edu/blog/examination" target="_blank">Examination</a></li>
+                    <li><a href="https://noida.amity.edu/blog/rankings" target="_blank">Ranking</a></li>
+                </ul>
+            </div>
+
+
+        </div>
+    </div>
+</section>

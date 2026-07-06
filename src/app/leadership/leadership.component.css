@@ -1,0 +1,10 @@
+.instructor-profile-right .title {
+    font-weight: 500;
+}
+
+.leadership-box {
+    box-shadow: 0 4px 20px 0 rgb(199 199 199);
+    margin-bottom: 30px !important;
+    margin: 10px;
+    padding: 20px 20px;
+}

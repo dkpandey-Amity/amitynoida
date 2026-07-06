@@ -1,0 +1,52 @@
+<div class="breadcumb-wrapper">
+    <div class="container">
+        <div class="breadcumb-content text-center">
+            <h1 class="breadcumb-title">{{getPgProgramData[0].sDiscipline}}</h1>
+            <ul class="breadcumb-menu">
+                <li><a routerLink="/home">Home</a></li>
+                <li><a routerLink="/pg">PG Programs</a></li>
+                <li>{{getPgProgramData[0].sDiscipline}}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<section class="background-sec">
+    <div style="padding: 50px 0px 50px 0px">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center mb-4">
+                    <!-- <h2 class="sec-title" style="font-weight: 100;margin-bottom: 20px;">
+                        {{getPgProgramData[0].sDiscipline}}</h2> -->
+                    <!-- <p>{{getPgProgramData[0].Overview}}</p> -->
+                    <div [innerHTML]="getPgProgramData[0].DisciplineOverview | cleanHtml"></div>
+                </div>
+                <div class="col-md-12">
+                    <ul class="course-li">
+
+                        @for (item of getPgProgramData; track item.id) {
+                        <li class="wow fadeInUp">
+                            <p class="bdr-bottom">{{item.sfullname}}
+                                <!-- <a [routerLink]="['/pg', formatFacultyName(item.sDiscipline), item.SlugName, item.sCourseCode]"
+                                    class="view-detailsBtn">View Details</a> -->
+
+                                <a [routerLink]="['/pg', item.Disciplineslugname, item.SlugName]"
+                                    class="view-detailsBtn">View Details</a>
+
+                                @if (item.bAdmissionOpen == 1) {
+                                <a [href]="'https://noida.amity.edu/admissions-2026/?utm_term=keywordcoursecode_'+ item.sCourseCode" target="_blank"
+                                    class="apply-nowBtn">Apply Now</a>
+                                }
+                                @else {
+                                <!-- <span class="apply-nowBtn">Admission Closed</span> -->
+                                }
+
+                            </p>
+                        </li>
+                        }
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

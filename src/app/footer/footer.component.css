@@ -1,0 +1,158 @@
+footer {
+  background: #051a3e;
+}
+
+.enquiry-now-btn {
+  position: fixed;
+  top: 40%;
+  right: 0px;
+  z-index: 99;
+}
+
+.enquiry-now-btn img:hover {
+  cursor: pointer;
+}
+
+textarea,
+textarea.form-control {
+  min-height: 100px;
+}
+
+.form-control,
+.form-select,
+input,
+select,
+textarea {
+  height: 40px;
+  padding: 0 40px 0 10px;
+  border: 1px solid #0b2d4c42 !important;
+  color: var(--body-color);
+  background-color: #fff;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 100%;
+  font-family: var(--body-font);
+  -webkit-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group > i {
+  top: 12px;
+}
+
+.ug-program-radio {
+  margin-right: 15px;
+  display: inline-block;
+}
+
+input[type="radio"] ~ label {
+  padding-left: 25px !important;
+  font-weight: 400;
+}
+
+.modal {
+  top: 10% !important;
+}
+
+.footer-program-links-wrapper {
+  background: #fff;
+  border-radius: 10px;
+}
+
+.footer-program-links {
+  border-top: 1px solid #dee2e6;
+  padding-top: 15px;
+}
+
+.footer-program-block {
+  border-bottom: 1px solid #bababa;
+  padding: 10px 0;
+}
+
+.footer-program-head {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.footer-program-head strong {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.iconfooter {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.footer-program-body {
+  padding-top: 10px;
+  line-height: 1.8;
+}
+
+.footer-program-body a {
+  color: #414141;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.footer-program-body a:hover {
+  text-decoration: underline;
+}
+
+.iconfooter {
+  font-size: 30px;
+}
+
+.colspace {
+  padding: 0px 10px;
+}
+
+.popup {
+  position: fixed;
+  bottom: 180px;
+  right: 20px;
+  text-align: left;
+  background: #dba921 !important;
+  padding: 10px;
+  border-radius: 10px;
+  z-index: 9999;
+  width: 280px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.popup a {
+  color: #000;
+  text-decoration: none;
+}
+
+.popup h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.popup p {
+  margin: 0px 0 0;
+  font-size: 14px;
+}
+
+.popup .cut {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.popup .arrow {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+
+

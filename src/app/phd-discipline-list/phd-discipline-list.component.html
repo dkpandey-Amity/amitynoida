@@ -1,0 +1,71 @@
+<div class="breadcumb-wrapper">
+    <div class="container">
+        <div class="breadcumb-content text-center">
+            <h1 class="breadcumb-title">PhD Programs & Admissions</h1>
+            <ul class="breadcumb-menu">
+                <li><a routerLink="/home">Home</a></li>
+                <li>Ph.D Programs</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<app-phd-program-search></app-phd-program-search>
+<section class="background-sec">
+    <div style="padding: 50px 0px 50px 0px">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h6 class="h5-head">Programs by Discipline</h6>
+                    <div class="dicipline-bg">
+                        @for (item of PhdDisciplineList; track $index) {
+                        <ul class="course-li">
+                            <li>
+                                <!-- <a [routerLink]="['/phd', formatFacultyName(item.sDiscipline), item.iDisciplineId]">
+                                    <h3>{{item.sDiscipline}}</h3>
+                                </a> -->
+
+                                <a [routerLink]="['/phd', item.Disciplineslugname]">
+                                    <h3>{{item.sDiscipline}}</h3>
+                                </a>
+                            </li>
+                        </ul>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <ul class="course-li" *ngFor="let item of getAllPhdCourseDeiscipline">
+                        <li>
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <p>{{ item.sfullname }}</p>
+                                </div>
+                                <div class="col-md-5">
+
+                                    <!-- <a [routerLink]="['/phd', formatFacultyName(item.sDiscipline), item.SlugName]" class="view-detailsBtn" (click)="onPhdViewClick('phd_view_details_clicked')">View Details</a> -->
+
+                                    <a [routerLink]="['/phd', item.Disciplineslugname, item.SlugName]"
+                                        class="view-detailsBtn" (click)="onPhdViewClick('phd_view_details_clicked')">
+                                        View Details
+                                    </a>
+
+                                    <ng-container *ngIf="item.bAdmissionOpen == 1; else admissionClosed">
+                                        <a [href]="'https://noida.amity.edu/admissions-2026/?utm_source=organic&utm_medium=Google_SERP&utm_campaign=PHD_Apply_Now&utm_term=keywordcoursecode_'+ item.sCourseCode" target="_blank"
+                                            class="apply-nowBtn" (click)="onPhdApplyClick('phd_apply_now_clicked')">
+                                            Apply Now
+                                        </a>
+
+                                        <!-- <a href="https://noida.amity.edu/admissions-2026/" target="_blank"
+                                            class="apply-nowBtn"
+                                            (click)="onPhdApplyClick('phd_apply_now_clicked')">Apply Now</a> -->
+                                    </ng-container>
+                                    <ng-template #admissionClosed></ng-template>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

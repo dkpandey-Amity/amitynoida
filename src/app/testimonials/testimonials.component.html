@@ -1,0 +1,101 @@
+<div class="breadcumb-wrapper">
+    <div class="container">
+        <div class="breadcumb-content text-center">
+            <h1 class="breadcumb-title">Student Testimonials</h1>
+            <ul class="breadcumb-menu">
+                <li><a routerLink="/home">Home</a></li>
+                <li>Testimonials</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<section class="overflow-hidden space">
+    <div class="container">
+        <div class="title-area wow fadeInUp">
+            <h2 class="sec-title" style="font-weight: 100;">Our Testimonials</h2>
+        </div>
+    </div>
+    <div class="container our-testimonials wow fadeInUp">
+        <div class="row gy-4" style="justify-content: center;">
+            <div class="col-md-12 col-xl-12">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#home">Students</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#menu1">Parents</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#menu2">Alumni</a>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div id="home" class="container tab-pane active">
+                        @for (item of studentTestimonials; track $index) {
+                        <div class="parentbox">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="https://img.amizone.net/AzureFileHandler.ashx?FileName=amitywebsite/userfiles/Noida2024/{{item.ImagePath}}" alt="Team" />
+                                </div>
+                                <div class="col-md-9">
+                                    <h6>{{item.Name}}</h6>
+                                    <p>
+                                        <b>{{item.StudentDetails}}</b>
+                                    </p>
+                                    <p>{{item.Message}}</p>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        }
+                    </div>
+                    <div id="menu1" class="container tab-pane fade">
+                        @for (item of ParentsTestimonials; track $index) {
+                        <div class="parentbox">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="https://img.amizone.net/AzureFileHandler.ashx?FileName=amitywebsite/userfiles/Noida2024/{{item.ImagePath}}" alt="Team" />
+                                </div>
+                                <div class="col-md-9">
+                                    <h6>{{item.Name}}</h6>
+                                    <p>
+                                        <b>{{item.StudentDetails}}</b>
+                                    </p>
+                                    <p>{{item.Message}}</p>
+
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                    <div id="menu2" class="container tab-pane fade">
+                        @for (item of AlumniTestimonials; track $index) {
+                        <div class="parentbox">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="https://img.amizone.net/AzureFileHandler.ashx?FileName=amitywebsite/userfiles/Noida2024/{{item.ImagePath}}" alt="Team" />
+                                </div>
+                                <div class="col-md-9">
+                                    <h6>{{item.Name}}</h6>
+                                    <p>
+                                        <b>{{item.StudentDetails}}</b>
+                                    </p>
+                                    <p>{{item.Message}}</p>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>

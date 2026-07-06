@@ -1,0 +1,11 @@
+.admission-card {
+  height: 350px;
+  margin-bottom: 20px;
+}
+
+.admission-card p{
+    text-align: left;
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 300;
+}

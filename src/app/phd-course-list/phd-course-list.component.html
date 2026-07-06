@@ -1,0 +1,54 @@
+<div class="breadcumb-wrapper">
+    <div class="container">
+        <div class="breadcumb-content text-center">
+            <h1 class="breadcumb-title">{{getPhdProgramData[0].sDiscipline}}</h1>
+            <ul class="breadcumb-menu">
+                <li><a routerLink="/home">Home</a></li>
+                <li><a routerLink="/phd">Ph.D Programs</a></li>
+                <li>{{getPhdProgramData[0].sDiscipline}}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<section class="background-sec">
+    <div style="padding: 50px 0px 50px 0px">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center mb-4">
+                    <!-- <h2 class="sec-title" style="font-weight: 100;margin-bottom: 20px;">
+                        {{getPhdProgramData[0].sDiscipline}}</h2> -->
+                    <p>{{getPhdProgramData[0].DisciplineOverview}}</p>
+                </div>
+                <div class="col-md-12">
+                    <ul class="course-li">
+                        <ul>
+                            <li *ngFor="let item of getPhdProgramData" class="wow fadeInUp">
+                                <p class="bdr-bottom">
+                                    {{item.sfullname}}
+                                    <!-- <a [routerLink]="['/phd', formatFacultyName(item.sDiscipline), formatFacultyName(item.sfullname), item.sCourseCode]" 
+                                    class="view-detailsBtn"> View Details </a> -->
+
+                                    <a [routerLink]="['/phd', item.Disciplineslugname, item.SlugName]" class="view-detailsBtn"> View Details </a>
+
+                                    <ng-container *ngIf="item.bAdmissionOpen === 1">
+                                        <a [href]="'https://noida.amity.edu/admissions-2026/?utm_term=keywordcoursecode_'+ item.sCourseCode" target="_blank"
+                                            class="apply-nowBtn">
+                                            Apply Now
+                                        </a>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="item.bAdmissionOpen !== 1">
+                                        <!-- <span class="apply-nowBtn">Admission Closed</span> -->
+                                    </ng-container>
+
+                                </p>
+                            </li>
+                        </ul>
+
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

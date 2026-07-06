@@ -1,0 +1,254 @@
+<div>
+    <img src="assets/img/student-innovation-banner.jpg" class="img-fluid w-100" alt="Student innovation banner">
+</div>
+<section class="background-sec">
+    <div class="why-sec-v2 overflow-hidden space" style="padding-bottom: 0px;">
+        <div class="container">
+            <div class="title-area wow fadeInUp">
+                <h2 class="sec-title" style="font-weight: 100">Student Innovation at Amity University Noida</h2>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-xl-12 wow fadeInUp">
+                    <div class="wcu-wrap2">
+                        <div class="title-area mb-xl-5">
+                            <p>
+                                At Amity University Noida, student innovation thrives through cutting-edge AI, deep
+                                learning, and real-world research projects that solve complex global challenges. From
+                                healthcare and cybersecurity to smart agriculture and computer vision, students
+                                transform ideas into impactful innovations
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="padding: 0px 0px 50px 0px;">
+        <div class="row">
+
+            <ng-container *ngFor="let item of studentList; let i = index">
+
+                <!-- CARD -->
+                <div style="cursor: pointer;" class="col-sm-4">
+
+                    <div class="card" data-bs-toggle="modal" [attr.data-bs-target]="'#modal_' + i">
+
+                        <div class="card-top-bar"></div>
+
+                        <div class="card-body">
+
+                            <!-- TITLE -->
+                            <h6 class="title">{{ item.Topic1Name }}</h6>
+
+                            <!-- IMAGE -->
+                            <div class="arch-box" *ngIf="item.ImagePath1">
+                                <img [src]="item.ImagePath1" alt="Project Image">
+                            </div>
+
+                            <!-- AREA -->
+                            <div class="main-grid" style="display: block;">
+                                <p class="abstract-text">
+                                    <b>Area:</b> {{ item.Topic2Name }}
+                                </p>
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <!-- AUTHOR 1 -->
+                            <div class="author-card" *ngIf="item.StudentName">
+                                <div class="avatar avatar-at">
+                                    <img *ngIf="item.ImagePath" [src]="item.ImagePath"
+                                        style="width:50px;height:50px;border-radius:50%;">
+                                </div>
+
+                                <div class="author-info-new">
+                                    <div class="author-name">
+                                        {{ item.StudentName }}
+
+                                        <a *ngIf="item.linkedin" [href]="item.linkedin" target="_blank">
+                                            <i class="fab fa-linkedin"></i>
+                                        </a>
+
+                                        <a *ngIf="item.semail" [href]="'mailto:' + item.semail">
+                                            <i class="fas fa-envelope"></i>
+                                        </a>
+                                    </div>
+
+                                    <div class="author-role">
+                                        {{ item.Designation }}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <p style="text-align:center">
+                            <b style="color:#0c49a3">Read More...</b>
+                        </p>
+
+                    </div>
+                </div>
+
+                <!-- MODAL -->
+                <div class="modal fade" [id]="'modal_' + i" tabindex="-1">
+
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+
+                            <!-- HEADER -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">{{ item.Topic1Name }}</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <!-- BODY -->
+                            <div class="modal-body">
+                                <div class="card-body" style="padding:0">
+
+                                    <div class="main-grid1">
+
+                                        <!-- LEFT -->
+                                        <div>
+                                            <p><b>AREA:</b> {{ item.Topic2Name }}</p>
+
+                                            <div class="arch-box" *ngIf="item.ImagePath1">
+                                                <div class="arch-box-body">
+                                                    <img [src]="item.ImagePath1" class="img-fluid"
+                                                        style="width:120%;height:120%;">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- RIGHT -->
+                                        <div>
+
+                                            <!-- AUTHOR 1 -->
+                                            <div class="author-card" *ngIf="item.StudentName">
+                                                <div class="avatar avatar-at">
+                                                    <img *ngIf="item.ImagePath" [src]="item.ImagePath">
+                                                </div>
+
+                                                <div class="author-info-new">
+                                                    <div class="author-name">
+                                                        {{ item.StudentName }}
+                                                        <a *ngIf="item.linkedin" [href]="item.linkedin" target="_blank">
+                                                            <i class="fab fa-linkedin"></i>
+                                                        </a>
+
+                                                        <a *ngIf="item.semail" [href]="'mailto:' + item.semail">
+                                                            <i class="fas fa-envelope"></i>
+                                                        </a>
+                                                    </div>
+                                                    <div class="author-role">{{ item.Designation }}</div>
+
+
+                                                </div>
+                                            </div>
+
+                                            <!-- AUTHOR 2 -->
+                                            <div class="author-card" *ngIf="item.StudentName2">
+                                                <div class="avatar avatar-at">
+                                                    <img *ngIf="item.ImagePath2" [src]="item.ImagePath2">
+                                                </div>
+
+                                                <div class="author-info-new">
+                                                    <div class="author-name">{{ item.StudentName2 }}
+                                                        <a *ngIf="item.linkedin2" [href]="item.linkedin2"
+                                                            target="_blank">
+                                                            <i class="fab fa-linkedin"></i>
+                                                        </a>
+
+                                                        <a *ngIf="item.semail2" [href]="'mailto:' + item.semail2">
+                                                            <i class="fas fa-envelope"></i>
+                                                        </a>
+                                                    </div>
+                                                    <div class="author-role">{{ item.Designation2 }}</div>
+                                                </div>
+                                            </div>
+
+                                            <!-- AUTHOR 3 -->
+                                            <div class="author-card" *ngIf="item.StudentName3">
+                                                <div class="author-info-new">
+                                                    <div class="author-name">{{ item.StudentName3 }}
+                                                        <a *ngIf="item.linkedin3" [href]="item.linkedin3"
+                                                            target="_blank">
+                                                            <i class="fab fa-linkedin"></i>
+                                                        </a>
+
+                                                        <a *ngIf="item.semail3" [href]="'mailto:' + item.semail3">
+                                                            <i class="fas fa-envelope"></i>
+                                                        </a>
+                                                    </div>
+                                                    <div class="author-role">{{ item.Designation3 }}</div>
+                                                </div>
+                                            </div>
+
+                                            <!-- BRIEF -->
+                                            <div *ngIf="item.Brief">
+                                                <p><b>Key Highlights:</b></p>
+                                                <div class="scroll-box">
+                                                    <p class="abstract-text">{{ item.Brief }}</p>
+                                                </div>
+                                            </div>
+
+                                            <!-- MENTOR -->
+                                            <div *ngIf="item.mentor">
+                                                <p><b>Mentor</b></p>
+                                                <p class="abstract-text">{{ item.mentor }}</p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- READ MORE -->
+                                    <div *ngIf="item.ReadMorePath" style="margin-top:10px;">
+                                        <p><b>Relevant Publication / Patents:</b></p>
+                                        <div class="scroll-box-sm">
+                                            <a target="_blank"
+                                                [href]="'https://docs.google.com/gview?url=' + item.ReadMorePath + '&embedded=true'">
+                                                View Publication / Patent Document
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <!-- PUBLICATION -->
+                                    <div>
+                                        <p><b>Relevant Publication/Patents/Achievements:</b></p>
+                                        <div
+                                            style="height:112px;overflow:auto;border:1px solid #ddd;padding:5px;border-radius:10px;">
+                                            <p class="abstract-text">
+                                                {{ item.RelevantPublication }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- FOOTER -->
+                            <div class="modal-footer">
+                                <button class="btn btn-solid" data-bs-dismiss="modal">
+                                    CLOSE
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </ng-container>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center wow fadeInUp">
+                <a href="https://www.amity.edu/noida/student-innovation.aspx" class="btn btn-warning"
+                    target="_blank">
+                    <b>VIEW ALL</b> </a>
+            </div>
+
+        </div>
+    </div>
+</section>

@@ -1,0 +1,12 @@
+@media only screen and (max-width: 600px) {
+    .nav-link {
+        line-height: 14px;
+    }
+  }
+
+
+@media only screen and (min-width: 768px) {
+    .desktop-none {
+        display: none;
+    }
+}

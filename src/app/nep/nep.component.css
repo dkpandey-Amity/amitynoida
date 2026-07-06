@@ -1,0 +1,9 @@
+
+.accordion-card .accordion-button {
+    background-color: #0b2d4c !important;
+    color: #fff;
+}
+
+.accordion-card .accordion-button:after {
+    color: #ffffff;
+}

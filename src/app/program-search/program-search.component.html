@@ -1,0 +1,103 @@
+<section class="background-sec" style="padding: 35px 0px 0px 0px">
+    <form>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <select (change)="onProgramLevelChange($event)">
+                            <option value="AllPrograms">All Programs</option>
+                            <option value="Graduate">Graduate Programs</option>
+                            <option value="Postgraduate">Postgraduate Programs</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="search" placeholder="Search Your Course"
+                            [(ngModel)]="searchTerm" (ngModelChange)="onSearchTermChange()" required />
+                        <i class="far fa-search"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="container">
+        <div class="row">
+            <div *ngIf="showAllCourses" class="col-md-12">
+                <ul class="course-li" *ngFor="let item of filteredAllCourseData">
+                    <li>
+                        <div class="row">
+                            <div class="col-md-7">
+                                <p>{{ item.sfullname }}</p>
+                            </div>
+                            <div class="col-md-5">
+                                <!-- <a [routerLink]="['/ug', formatFacultyName(item.sDiscipline), item.SlugName, item.sCourseCode]"
+                                    class="view-detailsBtn">View Details</a> -->
+
+                                <a [routerLink]="['/ug', item.Disciplineslugname, item.SlugName]" class="view-detailsBtn">View Details</a>
+
+
+                                <ng-container *ngIf="item.bAdmissionOpen == 1; else admissionClosed">
+                                    <a [href]="'https://noida.amity.edu/admissions-2026/?utm_term=keywordcoursecode_'+ item.sCourseCode" target="_blank"
+                                        class="apply-nowBtn">Apply Now</a>
+                                </ng-container>
+                                <ng-template #admissionClosed></ng-template>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div *ngIf="showUndergraduateCourses" class="col-md-12">
+                <ul class="course-li" *ngFor="let item of filteredDisciplineCourseData">
+                    <li>
+                        <div class="row">
+                            <div class="col-md-7">
+                                <p>{{ item.sfullname }}</p>
+                            </div>
+                            <div class="col-md-5">
+                                <!-- <a [routerLink]="['/ug', formatFacultyName(item.sDiscipline), item.SlugName, item.sCourseCode]"
+                                    class="view-detailsBtn">View Details</a> -->
+
+                                <a [routerLink]="['/ug', item.Disciplineslugname, item.SlugName]" class="view-detailsBtn">View Details</a>
+
+                                <ng-container *ngIf="item.bAdmissionOpen == 1; else admissionClosed">
+                                    <a [href]="'https://noida.amity.edu/admissions-2026/?utm_term=keywordcoursecode_'+ item.sCourseCode" target="_blank"
+                                        class="apply-nowBtn">Apply Now</a>
+                                </ng-container>
+                                <ng-template #admissionClosed></ng-template>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div *ngIf="showPostgraduateCourses" class="col-md-12">
+                <ul class="course-li" *ngFor="let item of filteredPgDisciplineCourseData">
+                    <li>
+                        <div class="row">
+                            <div class="col-md-7">
+                                <p>{{ item.sfullname }}</p>
+                            </div>
+                            <div class="col-md-5">
+                                <!-- <a [routerLink]="['/ug', formatFacultyName(item.sDiscipline), item.SlugName, item.sCourseCode]"
+                                    class="view-detailsBtn">View Details</a> -->
+
+                                <a [routerLink]="['/ug', item.Disciplineslugname, item.SlugName]" class="view-detailsBtn">View Details</a>
+
+
+                                <ng-container *ngIf="item.bAdmissionOpen == 1; else admissionClosed">
+                                    <a [href]="'https://noida.amity.edu/admissions-2026/?utm_term=keywordcoursecode_'+ item.sCourseCode" target="_blank"
+                                        class="apply-nowBtn">Apply Now</a>
+                                </ng-container>
+                                <ng-template #admissionClosed></ng-template>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>

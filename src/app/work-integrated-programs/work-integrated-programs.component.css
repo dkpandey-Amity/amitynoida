@@ -1,0 +1,36 @@
+.no-margin p:first-child {
+    margin: 0 !important;
+}
+
+
+.tab-content>.active {
+    display: block;
+    background: #e9fbff;
+    height: 100%;
+    padding: 20px 10px;
+    margin: 0px;
+    width: 100%;
+    box-shadow: none;
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+    background: #e9fbff;
+    height: 100%;
+    border: none;
+}
+
+.nav-tabs {
+    display: flex;
+    gap: 1px;
+}
+
+.nav-tabs li {
+    flex: 1;
+    background: #ffc107;
+}
+
+.nav-tabs li a {
+    color: #000;
+    font-weight: 600;
+}

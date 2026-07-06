@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <meta name="robots" content="index, follow" />
+
+    <title>404 - Page Not Found | Amity University</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://noida.amity.edu/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://noida.amity.edu/assets/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://noida.amity.edu/assets/css/fancybox.css">
+    <link rel="stylesheet" href="https://noida.amity.edu/assets/css/animate.min.css">
+    <link rel="stylesheet" href="https://noida.amity.edu/assets/css/style.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://noida.amity.edu/favicon.ico">
+
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                "gtm.start": new Date().getTime(),
+                event: "gtm.js",
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != "dataLayer" ? "&l=" + l : "";
+            j.async = true;
+            j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, "script", "dataLayer", "GTM-NDJ9KD69");
+    </script>
+    <!-- End Google Tag Manager -->
+    <script>
+        (function () {
+            const COOKIE_NAME = "first_referrer";
+
+            const COOKIE_DAYS = 30;
+
+            const ROOT_DOMAIN = ".amity.edu";
+
+            // Helper: read a cookie by name
+
+            function getCookie(name) {
+                return document.cookie
+
+                    .split("; ")
+
+                    .reduce((val, pair) => {
+                        const [key, v] = pair.split("=");
+
+                        return key === name ? decodeURIComponent(v) : val;
+                    }, "");
+            }
+
+            // Helper: write a cookie on .amity.edu so it’s shared by all subdomains
+
+            function setCookie(name, value, days) {
+                const expires = new Date(Date.now() + days * 864e5).toUTCString();
+
+                document.cookie = [
+                    `${name}=${encodeURIComponent(value)}`,
+
+                    `expires=${expires}`,
+
+                    `path=/`,
+
+                    `domain=${ROOT_DOMAIN}`,
+
+                    `Secure`,
+
+                    `SameSite=None`,
+                ].join(";");
+            }
+
+            // Extract just the hostname (no www.)
+
+            function extractHostname(url) {
+                try {
+                    return new URL(url).hostname.replace(/^www\./, "");
+                } catch {
+                    return null;
+                }
+            }
+
+            const existing = getCookie(COOKIE_NAME);
+
+            const referrer = document.referrer || "";
+
+            const refHost = extractHostname(referrer);
+
+            const selfHost = window.location.hostname.replace(/^www\./, "");
+
+            // Only set the cookie if:
+
+            // 1. We don’t already have a first_referrer
+
+            // 2. The referrer is external (not our own root domain)
+
+            if (
+                !existing &&
+                refHost &&
+                !refHost.endsWith(selfHost) // prevents capturing internal links
+            ) {
+                setCookie(COOKIE_NAME, referrer, COOKIE_DAYS);
+            }
+
+            console.log("First referrer is:", getCookie(COOKIE_NAME));
+        })();
+    </script>
+
+    <script type="text/javascript">
+        var moeDataCenter = "dc_3"; // Replace "DC" with the actual Data center value from the above table
+        var moeAppID = "WNM41NHWNS2KSYCKG02T9FT6"; // Replace "WorkspaceID" available in the settings page of MoEngage Dashboard.
+        var sdkVersion = "2"; // Replace this value with the version of Web SDK that you intend to use. It is recommended to use the format x (major)
+        // var projectId = "{ProjectID}"
+        !(function (e, n, i, t, a, r, o, d) {
+            if (!moeDataCenter || !moeDataCenter.match(/^dc_[0-9]+$/gm))
+                return console.error(
+                    "Data center has not been passed correctly. Please follow the SDK installation instruction carefully."
+                );
+            var s = (e[a] = e[a] || []);
+            if (((s.invoked = 0), s.initialised > 0 || s.invoked > 0))
+                return (
+                    console.error(
+                        "MoEngage Web SDK initialised multiple times. Please integrate the Web SDK only once!"
+                    ),
+                    !1
+                );
+            e.moengage_object = a;
+            var l = {},
+                g = function n(i) {
+                    return function () {
+                        for (var n = arguments.length, t = Array(n), a = 0; a < n; a++)
+                            t[a] = arguments[a];
+                        (e.moengage_q = e.moengage_q || []).push({ f: i, a: t });
+                    };
+                },
+                u = [
+                    "track_event",
+                    "add_user_attribute",
+                    "add_first_name",
+                    "add_last_name",
+                    "add_email",
+                    "add_mobile",
+                    "add_user_name",
+                    "add_gender",
+                    "add_birthday",
+                    "destroy_session",
+                    "add_unique_user_id",
+                    "update_unique_user_id",
+                    "moe_events",
+                    "call_web_push",
+                    "track",
+                    "location_type_attribute",
+                    "identifyUser",
+                    "getUserIdentities",
+                ],
+                m = { onsite: ["getData", "registerCallback", "getSelfHandledOSM"] };
+            for (var c in u) l[u[c]] = g(u[c]);
+            for (var v in m)
+                for (var f in m[v])
+                    null == l[v] && (l[v] = {}), (l[v][m[v][f]] = g(v + "." + m[v][f]));
+            (r = n.createElement(i)),
+                (o = n.getElementsByTagName("head")[0]),
+                (r.async = 1),
+                (r.src = t),
+                o.appendChild(r),
+                (e.moe =
+                    e.moe ||
+                    function () {
+                        return ((s.invoked = s.invoked + 1), s.invoked > 1)
+                            ? (console.error(
+                                "MoEngage Web SDK initialised multiple times. Please integrate the Web SDK only once!"
+                            ),
+                                !1)
+                            : ((d = arguments.length <= 0 ? void 0 : arguments[0]), l);
+                    }),
+                r.addEventListener("load", function () {
+                    if (d)
+                        return (
+                            (e[a] = e.moe(d)),
+                            (e[a].initialised = e[a].initialised + 1 || 1),
+                            !0
+                        );
+                }),
+                r.addEventListener("error", function () {
+                    return console.error("Moengage Web SDK loading failed."), !1;
+                });
+        })(
+            window,
+            document,
+            "script",
+            "https://cdn.moengage.com/release/" +
+            moeDataCenter +
+            "/versions/" +
+            sdkVersion +
+            "/moe_webSdk.min.latest.js",
+            "Moengage"
+        );
+
+        Moengage = moe({
+            app_id: moeAppID,
+            debug_logs: 0,
+            enableSPA: true,
+        });
+    </script>
+    <script>
+        // Installation script generated by Spotify Ads Manager
+        (function (w, d) {
+            var id = 'spdt-capture', n = 'script';
+            if (!d.getElementById(id)) {
+                w.spdt =
+                    w.spdt ||
+                    function () {
+                        (w.spdt.q = w.spdt.q || []).push(arguments);
+                    };
+                var e = d.createElement(n); e.id = id; e.async = 1;
+                e.src = 'https://pixel.byspotify.com/ping.min.js';
+                var s = d.getElementsByTagName(n)[0];
+                s.parentNode.insertBefore(e, s);
+            }
+            w.spdt('conf', { key: 'ff5087561ec9490380ac69194171141b' });
+            w.spdt('view');
+        })(window, document);
+    </script>
+
+</head>
+
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NDJ9KD69" height="0" width="0"
+            style="display: none; visibility: hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <header class="th-header header-layout1">
+        <div class="header-top">
+            <div class="container">
+                <div class="row justify-content-center justify-content-lg-between align-items-center gy-2">
+                    <div class="col-md-9 d-none d-lg-block text-end">
+                        <div class="header-links">
+                            <ul>
+                                <li>
+                                    <a href="https://amity.edu/microsite" target="_blank">Admission Portal</a>
+                                </li>
+                                <li><a href="https://noida.amity.edu/infrastructure">Infrastructure </a>
+                                </li>
+                                <li>
+                                    <a href="https://noida.amity.edu/blog/" target="_blank">Blogs</a>
+                                </li>
+                                <li><a href="https://noida.amity.edu/news">News</a></li>
+                                <li>
+                                    <a href="https://noida.amity.edu/alumni/" target="_blank">Alumni</a>
+                                </li>
+                                <li><a href="https://noida.amity.edu/careers-at-amity">Careers at Amity</a>
+                                </li>
+                                <li><a href="https://noida.amity.edu/contact-us">Contact Us</a></li>
+                                <li>
+                                    <a class="nav-link" href="https://noida.amity.edu/assets/pdf/CampusTourScheduleAY2026.pdf"
+                                        target="_blank">Campus Tour</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <div class="header-links header-right">
+                            <ul>
+                                <li>
+                                    <div class="header-social">
+                                        <a href="https://www.instagram.com/amityuniversity.noida/" target="_blank"><i
+                                                class="fab fa-instagram" style="font-weight: 600"></i></a>
+                                        <a href="https://in.linkedin.com/school/amity-university/" target="_blank"><i
+                                                class="fab fa-linkedin"></i></a>
+                                        <a href="https://www.youtube.com/@amityuni" target="_blank"><i
+                                                class="fab fa-youtube"></i></a>
+                                        <a href="https://www.facebook.com/amityuni/" target="_blank"><i
+                                                class="fab fa-facebook"></i></a>
+                                        <a href="https://x.com/AmityUni" target="_blank"><i
+                                                class="fab fa-twitter"></i></a>
+                                        &nbsp;&nbsp;
+                                        <a href="https://noida.amity.edu/all-programs"><i
+                                                class="fa-solid fa-magnifying-glass" style="font-size: 18px"></i></a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg nav-background" id="navbar">
+            <div class="nav-sec">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-2 p-12">
+                            <a class="navbar-brand" href="https://noida.amity.edu/">
+                                <img src="https://noida.amity.edu/assets/img/amity-logo.png" alt="Amity Noida Logo" class="img-fluid" /></a>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                <ul class="navbar-nav ms-auto">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">About Us</a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/rankings">Rankings</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/accreditations">Accreditations</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/leadership">Leadership
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/testimonials">Testimonials
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/vision-mission">Vision/Mission</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/amity-university-logo">Amity
+                                                    University Logo</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/tie-ups">TIE UPS</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://www.youtube.com/watch?v=byEQ07OirOM"
+                                                    target="_blank">Virtual Tour</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">Admissions</a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/how-to-apply">How to
+                                                    Apply</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/fee-structure">Fee
+                                                    Structure</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/admission-career-test">Career
+                                                    Test</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/scholarships">Scholarships</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/education-loan">Education
+                                                    Loan</a>
+                                            </li>
+                                            <li><a class="dropdown-item"
+                                                    href="https://noida.amity.edu/faq">FAQs</a></li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/withdrawal">Withdrawal</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/international-students">International
+                                                    Students</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="https://www.amity.edu/phd/"
+                                                    target="_blank">Ph.D Admission</a>
+                                            </li>
+                                            <li><a class="dropdown-item" href="assets/pdf/admission-prospectus-2026.pdf"
+                                                    target="_blank">Admission Prospectus 2026</a></li>
+                                            <li>
+                                                <a class="dropdown-item" href="https://www.amity.edu/Lateral/"
+                                                    target="_blank">Lateral
+                                                    Admission</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="https://noida.amity.edu/webinars/"
+                                                    target="_blank">Webinars</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">Programs</a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/ug">Undergraduate Programs
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/pg">Postgraduate Programs
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/phd">Doctoral Programs</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/work-integrated-programs">Work-Integrated
+                                                    Programs</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/all-programs">Find a
+                                                    Program</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">Academics</a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/faculty">Faculty</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/study-abroad-program">Study
+                                                    Abroad</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/flexible-credit-system">Flexible
+                                                    Credit System</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/mentoring-system">Mentoring
+                                                    System</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/guest-lectures">Guest
+                                                    Lectures</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="https://amityfinishingschool.com/"
+                                                    target="_blank">Amity Finishing
+                                                    School</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/foreign-language">Foreign
+                                                    Language</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/academia">The Academia</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/behavioral-science">Behavioral
+                                                    Science Modules</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/industry-interacton">Industry
+                                                    Interaction</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/beyond-academics">Beyond
+                                                    Academics</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="https://amity.edu/summerschool/"
+                                                    target="_blank">Summer School</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">Placements</a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/placements">Placements</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/placement-statistics">Placement
+                                                    Statistics</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="assets/pdf/Amity_Outcome_Brochure.pdf"
+                                                    target="_blank">Placement Outcome</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/career-resource-centre">CRC</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/higher-education">Higher
+                                                    Education</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/corporate-partners">Corporate
+                                                    Partners</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://www.amity.edu/placement/default.aspx"
+                                                    target="_blank">Placement Drives</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/incubator">Amity
+                                                    Incubator</a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">Research</a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/patents">Patents</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/publications">Publications
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/case-studies">Case Studies
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/sponsored-projects">Sponsored
+                                                    Projects</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/conferences">Conferences
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/research-centres">Research
+                                                    Centres</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/student-innovation">Student
+                                                    Innovation</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/student-research">Student
+                                                    Research
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">Campus Life</a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/campus-events">Campus
+                                                    Events</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/university-fest">University
+                                                    Fest</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/student-clubs">Student
+                                                    Clubs</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/student-life">Student
+                                                    Life</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/sangathan">Sangathan</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/diversity">Diversity</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="https://noida.amity.edu/campus-security">Campus
+                                                    Security</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li class="apply-btn-mb">
+                                        <a href="https://noida.amity.edu/admissions-2026/?utm_source=organic&utm_medium=Google_SERP&utm_campaign=HPHeaderApply&utm_term={keyword}"
+                                            target="_blank" class="th-btn"
+                                            (click)="onClickEvent('header_apply_now_clicked')">Apply Now <i
+                                                class="fas fa-arrow-right ms-1"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- Breadcrumb Section -->
+    <!-- <div class="breadcumb-wrapper">
+        <div class="container">
+            <div class="breadcumb-content text-center">
+                <h1 class="breadcumb-title">Page Not Found</h1>
+                <ul class="breadcumb-menu">
+                    <li><a href="/">Home</a></li>
+                    <li>404</li>
+                </ul>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- 404 Content Section -->
+    <section class="overflow-hidden space background-sec">
+        <div class="container">
+            <div class="title-area text-center wow fadeInUp">
+                <h2 class="sec-title" style="font-weight: 100;">Oops! This page doesn't exist.</h2>
+                <p>The page you're looking for might have been removed, had its name changed, or is temporarily
+                    unavailable.</p>
+            </div>
+
+            <div class="row justify-content-center my-5">
+                <div class="col-md-6 col-lg-5 wow fadeInUp">
+                    <div class="admission-card text-center">
+                        <a href="https://noida.amity.edu/" class="btn btn-primary">Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="footer-wrapper footer-layout-2">
+        <div class="widget-area">
+            <div class="container">
+                <div class="row justify-content-between">
+                    <div class="col-md-3 col-6">
+                        <div class="widget widget_nav_menu footer-widget">
+                            <p class="widget_title">Our Programs</p>
+                            <div class="menu-all-pages-container">
+                                <ul class="menu">
+                                    <li><a href="https://noida.amity.edu/ug">Undergraduate Programs</a></li>
+                                    <li><a href="https://noida.amity.edu/pg">Postgraduate Programs </a></li>
+                                    <li><a href="https://noida.amity.edu/phd">Doctoral Programs</a></li>
+                                </ul>
+                            </div>
+                            <p>&nbsp;</p>
+                            <p class="widget_title">Campus Life
+                            </p>
+                            <div class="menu-all-pages-container">
+                                <ul class="menu">
+                                    <li><a href="https://noida.amity.edu/campus-events">Campus Events</a>
+                                    </li>
+                                    <li><a href="https://noida.amity.edu/university-fest">University
+                                            Fest</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-6">
+                        <div class="widget widget_nav_menu footer-widget">
+                            <p class="widget_title">Admissions</p>
+                            <div class="menu-all-pages-container">
+                                <ul class="menu">
+                                    <li><a href="https://noida.amity.edu/how-to-apply">How to Apply</a></li>
+                                    <li>
+                                        <a href="https://noida.amity.edu/fee-structure">Fee Structure</a>
+                                    </li>
+                                    <li><a href="https://noida.amity.edu/admission-career-test">Career
+                                            Test</a></li>
+                                    <li><a href="https://noida.amity.edu/scholarships">Scholarships</a></li>
+                                    <li><a href="https://noida.amity.edu/education-loan">Education Loan</a>
+                                    </li>
+                                    <li><a href="https://noida.amity.edu/faq">FAQs</a></li>
+                                    <li><a href="https://noida.amity.edu/withdrawal">Withdrawal</a></li>
+                                    <!-- <li><a href="https://amity.edu/microsite" target="_blank">Admission Portal</a></li> -->
+                                    <li><a href="https://www.amity.edu/Lateral/" target="_blank">Lateral Admission</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-6">
+                        <div class="widget widget_nav_menu footer-widget">
+                            <p class="widget_title">Other Links</p>
+                            <div class="menu-all-pages-container">
+                                <ul class="menu">
+                                    <li><a href="https://amizone.net/amizone/" target="_blank">Amizone</a></li>
+                                    <li><a href="https://noida.amity.edu/alumni/" target="_blank">Alumni Portal</a></li>
+                                    <li><a href="https://noida.amity.edu/placements">Placements</a></li>
+                                    <li><a href="https://noida.amity.edu/faculty">Faculty</a></li>
+                                    <li><a href="https://noida.amity.edu/study-abroad-program">Study
+                                            Abroad</a></li>
+                                    <li><a href="https://noida.amity.edu/contact-us">Contact</a></li>
+                                    <li><a href="https://amity.edu/summerschool/" target="_blank">Amity Summer
+                                            School</a>
+                                    </li>
+                                    <li><a href="https://amity.edu/amityeducationfoundation/" target="_blank">Amity
+                                            Foundation</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-6">
+                        <div class="widget widget_nav_menu footer-widget">
+                            <p class="widget_title">Media</p>
+                            <div class="menu-all-pages-container">
+                                <ul class="menu">
+                                    <li><a href="https://noida.amity.edu/events">Events</a></li>
+                                    <li><a href="https://noida.amity.edu/media-coverage">Media Coverage</a>
+                                    </li>
+                                    <li><a href="https://noida.amity.edu/student-clubs">Student Clubs</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <p>&nbsp;</p>
+                            <p class="widget_title">Explore / Engage
+                            </p>
+                            <div class="menu-all-pages-container">
+                                <ul class="menu">
+                                    <li>
+                                        <a href="https://amity.edu/360-VIEW.aspx" target="_blank">
+                                            <img src="https://amity.edu/images/360-icon.png" alt="360° View Icon"
+                                                width="24" height="24">
+                                            360° VIEW
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://radioamity.com/" target="_blank"><i
+                                                class="fa fa-microphone">&nbsp;</i> Amity Radio Live</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3  col-12">
+                        <div class="widget widget_contact footer-widget">
+                            <p class="widget_title">Get in touch!</p>
+                            <div class="th-widget-contact">
+                                <div class="info-box-wrap">
+                                    <div class="info-box_icon"><i class="fas fa-location-dot"></i></div>
+                                    <p class="info-box_text">
+                                        <a href="https://maps.app.goo.gl/y3kddHMA7haxBMsJ9" target="_blank"
+                                            style="color: #b3c1d3;">
+                                            Amity Rd, Sector 125, Noida, Uttar Pradesh 201301
+                                        </a>
+                                    </p>
+                                </div>
+                                <div class="info-box-wrap">
+                                    <div class="info-box_icon"><i class="fas fa-envelope"></i></div>
+                                    <a href="mailto:admissions&#64;amity.edu"
+                                        class="info-box_link">admissions&#64;amity.edu</a>
+                                </div>
+                                <div class="info-box-wrap">
+                                    <div class="info-box_icon"><i class="fas fa-phone"></i></div>
+                                    <a href="tel:01202445252" class="info-box_link">0120-2445252 /</a>
+                                    <a style="margin-left: -12px;" class="info-box_link"
+                                        href="tel:01204713600">4713600</a>
+                                </div>
+                                <div class="th-social">
+                                    <a href="https://www.instagram.com/amityuniversity.noida/" target="_blank"
+                                        rel="noopener noreferrer" title="Contact Amity University on instagram"
+                                        aria-label="instagram">
+                                        <i class="fab fa-instagram" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="https://www.facebook.com/amityuni/" target="_blank"
+                                        rel="noopener noreferrer" title="Follow Amity University on Facebook"
+                                        aria-label="Facebook">
+                                        <i class="fab fa-facebook-f" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="https://x.com/AmityUni" target="_blank" rel="noopener noreferrer"
+                                        title="Follow Amity University on Twitter" aria-label="Twitter">
+                                        <i class="fab fa-twitter" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="https://in.linkedin.com/school/amity-university/" target="_blank"
+                                        rel="noopener noreferrer" title="Connect with Amity University on LinkedIn"
+                                        aria-label="LinkedIn">
+                                        <i class="fab fa-linkedin-in" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="https://www.youtube.com/@amityuni" target="_blank"
+                                        rel="noopener noreferrer"
+                                        title="Subscribe to Amity University's YouTube channel" aria-label="YouTube">
+                                        <i class="fab fa-youtube" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright-wrap">
+            <div class="container">
+                <div class="row align-items-center">
+
+                    <!-- Left copyright -->
+                    <div class="col-md-6 col-12 text-md-start text-center">
+                        <p class="copyright-text mb-2 mb-md-0">
+                            Copyright © 2026 Amity University | All Rights Reserved.
+                        </p>
+                    </div>
+
+
+                    <!-- Right links -->
+                    <div class="col-md-6 d-none d-md-block text-end">
+                        <div class="footer-links">
+                            <ul>
+                                <li><a href="https://noida.amity.edu/privacy-policy">Privacy Policy</a></li>
+                                <li><a href="https://noida.amity.edu/sitemap">Sitemap</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </footer>
+
+</body>
+
+</html>

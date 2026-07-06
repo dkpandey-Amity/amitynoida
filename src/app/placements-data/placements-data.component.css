@@ -1,0 +1,299 @@
+/* .admission-card {
+    background-color: #0b2d4c14;
+} */
+
+@import url(https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css);
+@import url(../../../public/assets/placements/css/owl.carousel.min.css);
+@import url(../../../public/assets/placements/css/main.css);
+@import url(../../../public/assets/placements/css/easy-responsive-tabs.css);
+
+/* ==================== GLOBAL SLIDER STYLES ==================== */
+
+.stat p{
+  text-align: center;
+}
+
+.custom-slider {
+  position: relative;
+  overflow: hidden;
+}
+
+.slider-track {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.5s ease;
+  width: 100%;
+}
+
+.item {
+  flex: 0 0 auto;
+  min-width: calc(50% - 10px);
+}
+
+@media (max-width: 768px) {
+  .item {
+    min-width: 100%;
+  }
+}
+
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.prev {
+  left: 10px;
+}
+
+.next {
+  right: 10px;
+}
+
+/* ==================== AMITIANS SLIDER STYLES ==================== */
+.amitians .custom-slider {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.amitians .slider-track {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.4s ease-in-out;
+  will-change: transform;
+  width: 100%;
+}
+
+.amitians .item {
+  flex: 0 0 auto;
+  width: calc(33.333% - 14px);
+  min-width: 0; /* Add this to prevent overflow */
+  box-sizing: border-box; /* Ensure padding doesn't add to width */
+  margin: auto;
+}
+
+/* Make sure images don't overflow */
+.amitians .item img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Ensure the amitians_list doesn't cause overflow */
+.amitians_list {
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+@media (max-width: 1024px) {
+  .amitians .item {
+    width: calc(50% - 10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .amitians .item {
+    width: 100%;
+  }
+}
+
+/* Arrow container positioning */
+.amitians-nav {
+  position: absolute;
+  top: -60px;
+  right: 0;
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+/* Arrow buttons */
+.amitians .arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 11;
+}
+
+.amitians .arrow i {
+  color: #555;
+  font-size: 14px;
+}
+
+.amitians .arrow:hover {
+  background: #0b2d4c;
+}
+
+.amitians .arrow:hover i {
+  color: #fff;
+}
+
+/* Ensure slider container has position relative */
+.amitians-block {
+  position: relative;
+  overflow: visible;
+}
+
+/* Add container padding to prevent edge cutting */
+.amitians .container {
+  overflow: visible;
+}
+
+.amitians .row [class*="col-"] {
+  overflow: visible;
+}
+
+/* ==================== ACCORDION STYLES ==================== */
+.accrodion {
+  margin-bottom: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.accrodion-title {
+  padding: 18px 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  transition: background 0.3s ease;
+}
+
+.accrodion-title:hover {
+  background: #f9f9f9;
+}
+
+.accrodion-title h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.accrodion-title h4 span {
+  color: #ff6b35;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.accrodion-content {
+  display: none;
+  padding: 0 24px 24px 24px;
+  background: #f9f9f9;
+}
+
+.accrodion.active .accrodion-content {
+  display: block;
+}
+
+/* ==================== FAQ ACCORDION STYLES ==================== */
+.faqs-page .accrodion {
+  margin-bottom: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.faqs-page .accrodion-title {
+  padding: 20px 24px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+
+.faqs-page .accrodion-title:hover {
+  background: #f9f9f9;
+}
+
+.faqs-page .accrodion-title h4 {
+  flex: 1;
+}
+
+.faqs-page .accrodion.active .faq-icon {
+  transform: rotate(45deg);
+}
+
+.faqs-page .accrodion-content {
+  display: none;
+  padding: 0 24px 24px 24px;
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
+}
+
+.faqs-page .accrodion.active .accrodion-content {
+  display: block;
+}
+
+.faqs-page .accrodion-content p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #666;
+}
+
+/* ==================== RESPONSIVE STYLES ==================== */
+@media (max-width: 768px) {
+  .faqs-page .accrodion-title {
+    padding: 16px 20px;
+  }
+
+  .faqs-page .accrodion-title h4 {
+    font-size: 16px;
+  }
+
+  .faqs-page .accrodion-content {
+    padding: 0 20px 20px 20px;
+  }
+
+  .faqs-page .accrodion-content p {
+    font-size: 14px;
+  }
+}
+
+
+.scholarship-rotate-btn {
+  position: fixed;
+  top: 40%;
+  right: 18px;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: right center;
+  z-index: 9999;
+  background: #ffb400;
+  color: #000;
+  padding: 7px 20px;
+  font-weight: 600;
+  border-radius: 8px 8px 0 0;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  .scholarship-rotate-btn {
+    top: auto;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    transform: none; /* remove rotate */
+    width: 100%;
+    text-align: center;
+    border-radius: 0;
+    padding: 12px;
+  }
+}

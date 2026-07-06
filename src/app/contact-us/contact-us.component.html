@@ -1,0 +1,1234 @@
+<div class="breadcumb-wrapper">
+    <div class="container">
+        <div class="breadcumb-content text-center">
+            <h1 class="breadcumb-title">Contact Us</h1>
+            <ul class="breadcumb-menu">
+                <li><a routerLink="/home">Home</a></li>
+                <li>Contact Us</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="space background-sec">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mb-30 wow fadeInUp">
+                <div class="me-xxl-5">
+                    <!--<div class="title-area mb-25">
+                        <h2 class="border-title h3">Have Any Questions?</h2>
+                    </div>-->
+                    <div class="contact-feature">
+                        <div class="contact-feature-icon"><i class="fal fa-location-dot"></i></div>
+                        <div class="media-body">
+                            <p class="contact-feature_label">Our Address</p>
+                            <a href="https://maps.app.goo.gl/y3kddHMA7haxBMsJ9" target="_blank"
+                                class="contact-feature_link">Amity University
+                                Noida<br />
+                                Sector-125, Noida- 201313 (UP)
+                            </a>
+                        </div>
+                    </div>
+                    <div class="contact-feature">
+                        <div class="contact-feature-icon"><i class="fal fa-location-dot"></i></div>
+                        <div class="media-body">
+                            <p class="contact-feature_label">Admission Office</p>
+                            <a href="https://maps.app.goo.gl/c2s72rDNE9Wq5onw6" target="_blank"
+                                class="contact-feature_link">Block-J2, Gate No.-3,
+                                <br />
+                                Amity University Noida Campus
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="contact-feature">
+                        <div class="contact-feature-icon"><i class="fal fa-phone"></i></div>
+                        <div class="media-body">
+                            <p class="contact-feature_label">Admission Helpline</p>
+                            <a href="tel:01202445252" class="contact-feature_link"><span>0120-2445252</span></a> <a
+                                href="tel:0120-4713600" class="contact-feature_link"><span>0120-4713600</span></a>
+                        </div>
+                    </div>
+                    <div class="contact-feature">
+                        <div class="contact-feature-icon"><i class="fal fa-envelope"></i></div>
+                        <div class="media-body">
+                            <p class="contact-feature_label">Email</p>
+                            <span class="contact-feature_link"><a
+                                    href="mailto:admissions@amity.edu">admissions&#64;amity.edu</a></span>
+                        </div>
+                    </div>
+                    <div class="contact-feature">
+                        <div class="contact-feature-icon">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="media-body">
+                            <p class="contact-feature_label">Whatsapp</p>
+                            <span class="contact-feature_link"><a href="https://wa.me/918448396303/?text=Hello, Amity"
+                                    target="_blank">+91
+                                    8448396303 </a>(Through this channel only queries pertaining to regular programmes
+                                of Noida campus will be addressed.)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 wow fadeInUp">
+                <div class="contact-form-wrap" data-bg-src="assets/img/bg/contact_bg_1.png">
+                    <!--<span class="sub-title">Contact With Us!</span>-->
+                    <h2 class="border-title">Get in Touch</h2>
+                    <p>Amity Info-centres are an extension of Amity Universe which help one get admission in desired
+                        programs and campus of one’s choice.</p>
+                    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form ajax-contact">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="text" class="form-control style-white" formControlName="Name"
+                                        placeholder="Name*" />
+                                    <i class="fal fa-user"></i>
+                                    <div *ngIf="contactForm.get('Name')?.touched && contactForm.get('Name')?.invalid">
+                                        <b><small class="text-danger"
+                                                *ngIf="contactForm.get('Name')?.errors?.['required']">Name is
+                                                required.</small></b>
+                                        <b><small class="text-danger"
+                                                *ngIf="contactForm.get('Name')?.errors?.['minlength']">Name must be at
+                                                least 2
+                                                characters long.</small></b>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="email" class="form-control style-white" formControlName="Email"
+                                        placeholder="Email*" />
+                                    <i class="fal fa-envelope"></i>
+                                    <div *ngIf="contactForm.get('Email')?.touched && contactForm.get('Email')?.invalid">
+                                        <b><small class="text-danger"
+                                                *ngIf="contactForm.get('Email')?.errors?.['required']">Email is
+                                                required.</small></b>
+                                        <b><small class="text-danger"
+                                                *ngIf="contactForm.get('Email')?.errors?.['email']">Enter
+                                                a valid email.</small></b>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="tel" class="form-control style-white" formControlName="Phone"
+                                        placeholder="Mobile*" />
+                                    <i class="fal fa-phone"></i>
+
+                                    <div *ngIf="contactForm.get('Phone')?.touched && contactForm.get('Phone')?.invalid">
+                                        <b>
+                                            <small class="text-danger"
+                                                *ngIf="contactForm.get('Phone')?.errors?.['required']">
+                                                Phone number is required.
+                                            </small>
+                                        </b>
+                                        <b>
+                                            <small class="text-danger"
+                                                *ngIf="contactForm.get('Phone')?.errors?.['pattern']">
+                                                Enter a valid 10-digit phone number.
+                                            </small>
+                                        </b>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <textarea formControlName="Message" cols="30" rows="3"
+                                        class="form-control style-white" placeholder="Write Your Message*"></textarea>
+                                    <i class="fal fa-pen"></i>
+                                    <div
+                                        *ngIf="contactForm.get('Message')?.touched && contactForm.get('Message')?.invalid">
+                                        <b><small class="text-danger"
+                                                *ngIf="contactForm.get('Message')?.errors?.['required']">
+                                                Message is required.
+                                            </small></b>
+                                        <b><small class="text-danger"
+                                                *ngIf="contactForm.get('Message')?.errors?.['minlength']">
+                                                Message must be at least 10 characters long.
+                                            </small></b>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-text fw-bold">
+                                            {{ captchaQuestion }}
+                                        </span>
+
+                                        <input type="text" class="form-control" formControlName="captcha"
+                                            placeholder="Enter Answer">
+
+                                        <button class="btn btn-outline-secondary" type="button"
+                                            (click)="generateCaptcha()">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </button>
+
+                                    </div>
+
+                                    <b><small class="text-danger"
+                                            *ngIf="contactForm.get('captcha')?.touched && contactForm.get('captcha')?.invalid">
+                                            Captcha is required.
+                                        </small></b>
+                                </div>
+                            </div>
+
+                            <div class="form-btn col-12 mt-10">
+                                <button type="submit" class="th-btn" (click)="onSendMessageClick('contactus_clicked')">
+                                    Send Message<i class="fas fa-long-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="space bg-smoke">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/agartala.jpg" class="img-fluid"
+                        alt="Amity University Agartala campus building" />
+                    <h5>AGARTALA</h5>
+                    <p>
+                        Unit Bearing No. 21/6,<br />
+                        Municipal Holding No. 498-A/1483,<br />
+                        Ward No. 5/14, laxmi Narayan Bari Road, Agartala
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0381-2970100<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infoagartala&#64;aic.amity.edu">infoagartala&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/agra.jpg" class="img-fluid" alt="Amity University Agra campus front view" />
+                    <h5>AGRA</h5>
+                    <p>
+                        E-14/6, 2ND Floor, office no.6,<br />
+                        Shanta Tower, Above ICICI BANK<br />
+                        Sanjay Palace Agra-282002
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0562-4000133<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infoagra&#64;aic.amity.edu">infoagra&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/allahabad.jpg" class="img-fluid"
+                        alt="Amity University Allahabad campus exterior" />
+                    <h5>ALLAHABAD</h5>
+                    <p>
+                        Plot no-HH/A 54 A, Second floor, Civil lines<br />
+                        Allahabad-211002
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0532-2260123<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infoallahabad&#64;aic.amity.edu">infoallahabad&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/amritsar.jpg" class="img-fluid" alt="Amity University Amritsar campus view" />
+                    <h5>AMRITSAR</h5>
+                    <p>
+                        SC0-21, 4th Floor,<br />
+                        Hemkunt Towers ,Dist Shopping Complex,<br />
+                        B Block Ranjit Avenue, Amritsar.
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0183-5011125<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infoamritsar&#64;aic.amity.edu">infoamritsar&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/aurangabad.jpg" class="img-fluid"
+                        alt="Amity University Aurangabad campus building" />
+                    <h5>AURANGABAD</h5>
+                    <p>
+                        City Heights, 2nd Floor,<br />
+                        Jijamata Colony, Nirala Bazar to<br />
+                        Paithan Gate Road,Aurangabad-431001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 9503000264<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infoaurangabad&#64;aic.amity.edu">infoaurangabad&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/bareilly.jpg" class="img-fluid"
+                        alt="Amity University Bareilly campus building" />
+                    <h5>BAREILLY</h5>
+                    <p>
+                        Shop No. 1, First Floor,<br />
+                        Opp. LIC Building, Deen Dayal Puram,<br />
+                        Near Selection Point, Bareilly, Uttar Pradesh-2430012
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0581-2311720<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infobareily&#64;aic.amity.edu">infobareily&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/belgaum.jpg" class="img-fluid"
+                        alt="Amity University Belgaum campus building" />
+                    <h5>BELGAUM</h5>
+                    <p>
+                        CTS 3439, 1A/2A,<br />
+                        More plaza, College Road, Belgaum - 590001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0831-2451022<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infobelgaum&#64;aic.amity.edu">infobelgaum&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/bhagalpur.jpg" class="img-fluid"
+                        alt="Amity University Bhagalpur campus front" />
+                    <h5>BHAGALPUR</h5>
+                    <p>
+                        2ND FLOOR, Patal Babu Road,<br />
+                        Angar Complex, Bhagalpur 812001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0641-2420190<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infobhagalpur&#64;aic.amity.edu">infobhagalpur&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/bilaspur.jpg" class="img-fluid"
+                        alt="Amity University Bilaspur campus building" />
+                    <h5>BHATINDA</h5>
+                    <p>
+                        Grover Complex, Grover Complex 2739 AB,<br />
+                        Second Floor, Shri Hanuman Chowk,<br />
+                        GT Road, Bhatinda 151001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0164-5006897<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infobhatinda&#64;aic.amity.edu">infobhatinda&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/kanpur.jpg" class="img-fluid" alt="Amity University Kanpur campus exterior" />
+                    <h5>BHOPAL</h5>
+                    <p>
+                        Plot No-133, 2nd floor Kay Kay<br />
+                        Business Centre Above CITI Bank,<br />
+                        Zone-1 M.P Nagar , Bhopal (M.P)-462023
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0755-4233001<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infobhopal&#64;aic.amity.edu">infobhopal&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/bhubaneshwar.jpg" class="img-fluid"
+                        alt="Amity University Bhubaneswar campus view" />
+                    <h5>BHUBANESHWAR</h5>
+                    <p>
+                        Parthasarathi Complex, M-1/M-2,<br />
+                        Madhusudan Nagar, Unit-4,<br />
+                        (Near Nicco Park), Bhubaneswar-751001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0674-2973576<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infobhubaneshwar&#64;aic.amity.edu">infobhubaneshwar&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/bilaspur.jpg" class="img-fluid"
+                        alt="Amity University bilaspur campus front building" />
+                    <h5>BILASPUR</h5>
+                    <p>
+                        Om Sharda Chamber, 2nd Floor,<br />
+                        Shrikant Verma Marg, Near Rama Magneto Mall, Bilaspur
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 07752-490749<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infobilaspur&#64;aic.amity.edu">infobilaspur&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/bokaro.jpg" class="img-fluid"
+                        alt="Amity University Bokaro campus front building" />
+                    <h5>BOKARO</h5>
+                    <p>
+                        Plot No - GE-10, City Center,<br />
+                        Bokaro Steel City, Bokaro, Jharkhand - 827004
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0654-2231001<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infobokaro&#64;aic.amity.edu">infobokaro&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/burdwan.jpg" class="img-fluid"
+                        alt="Amity University Burdwan campus building" />
+                    <h5>BURDWAN</h5>
+                    <p>
+                        Talk of the town,398,GT Road,<br />
+                        Bardhhaman 713101
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0342-2665682<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infoburdwan&#64;aic.amity.edu">infoburdwan&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/calicut.jpg" class="img-fluid"
+                        alt="Amity University Calicut campus front view" />
+                    <h5>CALICUT</h5>
+                    <p>
+                        5th Floor, V Zone Mall,<br />
+                        Parayanchery, Mavoor Road, Calicut
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0495-4015251<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infocalicut&#64;aic.amity.edu">infocalicut&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/coimbatore.jpg" class="img-fluid"
+                        alt="Amity University Coimbatore campus building" />
+                    <h5>COIMBATORE</h5>
+                    <p>
+                        Room no-202A, Raheja Centre,<br />
+                        Avinashi Road, Coimbatore
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0422-4200364<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infocoimbatore&#64;aic.amity.edu">infocoimbatore&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/dehradun.jpg" class="img-fluid" alt="Amity University Dehradun campus view" />
+                    <h5>DEHRADUN</h5>
+                    <p>
+                        91-Shivalik Complex, 1st Floor, opp PNB,<br />
+                        Tagore Villa, Chakrata Road, Dehradun,<br />
+                        Uttarakhand - 248001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 7895688333<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infodehradun&#64;aic.amity.edu">infodehradun&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/dhanbad.jpg" class="img-fluid"
+                        alt="Amity University Dhanbad campus exterior" />
+                    <h5>DHANBAD</h5>
+                    <p>210, 2nd floor, Shri Ram Plaza, Bank More, Dhanbad</p>
+                    <p>
+                        <strong>Contact :</strong> 0326-2300457<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infodhanbad&#64;aic.amity.edu">infodhanbad&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/dharmshala.jpg" class="img-fluid"
+                        alt="Amity University Dharamshala campus building" />
+                    <h5>DHARMSHALA</h5>
+                    <p>
+                        Vidya Complex ,59 Civil Line, Dharmshala,<br />
+                        Dist- Kangra (HP)-176215
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0189-2223166<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infodharmshala&#64;aic.amity.edu">infodharmshala&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/dibrugarh.jpg" class="img-fluid"
+                        alt="Amity University Dibrugarh campus view" />
+                    <h5>DIBRUGARH</h5>
+                    <p>
+                        Amba Complex, 3rd Floor, H.S Road,<br />
+                        Opposite to Aurora Cinema Hall, Dibrugarh- 786001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0373-2324277<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infodibrugarh&#64;aic.amity.edu">infodibrugarh&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/durgapur.jpg" class="img-fluid"
+                        alt="Amity University Durgapur campus exterior" />
+                    <h5>DURGAPUR</h5>
+                    <p>
+                        Nachan Road, Opp. of HDFC Bank,<br />
+                        Benachity, Durgapur-713213
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0343-2583536<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infodurgapur&#64;aic.amity.edu">infodurgapur&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/gaya.jpg" class="img-fluid" alt="Amity University Gaya campus building" />
+                    <h5>GAYA</h5>
+                    <p>
+                        Above Tanishq Showroom,<br />
+                        Aziza Plaza, 5th Floor, Solra Colony,<br />
+                        Swarajpur Puri Road, Gaya-823001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0631-2222073<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infogaya&#64;aic.amity.edu">infogaya&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/guntur.jpg" class="img-fluid" alt="Amity University Guntur campus view" />
+                    <h5>GUNTUR</h5>
+                    <p>
+                        Perumal Complex, 4/13,cross road,<br />
+                        1st Floor, Opposite Andhra Bank, Brodipet Guntur 522002
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0863-2232506<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infoguntur&#64;aic.amity.edu">infoguntur&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/guwahati.jpg" class="img-fluid"
+                        alt="Amity University Guwahati campus building" />
+                    <h5>GUWAHATI</h5>
+                    <p>5-C Dhiang Arcade, G.S. Road,Guwahati</p>
+                    <p>
+                        <strong>Contact :</strong> 0361-2469417<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infoguwahati&#64;aic.amity.edu">infoguwahati&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/patilia.jpg" class="img-fluid"
+                        alt="Amity University Patiala campus exterior" />
+                    <h5>GWALIOR</h5>
+                    <p>
+                        Flat No.206(B),Second Floor,<br />
+                        Narayan Krishna Tower, City Center Gwalior
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0751-2340305<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infogwalior&#64;aic.amity.edu">infogwalior&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/haldwani.jpg" class="img-fluid" alt="Amity University Haldwani campus view" />
+                    <h5>HALDWANI</h5>
+                    <p>
+                        Hall No-1 2nd Floor Phase-3,<br />
+                        Sanwal Chadha Complex,<br />
+                        Durga City Center, Haldwani - 263139
+                    </p>
+
+                    <p>
+                        <strong>Contact :</strong> 05946-222044<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infohaldwani&#64;aic.amity.edu">infohaldwani&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/trivandrum.jpg" class="img-fluid"
+                        alt="Amity University Trivandrum campus building" />
+                    <h5>HISAR</h5>
+                    <p>
+                        Unit Bearing, 1st Floor,<br />
+                        Plot No. 30S, Model Town, Hisar- 125005
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 01662-250025<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infohisar&#64;aic.amity.edu">infohisar&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/jabalpur.jpg" class="img-fluid"
+                        alt="Amity University Jabalpur campus exterior" />
+                    <h5>JABALPUR</h5>
+                    <p>
+                        1989, MLB Crossing,<br />
+                        Near Manas Bhawan Opp.<br />
+                        Basket Ball Ground Wright Town Jabalpur-482001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0761-4031994<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infojabalpur&#64;aic.amity.edu">infojabalpur&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/jalandhar.jpg" class="img-fluid"
+                        alt="Amity University Jalandhar campus view" />
+                    <h5>JALANDHAR</h5>
+                    <p>
+                        City Square Building, Shop No. 32, 2nd Floor EH-197,<br />
+                        Civil Lines, Opp. Hans Raj Stadium,<br />
+                        Jalandhar City (Punjab) Pin Code - 144001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0181-4612280<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infojalandhar&#64;iac.amity.edu">infojalandhar&#64;iac.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/jammu.jpg" class="img-fluid" alt="Amity University Jammu campus building" />
+                    <h5>JAMMU</h5>
+                    <p>
+                        312-B1, Hall No. 312, 3rd Floor,<br />
+                        North Block, Bahu Plaza,<br />
+                        Near Railway Station, Jammu- 180014
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0191-2473902<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infojammu&#64;aic.amity.edu">infojammu&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/jamshedpur.jpg" class="img-fluid"
+                        alt="Amity University Jamshedpur campus exterior" />
+                    <h5>JAMSHEDPUR</h5>
+                    <p>67,Pennar Road 1st Floor Above ICICI Bank, Main Road Sakchi Jamshedpur-831001, Jharkhand</p>
+                    <p>
+                        <strong>Contact :</strong> 0657-2222200<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infojamshedpur&#64;aic.amity.edu">infojamshedpur&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/jorhat.jpg" class="img-fluid" alt="Amity University Jorhat campus view" />
+                    <h5>JORHAT</h5>
+                    <p>
+                        P.R. TOWER , Gar Ali Near PWD office,<br />
+                        Jorhat Assam-785001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0376-2950137<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infojorhat&#64;aic.amity.edu">infojorhat&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/kanpur.jpg" class="img-fluid" alt="Amity University Kannur campus building" />
+                    <h5>KANNUR</h5>
+                    <p>
+                        Amity Info Centre, KVR Tower,<br />
+                        1st Floor,Kannur-2
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0497-2764106<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infokannur&#64;aic.amity.edu">infokannur&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/kanpur.jpg" class="img-fluid" alt="Amity University kanpur campus building" />
+                    <h5>KANPUR</h5>
+                    <p>
+                        117/N/78 Avon Market,<br />
+                        Pandu Nagar, Kanpur Pin- 208005
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 8188016660<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infokanpur&#64;aic.amity.edu">infokanpur&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/karnal.jpg" class="img-fluid" alt="Amity University karnal campus view" />
+                    <h5>KARNAL</h5>
+                    <p>
+                        S.C.O 202, Above United properties,<br />
+                        Sector - 12 , KARNAL-132001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0184-2266211<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infokarnal&#64;aic.amity.edu">infokarnal&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/ludhiyana.jpg" class="img-fluid"
+                        alt="Amity University Ludhiana campus building" />
+                    <h5>LUDHIANA</h5>
+                    <p>
+                        5th Floor, SCO 41 above titan Showroom Feroz Gandhi Market,<br />
+                        Ludhiana Punjab-141001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0161-5025580<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infoludhiana&#64;aic.amity.edu">infoludhiana&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/madhurai.jpg" class="img-fluid" alt="Amity University Madurai campus view" />
+                    <h5>MADURAI</h5>
+                    <p>
+                        82 - Chandra Gandhi Nagar,<br />
+                        Ponmeni, Madurai - 625010
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0452 4377957<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infomadurai&#64;aic.amity.edu">infomadurai&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/bilaspur.jpg" class="img-fluid" alt="Amity University Mangalore campus" />
+                    <h5>MANGALORE</h5>
+                    <p>
+                        309, Levilla 3, Classic Arcade,<br />
+                        next to City Centre Mall,<br />
+                        KS Rao Road, Mangalore - 575001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0824-4266477<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infomangalore&#64;aic.amity.edu">infomangalore&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/moradabad.jpg" class="img-fluid" alt="Amity University moradabad campus" />
+                    <h5>MORADABAD</h5>
+                    <p>
+                        First Floor, Cross Road Mall,<br />
+                        Near RN Inter College,<br />
+                        Civil Lines, Moradabad - 244001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0591-2411295<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infomoradabad&#64;aic.amity.edu">infomoradabad&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/muzzafarpur.jpg" class="img-fluid"
+                        alt="Amity University Muzaffarpur campus building" />
+                    <h5>MUZZAFARPUR</h5>
+                    <p>
+                        Kalambagh Road, Near Magma Office,<br />
+                        Aghoriya Bazar, Muzzafarpur.
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 9939025963<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infomuzaffarpur&#64;aic.amity.edu">infomuzaffarpur&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/mysore.jpg" class="img-fluid"
+                        alt="Amity University Mysore campus front view" />
+                    <h5>MYSORE</h5>
+                    <p>
+                        #939,7th Main,New Kantharaja Urs Road,<br />
+                        Saraswathipuram, Mysore, Karnataka-570009
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0821 4244382<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infomysore&#64;aic.amity.edu">infomysore&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/nagpur.jpg" class="img-fluid" alt="Amity University Nagpur campus building" />
+                    <h5>NAGPUR</h5>
+                    <p>
+                        504, 5th Floor, Indu yash-2,<br />
+                        Ram Nagar Square,<br />
+                        Nagpur-33 Landmark Near Ram Nagar Bus Stop Above Olympia Gym-440010
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0712-6631899<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infonagpur&#64;aic.amity.edu">infonagpur&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/nashik.jpg" class="img-fluid" alt="Amity University Nashik campus exterior" />
+                    <h5>NASHIK</h5>
+                    <p>
+                        Luthara House, College Road,<br />
+                        Above Manyavar Showroom, Nashik-422005
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0253-2232197<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infonasik&#64;aic.amity.edu">infonasik&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/patilia.jpg" class="img-fluid" alt="Amity University Patiala campus" />
+                    <h5>PATIALA</h5>
+                    <p>
+                        3266/1, Sherawala gate,<br />
+                        Patiala-147001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0175-5063612<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infopatiala&#64;aic.amity.edu">infopatiala&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/pondicherry.jpg" class="img-fluid"
+                        alt="Amity University Pondicherry campus building" />
+                    <h5>PONDICHERRY</h5>
+                    <p>
+                        1st Floor, 31 (47),<br />
+                        Ambalathadayar Street, Heritage Town,<br />
+                        Punducherry-605001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0413 4900492<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infopondicherry&#64;aic.amity.edu">infopondicherry&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/bhubaneshwar.jpg" class="img-fluid" alt="Amity University Raipur campus" />
+                    <h5>RAIPUR</h5>
+                    <p>
+                        C-14, 3rd Floor, Shyam Plaza, Pandri,<br />
+                        Opp-Pandri Bus Stand, Raipur, (C.G.)
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0771-2428464<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:inforaipur&#64;aic.amity.edu">inforaipur&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/nashik.jpg" class="img-fluid" alt="Amity University Rajahmundry campus" />
+                    <h5>RAJAHMUNDRY</h5>
+                    <p>
+                        Mounika Plaza, Flat no -302 ,D.no 46-12-24, Danavanipeta, Rajahmundry.
+                        <br />
+                        (Andhra Pradesh) Pin code : 533103
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0883-2481879<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:inforajahmundry&#64;aic.amity.edu">inforajahmundry&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/rourkela.jpg" class="img-fluid" alt="Amity University Rourkela campus view" />
+                    <h5>ROURKELA</h5>
+                    <p>
+                        D-11, Koel Nagar,<br />
+                        Rourkela - 769014
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0661-2470110<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:inforourkela&#64;aic.amity.edu">inforourkela&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/durgapur.jpg" class="img-fluid" alt="Amity University durgapur campus view" />
+                    <h5>SALEM</h5>
+                    <p>
+                        356/1, Empire Arcade,<br />
+                        Omalur Main Road, Opp. New Bus Stand,<br />
+                        Salem-636004
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0427-4050905<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infosalem&#64;aic.amity.edu">infosalem&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/sambhalpur.jpg" class="img-fluid" alt="Amity University Sambalpur campus" />
+                    <h5>SAMBHALPUR</h5>
+                    <p>
+                        Balaji Business Centre,<br />
+                        3rd Floor, Main Road, Budharaja,<br />
+                        Po- Ainthapali, Sambalpur, Pin-768004
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0663-2540135<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infosambhalpur&#64;aic.amity.edu">infosambhalpur&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/shimla.jpg" class="img-fluid" alt="Amity University shimla campus" />
+                    <h5>SHIMLA</h5>
+                    <p>
+                        Sarab Complex, Top Floor,<br />
+                        Above Dr Lal Path Lab,<br />
+                        Sanjauli, Shimla-171006
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0177-2844883<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infoshimla&#64;aic.amity.edu">infoshimla&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/guntur.jpg" class="img-fluid" alt="Amity University Siliguri campus" />
+                    <h5>SILIGURI</h5>
+                    <p>
+                        Radha Apartment Block-B,<br />
+                        Iskon Mandir Road, Opp of Payel Cinema Hall,<br />
+                        Sevoke Road- Siliguri -734001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0353-2640070<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infosiliguri&#64;aic.amity.edu">infosiliguri&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/surat.jpg" class="img-fluid" alt="Amity University surat campus" />
+                    <h5>SURAT</h5>
+                    <p>
+                        International Trade Center, D/G/12B,<br />
+                        Mujara Gate, Ring Road,<br />
+                        Surat, Gujrat-395002
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0261-4895444<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infosurat&#64;aic.amity.edu">infosurat&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/karnal.jpg" class="img-fluid" alt="Amity University Tirupati campus" />
+                    <h5>TIRUPATI</h5>
+                    <p>
+                        Kalpana, Opposite RDO Office,23/8/50 -1,<br />
+                        Annamalai Road, Tirupati 517501
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0877-2242506<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infotirupati&#64;aic.amity.edu">infotirupati&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/trivandrum.jpg" class="img-fluid" alt="Amity University Trivandrum campus" />
+                    <h5>TRIVANDRUM</h5>
+                    <p>
+                        T.C-15/1948 (2), Ground Floor, Parameswara Towers,<br />
+                        Vazhuthacaud, Trivandrum - 695 014, KERALA
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0471-4850056<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infotrivandrum&#64;aic.amity.edu">infotrivandrum&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/aurangabad.jpg" class="img-fluid" alt="Amity University Vadodara campus" />
+                    <h5>VADODARA</h5>
+                    <p>
+                        402, A/11, 3rd Floor, Berry Plaza,<br />
+                        Shri Nagar Society, Akota, Vadodara-390020
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0265-2339253<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infovadodara&#64;aic.amity.edu">infovadodara&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/varanasi.jpg" class="img-fluid" alt="Amity University Varanasi campus" />
+                    <h5>VARANASI</h5>
+                    <p>
+                        Shop no.3 &amp; 4, 1st Floor,
+                        <br />
+                        Shakumbari Complex, B-27/90,
+                        <br />
+                        Durga Kund Road, Bhelupur,
+                        <br />
+                        Varanasi - 221010
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0542-2276322<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infovaranasi&#64;iac.amity.edu">infovaranasi&#64;iac.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/varanasi.jpg" class="img-fluid" alt="Amity University Vijaywada campus" />
+                    <h5>VIJAYWADA</h5>
+                    <p>
+                        D no-39-1-68 A, MG Road,<br />
+                        above Thomas Cook, Vijaywada
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0866-2488505<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infovijaywada&#64;aic.amity.edu">infovijaywada&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/visakhapatnam.jpg" class="img-fluid"
+                        alt="Amity University dwarakanagar campus" />
+                    <h5>VISAKHAPATNAM</h5>
+                    <p>
+                        Ram's Plaza, Flat no:202,
+                        <br />
+                        2nd lane, dwarakanagar, vizag
+                        <br />
+                        pin code :5300016
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0891-6643312<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infovishakapatnam&#64;aic.amity.edu">infovishakapatnam&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/yamuna-nagar.jpg" class="img-fluid"
+                        alt="Amity University Yamuna Nagar campus" />
+                    <h5>YAMUNA NAGAR</h5>
+                    <p>
+                        513-L, Paras Ram Chowk,
+                        <br />
+                        Near Meerut Fine Tailor,
+                        <br />
+                        Model Town, Yamuna Nagar-135001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0173-2231020<br />
+                        <strong>Email :</strong> <a href="mailto:infoyamuna nagar&#64;aic.amity.edu">infoyamuna
+                            nagar&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 wow fadeInUp">
+                <div class="admission-card">
+                    <img src="assets/img/pondicherry.jpg" class="img-responsive"
+                        alt="Amity University Kurukshetra campus" />
+                    <h5>Kurukshetra</h5>
+                    <p>
+                        1st Floor, 31 (47),<br />
+                        Ambalathadayar Street, Heritage Town,<br />
+                        Kurukshetra-605001
+                    </p>
+                    <p>
+                        <strong>Contact :</strong> 0413 4900492<br />
+                        <strong>Email :</strong> <a
+                            href="mailto:infokurukshetra&#64;aic.amity.edu">infokurukshetra&#64;aic.amity.edu</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>

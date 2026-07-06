@@ -1,0 +1,39 @@
+@for (item of blogsData; track $index) {
+    <div class="breadcumb-wrapper">
+        <div class="container">
+            <div class="breadcumb-content text-center">
+                <p class="breadcumb-title">News</p>
+                <ul class="breadcumb-menu">
+                    <li><a routerLink="/home">Home</a></li>
+                    <li><a routerLink="/news">News</a></li>
+                    <li>{{item.Title}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <section class="th-blog-wrapper blog-details space-top space-extra2-bottom">
+        <div class="container">
+            <div class="row gx-30">
+                <div class="col-md-12 col-lg-12 wow fadeInUp">
+                    <div class="th-blog blog-single">
+                        <div class="blog-content">
+                            <div>
+                                <h1 style="font-weight: 600;font-size: 32px;">{{item.Title}}</h1>
+                                {{item.Blogdate}}
+                            </div>
+                            <img src="https://img.amizone.net/AzureFileHandler.ashx?FileName=amitywebsite/userfiles/Noida2024/{{item.ImagePath}}"
+                                alt="Blog Image"
+                                style="width: 49%;background: #eee;padding: 5px;float: left;margin-right: 20px;" />
+                            <div class="blog-meta">
+                            </div>
+                            <div>
+                                <!-- {{item.sEventDetails}} -->
+                                <div [innerHTML]="item.Detail | eventpipe"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    }
