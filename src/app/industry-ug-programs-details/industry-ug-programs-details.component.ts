@@ -310,6 +310,7 @@ export class IndustryUgProgramsDetailsComponent implements OnInit {
         this.isSubmitting = false;
 
         if (res.success) {
+          this.otpSent = false;
           this.otpVerified = true;
           this.formNo = res.formNo || '';
 

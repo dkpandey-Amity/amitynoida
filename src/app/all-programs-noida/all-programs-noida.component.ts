@@ -50,8 +50,8 @@ export class AllProgramsNoidaComponent implements OnInit {
   }
 
   onApplyClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log('Placeholder:', 'All Program');
+    // console.log('Event Triggered:', eventName);
+    // console.log('Placeholder:', 'All Program');
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {

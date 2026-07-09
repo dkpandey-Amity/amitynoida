@@ -211,11 +211,13 @@ export class ProgramDetailsComponent implements OnInit {
         email: formData.email,
         countryCode: formData.countryCode,
         mobile: formData.phone,
+        Coursecd: this.programCD, // <-- Pass CourseCD here
         target,
       })
       .subscribe({
         next: (res: OtpResponse) => {
           this.isSubmitting = false;
+          //console.log('OTP Response:', res);
 
           if (res.success) {
             this.loginNo = res.loginNo || '';
@@ -296,6 +298,7 @@ export class ProgramDetailsComponent implements OnInit {
         this.isSubmitting = false;
 
         if (res.success) {
+          this.otpSent = false;
           this.otpVerified = true;
           this.formNo = res.formNo || '';
 
@@ -372,7 +375,7 @@ export class ProgramDetailsComponent implements OnInit {
       spageurl: window.location.href,
     };
 
-    console.log(payload);
+    //console.log(payload);
 
     this.apiService.allCourseSubmitEnquiryForm(payload).subscribe({
       next: () => {
@@ -412,7 +415,7 @@ export class ProgramDetailsComponent implements OnInit {
       .subscribe((data: any[]) => {
         if (!data?.length) return;
 
-        console.log('data:', data);
+        //console.log('data:', data);
 
         // ✅ FIND CORRECT PROGRAM (IMPORTANT FIX)
         const program = data.find(

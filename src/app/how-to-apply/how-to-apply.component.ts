@@ -70,7 +70,7 @@ export class HowToApplyComponent {
 
     this.apiService.submitTechnicalProblemform(formData).subscribe({
       next: (response) => {
-        console.log('Form submitted successfully', response);
+        //console.log('Form submitted successfully', response);
         this.toastr.success('Form submitted successfully!', 'Success');
         this.router.navigate(['/']); // Navigate to home or another page after success
       },

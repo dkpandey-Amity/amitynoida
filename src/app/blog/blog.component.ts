@@ -51,7 +51,7 @@ export class BlogComponent {
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
     this.paginatedEvents = this.blogsAllData.slice(startIndex, endIndex);
-    console.log('Paginated Events:', this.paginatedEvents); // Debug: Log paginated events
+    //console.log('Paginated Events:', this.paginatedEvents); // Debug: Log paginated events
   }
 
   // Go to the next page

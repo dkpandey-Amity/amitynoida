@@ -14,8 +14,8 @@ export class HeaderComponent {
 
   // Method to track Apply Now button clicks
   onClickEvent(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log('Placeholder:', 'Apply now button header');
+    // console.log('Event Triggered:', eventName);
+    // console.log('Placeholder:', 'Apply now button header');
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {

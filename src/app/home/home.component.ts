@@ -119,8 +119,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   // Method to track Apply Now button clicks
   onHomeApplyClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log('Placeholder:', 'Apply now button home page banner');
+    // console.log('Event Triggered:', eventName);
+    // console.log('Placeholder:', 'Apply now button home page banner');
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {
@@ -147,8 +147,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   // Admission Click Tracking
   onAdmissionApplyClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log('Placeholder:', 'Apply for Admission Section');
+    // console.log('Event Triggered:', eventName);
+    // console.log('Placeholder:', 'Apply for Admission Section');
 
     // Google Analytics
     if (typeof gtag !== 'undefined') {
@@ -175,8 +175,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   // Scholarship Click Tracking
   onScholarshipApplyClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log('Placeholder:', 'Apply for Scholarship Section');
+    // console.log('Event Triggered:', eventName);
+    // console.log('Placeholder:', 'Apply for Scholarship Section');
 
     // Google Analytics
     if (typeof gtag !== 'undefined') {
@@ -203,8 +203,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   // Method to track Apply Now button clicks
   onReadClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log('Placeholder:', 'Read More Button home page');
+    // console.log('Event Triggered:', eventName);
+    // console.log('Placeholder:', 'Read More Button home page');
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {
@@ -231,8 +231,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   // Method to track Apply Now button clicks
   onClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log('Placeholder:', 'Explore Program button home page banner');
+    // console.log('Event Triggered:', eventName);
+    // console.log('Placeholder:', 'Explore Program button home page banner');
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {
@@ -259,8 +259,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   // Method to track Apply Now button clicks
   onUGExploreClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log('Placeholder:', 'Explore More home page - UG');
+    // console.log('Event Triggered:', eventName);
+    // console.log('Placeholder:', 'Explore More home page - UG');
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {
@@ -287,8 +287,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   // Method to track Apply Now button clicks
   onPGExploreClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log('Placeholder:', 'Explore More home page - PG');
+    // console.log('Event Triggered:', eventName);
+    // console.log('Placeholder:', 'Explore More home page - PG');
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {
@@ -315,8 +315,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   // Method to track Apply Now button clicks
   onPhdExploreClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log('Placeholder:', 'Explore More home page - PHD');
+    // console.log('Event Triggered:', eventName);
+    // console.log('Placeholder:', 'Explore More home page - PHD');
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {
@@ -343,8 +343,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   // Method to track Apply Now button clicks
   onClickHere(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log('Placeholder:', 'Click Here home page');
+    // console.log('Event Triggered:', eventName);
+    // console.log('Placeholder:', 'Click Here home page');
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {
@@ -371,8 +371,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   // Method to track Apply Now button clicks
   onEventClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log('Placeholder:', 'View All Event Above Footer');
+    // console.log('Event Triggered:', eventName);
+    // console.log('Placeholder:', 'View All Event Above Footer');
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {

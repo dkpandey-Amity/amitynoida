@@ -48,11 +48,11 @@ export class UgProgramsDisciplineComponent implements OnInit {
 
   // Method to track Apply Now button clicks
   onUGApplyClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log(
-      'Placeholder:',
-      'Undergraduate Programs page ( Apply Now button ) ',
-    );
+    // console.log('Event Triggered:', eventName);
+    // console.log(
+    //   'Placeholder:',
+    //   'Undergraduate Programs page ( Apply Now button ) ',
+    // );
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {
@@ -79,11 +79,11 @@ export class UgProgramsDisciplineComponent implements OnInit {
 
   // Method to track Apply Now button clicks
   onUGViewClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log(
-      'Placeholder:',
-      'Undergraduate Programs page ( View Details button ) ',
-    );
+    // console.log('Event Triggered:', eventName);
+    // console.log(
+    //   'Placeholder:',
+    //   'Undergraduate Programs page ( View Details button ) ',
+    // );
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {

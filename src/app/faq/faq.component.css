@@ -7,3 +7,22 @@
 .accordion-card .accordion-button:after {
     color: #ffffff;
 }
+
+/* .faq-search {
+  margin-bottom: 35px;
+} */
+
+.faq-search input {
+  height: 44px;
+  border-radius: 50px;
+  border: 2px solid #d7d7d7;
+  padding: 0 25px;
+  font-size: 14px;
+  transition: .3s;
+  box-shadow: none;
+}
+
+.faq-search input:focus {
+  border-color: #003a70;
+  box-shadow: 0 0 0 0.15rem rgba(0, 58, 112, 0.15);
+}

@@ -477,3 +477,42 @@ RESPONSIVE
     font-size: 22px;
   }
 }
+
+.virtual-guidance-logo {
+  position: fixed;
+  right: 50px;
+  bottom: 29%;
+  z-index: 9999;
+}
+
+.virtual-guidance-logo img {
+  /* width: 80px; */
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  border-radius: 10px;
+  box-shadow: 0 0 20px 0 #bbb;
+}
+
+.virtual-guidance-logo:hover img {
+  transform: scale(1.05);
+}
+
+.logo-tooltip {
+  position: absolute;
+  bottom: 60px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+  font-size: 14px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.virtual-guidance-logo:hover .logo-tooltip {
+  opacity: 1;
+  visibility: visible;
+}

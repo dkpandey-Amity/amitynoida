@@ -13,50 +13,11 @@ footer {
   cursor: pointer;
 }
 
-textarea,
-textarea.form-control {
-  min-height: 100px;
-}
-
-.form-control,
-.form-select,
-input,
-select,
-textarea {
-  height: 40px;
-  padding: 0 40px 0 10px;
-  border: 1px solid #0b2d4c42 !important;
-  color: var(--body-color);
-  background-color: #fff;
-  border-radius: 5px;
-  font-size: 14px;
-  width: 100%;
-  font-family: var(--body-font);
-  -webkit-transition: 0.3s ease-in-out;
-  transition: 0.3s ease-in-out;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group > i {
-  top: 12px;
-}
-
 .ug-program-radio {
   margin-right: 15px;
   display: inline-block;
 }
 
-input[type="radio"] ~ label {
-  padding-left: 25px !important;
-  font-weight: 400;
-}
-
-.modal {
-  top: 10% !important;
-}
 
 .footer-program-links-wrapper {
   background: #fff;
@@ -156,3 +117,18 @@ input[type="radio"] ~ label {
 }
 
 
+
+.form-control, .form-select, input, select, textarea {
+    height: 35px;
+    padding: 0 10px 0 10px;
+    font-size: 14px;
+}
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+    font-weight: 600;
+    height: 35px;
+    padding: 0 10px 0 10px;
+    font-size: 14px;
+}

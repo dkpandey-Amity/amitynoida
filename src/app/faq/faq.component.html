@@ -12,6 +12,15 @@
 <section class="space">
   <div style="padding: 0px 0px 50px 0px">
     <div class="container">
+      <div class="row mb-4">
+        <div class="col-lg-4 mx-auto">
+          <div class="faq-search">
+            <input type="text" class="form-control" placeholder="Search your question..." [(ngModel)]="searchText"
+              (input)="onSearch($event)" />
+          </div>
+        </div>
+      </div>
+
       <div class="row">
         <div class="col-md-12">
           <div class="accordion-area accordion" id="faqAccordion">
@@ -419,7 +428,8 @@
                     extension of date will be considered by the Admission
                     Committee, depending on the availability of seats.
                     <br />
-                    <b>Please note that seats in all programmes are limited and will be allotted on first come, first served basis.</b>
+                    <b>Please note that seats in all programmes are limited and will be allotted on first come, first
+                      served basis.</b>
                   </p>
                 </div>
               </div>

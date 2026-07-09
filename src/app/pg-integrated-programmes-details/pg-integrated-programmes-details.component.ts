@@ -225,6 +225,7 @@ export class PgIntegratedProgrammesDetailsComponent implements OnInit {
         email: formData.email,
         countryCode: formData.countryCode,
         mobile: formData.phone,
+        Coursecd: this.programCD, // <-- Pass CourseCD here
         target,
       })
       .subscribe({
@@ -386,7 +387,7 @@ export class PgIntegratedProgrammesDetailsComponent implements OnInit {
       spageurl: window.location.href,
     };
 
-    console.log(payload);
+    //console.log(payload);
 
     this.apiService.allCourseSubmitEnquiryForm(payload).subscribe({
       next: () => {

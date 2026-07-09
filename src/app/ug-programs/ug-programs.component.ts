@@ -36,7 +36,7 @@ export class UgProgramsComponent {
       .getUgDisciplineProgramList(this.iDisciplineId)
       .subscribe((data: any) => {
         this.getUgProgramData = data;
-        console.log(data);
+        //console.log(data);
 
         const pageData = data && data.length > 0 ? data[0] : null;
         if (pageData) {
@@ -156,11 +156,11 @@ export class UgProgramsComponent {
 
   // Method to track Apply Now button clicks
   onUGApplyClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log(
-      'Placeholder:',
-      'Undergraduate Programs page ( Apply Now button ) ',
-    );
+    // console.log('Event Triggered:', eventName);
+    // console.log(
+    //   'Placeholder:',
+    //   'Undergraduate Programs page ( Apply Now button ) ',
+    // );
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {
@@ -187,11 +187,11 @@ export class UgProgramsComponent {
 
   // Method to track Apply Now button clicks
   onUGViewClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log(
-      'Placeholder:',
-      'Undergraduate Programs page ( View Details button ) ',
-    );
+    // console.log('Event Triggered:', eventName);
+    // console.log(
+    //   'Placeholder:',
+    //   'Undergraduate Programs page ( View Details button ) ',
+    // );
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {

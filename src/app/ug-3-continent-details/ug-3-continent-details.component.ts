@@ -12,7 +12,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { LandingserviceService, OtpResponse } from '../service/landingservice.service';
+import {
+  LandingserviceService,
+  OtpResponse,
+} from '../service/landingservice.service';
 
 @Component({
   selector: 'app-ug-3-continent-details',
@@ -110,7 +113,7 @@ export class Ug3ContinentDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCountryCodes();
-    
+
     this.getAllUgProgramMetas();
     this.sCourseCode = this.route.snapshot.params['SlugName'];
     //this.sCourseCode = history.state.code;
@@ -165,7 +168,6 @@ export class Ug3ContinentDetailsComponent implements OnInit {
     this.quickLinksClosed = localStorage.getItem('quickLinksClosed') === 'true';
   }
 
-  
   ngOnDestroy(): void {
     if (this.otpInterval) {
       clearInterval(this.otpInterval);
@@ -221,6 +223,7 @@ export class Ug3ContinentDetailsComponent implements OnInit {
         email: formData.email,
         countryCode: formData.countryCode,
         mobile: formData.phone,
+        Coursecd: this.programCD, // <-- Pass CourseCD here
         target,
       })
       .subscribe({
@@ -306,6 +309,7 @@ export class Ug3ContinentDetailsComponent implements OnInit {
         this.isSubmitting = false;
 
         if (res.success) {
+          this.otpSent = false;
           this.otpVerified = true;
           this.formNo = res.formNo || '';
 
@@ -382,7 +386,7 @@ export class Ug3ContinentDetailsComponent implements OnInit {
       spageurl: window.location.href,
     };
 
-    console.log(payload);
+    //console.log(payload);
 
     this.apiService.allCourseSubmitEnquiryForm(payload).subscribe({
       next: () => {

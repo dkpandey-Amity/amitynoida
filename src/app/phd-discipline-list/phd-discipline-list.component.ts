@@ -53,7 +53,7 @@ export class PhdDisciplineListComponent {
   }
 
   onPhdApplyClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
+    //console.log('Event Triggered:', eventName);
 
     if (typeof gtag !== 'undefined') {
       gtag('event', eventName, {
@@ -75,7 +75,7 @@ export class PhdDisciplineListComponent {
   }
 
   onPhdViewClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
+    //console.log('Event Triggered:', eventName);
 
     if (typeof gtag !== 'undefined') {
       gtag('event', eventName, {

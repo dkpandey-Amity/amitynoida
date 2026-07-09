@@ -76,6 +76,7 @@ export class LandingserviceService {
     email: string;
     countryCode: string;
     mobile: string;
+    Coursecd?: string; // <-- Add this
     target?: 'mobile' | 'email';
     pageUrl?: string;
     campusId?: string;
@@ -89,7 +90,7 @@ export class LandingserviceService {
     city?: string;
     sourceReferral?: string;
     sGCLID?: string;
-    mx_Is_brochure_Leads? : string;
+    mx_Is_brochure_Leads?: string;
   }): Observable<OtpResponse> {
     return this.http
       .post<{ d: string }>(
@@ -97,14 +98,55 @@ export class LandingserviceService {
         this.encBody({
           pageUrl: window.location.href,
 
-          // Default UTM values Brochure
+          // Default UTM values
           utm_source: 'Direct Traffic',
           utm_medium: 'Brochure',
           utm_campaign: 'Brochure',
           CampusId: '1',
           mx_Is_brochure_Leads: 'Yes',
-          
-          ...data,
+
+          ...data, // Coursecd will automatically be included
+        }),
+        { headers: this.headers },
+      )
+      .pipe(this.dec<OtpResponse>());
+  }
+
+    enquirysendOtp(data: {
+    firstName: string;
+    email: string;
+    countryCode: string;
+    mobile: string;
+    Coursecd?: string; // <-- Add this
+    target?: 'mobile' | 'email';
+    pageUrl?: string;
+    campusId?: string;
+    utm_source?: string;
+    utm_medium?: string;
+    utm_campaign?: string;
+    utm_content?: string;
+    utm_term?: string;
+    utm_location?: string;
+    state?: string;
+    city?: string;
+    sourceReferral?: string;
+    sGCLID?: string;
+    mx_Is_brochure_Leads?: string;
+  }): Observable<OtpResponse> {
+    return this.http
+      .post<{ d: string }>(
+        this.sendOtpUrl,
+        this.encBody({
+          pageUrl: window.location.href,
+
+          // Default UTM values
+          utm_source: 'Direct Traffic',
+          utm_medium: 'Enquiry Form',
+          utm_campaign: 'Enquiry Form',
+          CampusId: '1',
+          mx_Is_brochure_Leads: 'Yes',
+
+          ...data, // Coursecd will automatically be included
         }),
         { headers: this.headers },
       )

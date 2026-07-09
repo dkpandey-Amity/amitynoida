@@ -112,6 +112,16 @@
                             </tbody>
                         </table>
 
+                        <div class="fees-notes">
+                            <p><strong>FEE NOTES:</strong></p>
+                            <ul>
+                                <li>One-time Academic Security Deposit of Rs. 20,000/- has to be paid at the time of
+                                    admission.</li>
+                                <li>The Fee mentioned is for the 1st semester only and will increase by approximately 5%
+                                    every year. Each Academic year is of 2 semesters.</li>
+                            </ul>
+                        </div>
+
                         @if (item.bAdmissionOpen == 1) {
                         <p style="text-align: center;">
                             <a href="https://noida.amity.edu/admissions-2026/" target="_blank"
@@ -932,7 +942,7 @@
 
                             <input type="email" class="form-control" placeholder="Email" formControlName="email">
 
-                            <button *ngIf="!isIndian" type="button" class="btn btn-warning"
+                            <button *ngIf="!isIndian && !otpVerified" type="button" class="btn btn-warning"
                                 (click)="otpSent ? resendOtp() : sendOtp()" [disabled]="otpSent && otpTimer > 0">
 
                                 {{ otpSent
@@ -977,7 +987,7 @@
                             <input type="text" class="form-control" placeholder="Mobile Number" formControlName="phone"
                                 [maxlength]="isIndian ? 10 : 15">
 
-                            <button *ngIf="isIndian" type="button" class="btn btn-warning"
+                            <button *ngIf="isIndian && !otpVerified" type="button" class="btn btn-warning"
                                 (click)="otpSent ? resendOtp() : sendOtp()" [disabled]="otpSent && otpTimer > 0">
 
                                 {{ otpSent
@@ -994,12 +1004,13 @@
                     </div>
 
                     <!-- OTP -->
-                    <div *ngIf="otpSent" class="mt-3">
+                    <div class="mt-3" *ngIf="otpSent || otpVerified">
 
-                        <input type="text" class="form-control" placeholder="Enter OTP" formControlName="otp"
-                            maxlength="4" (input)="onOtpInput()">
+                        <!-- OTP input -->
+                        <input *ngIf="!otpVerified" type="text" class="form-control" placeholder="Enter OTP"
+                            formControlName="otp" maxlength="4" (input)="onOtpInput()">
 
-                        <!-- OTP Status -->
+                        <!-- Success / Error message -->
                         <div class="mt-2" *ngIf="otpMessage">
                             <small [class.text-success]="otpStatus === 'success'"
                                 [class.text-danger]="otpStatus === 'error'">

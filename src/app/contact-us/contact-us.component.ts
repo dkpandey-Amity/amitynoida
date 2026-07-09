@@ -116,8 +116,8 @@ export class ContactUsComponent {
 
   // Method to track Apply Now button clicks
   onSendMessageClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log('Placeholder:', 'Contact us Page ( Send Message Button ) ');
+    // console.log('Event Triggered:', eventName);
+    // console.log('Placeholder:', 'Contact us Page ( Send Message Button ) ');
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {

@@ -453,3 +453,142 @@
         <p><b>Register for Career Planning Session</b></p>
     </a>
 </div> -->
+
+<div class="enquiry-now-btn">
+    <img src="assets/img/enquiry-now.png" alt="Enquiry Now" (click)="openBrochurePopup()">
+</div>
+
+<!-- Brochure Modal -->
+<div class="modal fade show" *ngIf="showBrochurePopup" style="display:block;background:rgba(0,0,0,.5)">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Download Brochure</h5>
+
+                <button type="button" class="btn-close" (click)="showBrochurePopup=false">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <form [formGroup]="brochureForm">
+
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Name" formControlName="name">
+
+                        <div class="text-danger mt-1"
+                            *ngIf="brochureForm.get('name')?.touched && brochureForm.get('name')?.invalid">
+
+                            <small *ngIf="brochureForm.get('name')?.errors?.['required']">
+                                Name is required
+                            </small>
+
+                            <small *ngIf="brochureForm.get('name')?.errors?.['pattern']">
+                                Only letters are allowed
+                            </small>
+
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+
+                        <div class="input-group">
+
+                            <input type="email" class="form-control" placeholder="Email" formControlName="email">
+
+                            <button *ngIf="!isIndian && !otpVerified" type="button" class="btn btn-warning"
+                                (click)="otpSent ? resendOtp() : sendOtp()" [disabled]="otpSent && otpTimer > 0">
+
+                                {{ otpSent
+                                ? (otpTimer > 0
+                                ? 'Resend OTP (' + otpTimer + 's)'
+                                : 'Resend OTP')
+                                : 'Send OTP'
+                                }}
+
+                            </button>
+
+                        </div>
+
+                        <div class="text-danger mt-1"
+                            *ngIf="brochureForm.get('email')?.touched && brochureForm.get('email')?.invalid">
+
+                            <small *ngIf="brochureForm.get('email')?.errors?.['required']">
+                                Email is required
+                            </small>
+
+                            <small *ngIf="brochureForm.get('email')?.errors?.['email']">
+                                Enter valid email address
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Mobile -->
+                    <div class="mb-3">
+
+                        <div class="input-group">
+
+                            <select class="form-select" style="max-width:90px" formControlName="countryCode">
+
+                                <option *ngFor="let code of countryCodes" [value]="code">
+                                    {{ code }}
+                                </option>
+
+                            </select>
+
+                            <input type="text" class="form-control" placeholder="Mobile Number" formControlName="phone"
+                                [maxlength]="isIndian ? 10 : 15">
+
+                            <button *ngIf="isIndian && !otpVerified" type="button" class="btn btn-warning"
+                                (click)="otpSent ? resendOtp() : sendOtp()" [disabled]="otpSent && otpTimer > 0">
+
+                                {{ otpSent
+                                ? (otpTimer > 0
+                                ? 'Resend OTP (' + otpTimer + 's)'
+                                : 'Resend OTP')
+                                : 'Send OTP'
+                                }}
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <!-- OTP -->
+                    <div class="mt-3" *ngIf="otpSent || otpVerified">
+
+                        <!-- OTP input -->
+                        <input *ngIf="!otpVerified" type="text" class="form-control" placeholder="Enter OTP"
+                            formControlName="otp" maxlength="4" (input)="onOtpInput()">
+
+                        <!-- Success / Error message -->
+                        <div class="mt-2" *ngIf="otpMessage">
+                            <small [class.text-success]="otpStatus === 'success'"
+                                [class.text-danger]="otpStatus === 'error'">
+                                {{ otpMessage }}
+                            </small>
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" [disabled]="!otpVerified" (click)="submitBrochureForm()">
+                    Submit
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</div>

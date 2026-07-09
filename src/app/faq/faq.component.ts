@@ -2,15 +2,18 @@ import { Component } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../service/noidaweb.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-faq',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, FormsModule],
   templateUrl: './faq.component.html',
   styleUrl: './faq.component.css',
 })
 export class FaqComponent {
+  searchText: string = '';
+
   constructor(
     private meta: Meta,
     private titleService: Title,
@@ -19,6 +22,22 @@ export class FaqComponent {
 
   ngOnInit(): void {
     this.updateMetaTags();
+  }
+
+  onSearch(event: Event): void {
+    const value = (event.target as HTMLInputElement).value.toLowerCase();
+
+    const cards = document.querySelectorAll('.accordion-card');
+
+    cards.forEach((card: any) => {
+      const text = card.innerText.toLowerCase();
+
+      if (text.includes(value)) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
   }
 
   updateMetaTags(): void {

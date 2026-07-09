@@ -93,11 +93,11 @@ export class PgProgramsComponent implements OnInit {
 
   // Method to track Apply Now button clicks
   onPGApplyClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log(
-      'Placeholder:',
-      'Postgraduate Programs Page ( Apply Now button ) ',
-    );
+    // console.log('Event Triggered:', eventName);
+    // console.log(
+    //   'Placeholder:',
+    //   'Postgraduate Programs Page ( Apply Now button ) ',
+    // );
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {
@@ -124,11 +124,11 @@ export class PgProgramsComponent implements OnInit {
 
   // Method to track Apply Now button clicks
   onPGViewClick(eventName: string): void {
-    console.log('Event Triggered:', eventName);
-    console.log(
-      'Placeholder:',
-      'Postgraduate Programs page ( View Details button )',
-    );
+    // console.log('Event Triggered:', eventName);
+    // console.log(
+    //   'Placeholder:',
+    //   'Postgraduate Programs page ( View Details button )',
+    // );
 
     // Example: Google Analytics (gtag)
     if (typeof gtag !== 'undefined') {

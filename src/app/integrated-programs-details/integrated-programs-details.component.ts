@@ -111,9 +111,9 @@ export class IntegratedProgramsDetailsComponent implements OnInit {
     localStorage.setItem('quickLinksClosed', 'true');
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.loadCountryCodes();
-    
+
     this.getAllUgProgramMetas();
 
     this.sCourseCode = this.route.snapshot.params['SlugName'];
@@ -167,10 +167,8 @@ export class IntegratedProgramsDetailsComponent implements OnInit {
     });
 
     this.quickLinksClosed = localStorage.getItem('quickLinksClosed') === 'true';
-    
   }
 
-  
   ngOnDestroy(): void {
     if (this.otpInterval) {
       clearInterval(this.otpInterval);
@@ -226,6 +224,7 @@ export class IntegratedProgramsDetailsComponent implements OnInit {
         email: formData.email,
         countryCode: formData.countryCode,
         mobile: formData.phone,
+        Coursecd: this.programCD, // <-- Pass CourseCD here
         target,
       })
       .subscribe({
@@ -311,6 +310,7 @@ export class IntegratedProgramsDetailsComponent implements OnInit {
         this.isSubmitting = false;
 
         if (res.success) {
+          this.otpSent = false;
           this.otpVerified = true;
           this.formNo = res.formNo || '';
 
@@ -387,7 +387,7 @@ export class IntegratedProgramsDetailsComponent implements OnInit {
       spageurl: window.location.href,
     };
 
-    console.log(payload);
+    //console.log(payload);
 
     this.apiService.allCourseSubmitEnquiryForm(payload).subscribe({
       next: () => {

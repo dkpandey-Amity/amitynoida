@@ -168,7 +168,6 @@ export class Pg3ContinentDetailsComponent implements OnInit {
     this.quickLinksClosed = localStorage.getItem('quickLinksClosed') === 'true';
   }
 
-  
   ngOnDestroy(): void {
     if (this.otpInterval) {
       clearInterval(this.otpInterval);
@@ -224,6 +223,7 @@ export class Pg3ContinentDetailsComponent implements OnInit {
         email: formData.email,
         countryCode: formData.countryCode,
         mobile: formData.phone,
+        Coursecd: this.programCD, // <-- Pass CourseCD here
         target,
       })
       .subscribe({
@@ -309,6 +309,7 @@ export class Pg3ContinentDetailsComponent implements OnInit {
         this.isSubmitting = false;
 
         if (res.success) {
+          this.otpSent = false;
           this.otpVerified = true;
           this.formNo = res.formNo || '';
 
@@ -385,7 +386,7 @@ export class Pg3ContinentDetailsComponent implements OnInit {
       spageurl: window.location.href,
     };
 
-    console.log(payload);
+    //console.log(payload);
 
     this.apiService.allCourseSubmitEnquiryForm(payload).subscribe({
       next: () => {

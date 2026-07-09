@@ -64,6 +64,7 @@ export class PhdCourseDetailsComponent implements OnInit {
   isSubmitting = false;
   otpTimer = 0;
   otpInterval: any;
+  programCD!: any;
 
   constructor(
     private apiService: ApiService,
@@ -143,7 +144,6 @@ export class PhdCourseDetailsComponent implements OnInit {
     this.quickLinksClosed = localStorage.getItem('quickLinksClosed') === 'true';
   }
 
-  
   ngOnDestroy(): void {
     if (this.otpInterval) {
       clearInterval(this.otpInterval);
@@ -199,12 +199,12 @@ export class PhdCourseDetailsComponent implements OnInit {
         email: formData.email,
         countryCode: formData.countryCode,
         mobile: formData.phone,
+        Coursecd: this.programCD, // <-- Pass CourseCD here
         target,
       })
       .subscribe({
         next: (res: OtpResponse) => {
           this.isSubmitting = false;
-
           if (res.success) {
             this.loginNo = res.loginNo || '';
             this.otpSent = true;
@@ -284,6 +284,7 @@ export class PhdCourseDetailsComponent implements OnInit {
         this.isSubmitting = false;
 
         if (res.success) {
+          this.otpSent = false;
           this.otpVerified = true;
           this.formNo = res.formNo || '';
 
@@ -360,7 +361,7 @@ export class PhdCourseDetailsComponent implements OnInit {
       spageurl: window.location.href,
     };
 
-    console.log(payload);
+    //console.log(payload);
 
     this.apiService.allCourseSubmitEnquiryForm(payload).subscribe({
       next: () => {
@@ -427,6 +428,8 @@ export class PhdCourseDetailsComponent implements OnInit {
 
           // ✅ SET ONLY MATCHED PROGRAM
           this.getPhdProgramData = [program];
+
+          this.programCD = program.CourseCD;
 
           // ✅ META + SCHEMA after data
           this.getAllProgramMetas(categorySlug);
@@ -790,7 +793,7 @@ export class PhdCourseDetailsComponent implements OnInit {
     document.head.appendChild(script);
 
     // Debug log to verify
-    console.log('Structured Data Generated:', schema);
+    //console.log('Structured Data Generated:', schema);
   }
 
   // injectStructuredData(pageData: any): void {
