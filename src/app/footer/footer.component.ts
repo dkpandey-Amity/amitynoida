@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Component, AfterViewInit } from '@angular/core';
+import $ from 'jquery';
+import { Router, RouterLink } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -8,301 +8,241 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../service/noidaweb.service';
-import {
-  LandingserviceService,
-  OtpResponse,
-} from '../service/landingservice.service';
+import { Course } from '../service/course.model';
+import { ChatboatComponent } from '../chatboat/chatboat.component';
+import { EnquiryformComponent } from "../enquiryform/enquiryform.component";
+
+declare var bootstrap: any;
+
+type FooterPanel =
+  | 'ug'
+  | 'pg'
+  | 'phd'
+  | 'resources'
+  | 'admission'
+  | 'academics'
+  | 'placements';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [RouterLink, CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [RouterLink, ReactiveFormsModule, CommonModule, FormsModule, EnquiryformComponent],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.css',
 })
-export class FooterComponent implements OnInit, OnDestroy {
-  brochureForm!: FormGroup;
-  showBrochurePopup = false;
-  countryCodes: string[] = [];
+export class FooterComponent {
+  selectedProgramType: string = 'G';
+  selectedProgram: any;
+  displayedPrograms: any[] = [];
+  //contactForm: FormGroup;
+  countryCodes: any[] = [];
 
-  // OTP Properties
-  otpSent = false;
-  otpVerified = false;
-  otpMessage = '';
-  otpStatus: 'success' | 'error' | '' = '';
-  loginNo = '';
-  formNo = '';
-  isSubmitting = false;
-  otpTimer = 0;
-  otpInterval: any;
+  ugPrograms: Course[] = [];
+  pgPrograms: Course[] = [];
+  phdPrograms: Course[] = [];
+
+  showFooterLinks = false;
+
+  activePanel: FooterPanel | null = 'ug';
 
   constructor(
-    private apiService: ApiService,
     private fb: FormBuilder,
-    private landingService: LandingserviceService,
-  ) {}
-
-  ngOnInit(): void {
-    this.loadCountryCodes();
-
-    this.brochureForm = this.fb.group({
-      name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
-      email: ['', [Validators.required, Validators.email]],
-      countryCode: ['+91', Validators.required],
-      phone: ['', [Validators.required, Validators.pattern(/^[6-9][0-9]{9}$/)]],
-      otp: [''],
-    });
-
-    // Change validation according to country
-    this.brochureForm.get('countryCode')?.valueChanges.subscribe((code) => {
-      const phoneCtrl = this.brochureForm.get('phone');
-      if (code === '+91') {
-        phoneCtrl?.setValidators([
-          Validators.required,
-          Validators.pattern(/^[6-9][0-9]{9}$/),
-        ]);
-      } else {
-        phoneCtrl?.setValidators([
-          Validators.required,
-          Validators.pattern(/^[0-9]{6,15}$/),
-        ]);
-      }
-      phoneCtrl?.updateValueAndValidity();
-    });
+    private apiService: ApiService,
+    private router: Router,
+    private toastr: ToastrService,
+  ) {
+    // this.contactForm = this.fb.group({
+    //   Name: ['', [Validators.required, Validators.minLength(2)]],
+    //   Email: ['', [Validators.required, Validators.email]],
+    //   Phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+    //   Message: ['Amity'],
+    //   stype: ['', [Validators.required]],
+    //   scoursecode: ['', [Validators.required]],
+    //   scountrycode: [''],
+    // });
   }
 
-  ngOnDestroy(): void {
-    if (this.otpInterval) {
-      clearInterval(this.otpInterval);
-    }
-  }
+  // toggle(panel: FooterPanel) {
+  //   this.activePanel = this.activePanel === panel ? null : panel;
+  // }
 
-  // Open Brochure Popup
-  openBrochurePopup(): void {
-    this.showBrochurePopup = true;
-    // Reset form state when opening
-    this.resetFormState();
-  }
+  // toggleFooterLinks() {
+  //   this.showFooterLinks = !this.showFooterLinks;
+  // }
 
-  // Close Brochure Popup
-  closeBrochurePopup(): void {
-    this.showBrochurePopup = false;
-    this.resetFormState();
-  }
+  // ngOnInit(): void {
+  //   //this.onProgramTypeChange(undefined, this.selectedProgramType); // Pass undefined for the event to initialize courses
+  //   //this.GetAllCountryCode();
+  //   this.loadUG();
+  //   this.loadPG();
+  //   this.loadPhd();
+  // }
 
-  // Reset form state
-  resetFormState(): void {
-    this.otpSent = false;
-    this.otpVerified = false;
-    this.otpStatus = '';
-    this.otpMessage = '';
-    this.loginNo = '';
-    this.formNo = '';
-    this.otpTimer = 0;
+  // loadUG() {
+  //   this.apiService.GetAllCoursewithoutDiscipline().subscribe((res) => {
+  //     this.ugPrograms = res;
+  //   });
+  // }
 
-    if (this.otpInterval) {
-      clearInterval(this.otpInterval);
-    }
+  // loadPG() {
+  //   this.apiService.GetAllPgCoursewithoutDiscipline().subscribe((res) => {
+  //     this.pgPrograms = res;
+  //   });
+  // }
 
-    this.brochureForm.reset({
-      countryCode: '+91',
-    });
+  // loadPhd() {
+  //   this.apiService.GetPhdCourseWithoutDeiscipline().subscribe((res) => {
+  //     this.phdPrograms = res;
+  //   });
+  // }
 
-    this.brochureForm.get('email')?.enable();
-    this.brochureForm.get('phone')?.enable();
-    this.brochureForm.get('countryCode')?.enable();
-    this.brochureForm.get('otp')?.enable();
-  }
+  // onProgramTypeChange(event: Event | undefined, stype: string): void {
+  //   if (stype === 'G') {
+  //     this.GetAllDisciplineCourse();
+  //   } else if (stype === 'PG') {
+  //     this.GetPgCoursewithoutDiscipline();
+  //   }
+  // }
 
-  loadCountryCodes(): void {
-    this.landingService.getCountryCodes().subscribe({
-      next: (res) => {
-        if (res.success) {
-          this.countryCodes = res.data.map((x) => x.CountryCode);
-        }
-      },
-    });
-  }
+  // GetAllCountryCode(): void {
+  //   this.apiService.GetCountryCode().subscribe((data: any) => {
+  //     if (Array.isArray(data) && data.length > 0) {
+  //       this.countryCodes = data;
 
-  get isIndian(): boolean {
-    return this.brochureForm?.get('countryCode')?.value === '+91';
-  }
+  //       const defaultCountry =
+  //         this.countryCodes.find((item) => item.phone_code === '91') ||
+  //         this.countryCodes[0];
 
-  sendOtp(): void {
-    const formData = this.brochureForm.getRawValue();
-    const code = formData.countryCode;
-    const target: 'mobile' | 'email' = code === '+91' ? 'mobile' : 'email';
+  //       if (defaultCountry) {
+  //         this.contactForm.patchValue({
+  //           scountrycode: defaultCountry.phone_code,
+  //         });
+  //       }
+  //     }
+  //   });
+  // }
 
-    // Name is mandatory
-    if (this.brochureForm.get('name')?.invalid) {
-      this.brochureForm.get('name')?.markAsTouched();
-      return;
-    }
+  // GetAllDisciplineCourse(): void {
+  //   this.apiService.GetUgEnquiryformCourses().subscribe(
+  //     (data: any[]) => {
+  //       this.displayedPrograms = this.formatPrograms(data, 'G');
+  //       if (this.displayedPrograms.length > 0) {
+  //         this.selectedProgram = this.displayedPrograms[0].value;
+  //         this.contactForm.patchValue({ scoursecode: this.selectedProgram });
+  //       }
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching UG courses:', error);
+  //     },
+  //   );
+  // }
 
-    // Validate according to target
-    if (target === 'mobile') {
-      if (this.brochureForm.get('phone')?.invalid) {
-        this.brochureForm.get('phone')?.markAsTouched();
-        return;
-      }
-    } else {
-      if (this.brochureForm.get('email')?.invalid) {
-        this.brochureForm.get('email')?.markAsTouched();
-        return;
-      }
-    }
+  // GetPgCoursewithoutDiscipline(): void {
+  //   this.apiService.GetPgEnquiryformCourses().subscribe(
+  //     (data: any[]) => {
+  //       this.displayedPrograms = this.formatPrograms(data, 'PG');
+  //       if (this.displayedPrograms.length > 0) {
+  //         this.selectedProgram = this.displayedPrograms[0].value; // Set the default to the first PG program
+  //         this.contactForm.patchValue({ scoursecode: this.selectedProgram }); // Update form value
+  //       }
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching PG courses:', error);
+  //     },
+  //   );
+  // }
 
-    this.isSubmitting = true;
-    this.otpMessage = '';
-    this.otpStatus = '';
+  // Format the program data for display in the select dropdown
+  // private formatPrograms(data: any[], stype: string): any[] {
+  //   return data.map((item: any) => ({
+  //     value: item.sCourseCode,
+  //     sfullname: `${item.sfullname || 'Unnamed Program'}`,
+  //   }));
+  // }
 
-    this.landingService
-      .enquirysendOtp({
-        firstName: formData.name,
-        email: formData.email,
-        countryCode: formData.countryCode,
-        mobile: formData.phone,
-        target,
-      })
-      .subscribe({
-        next: (res: OtpResponse) => {
-          this.isSubmitting = false;
-          if (res.success) {
-            this.loginNo = res.loginNo || '';
-            this.otpSent = true;
-            this.otpStatus = 'success';
-            this.otpMessage =
-              target === 'mobile'
-                ? 'OTP sent to your mobile.'
-                : 'OTP sent to your email.';
+  // onSubmit() {
+  //   if (this.contactForm.valid) {
+  //     const formData = this.contactForm.value;
 
-            // Disable input
-            if (target === 'mobile') {
-              this.brochureForm.get('phone')?.disable();
-            } else {
-              this.brochureForm.get('email')?.disable();
-            }
+  //     this.apiService.postEnquiryForm(formData).subscribe({
+  //       next: (response: any) => {
+  //         this.toastr.success('Form submitted successfully!', 'Success');
+  //         alert('Form Submitted Successfully');
+  //         const enquiryModal = document.getElementById('enquiryNow');
+  //         const modalInstance = bootstrap.Modal.getInstance(enquiryModal);
+  //         modalInstance.hide();
+  //         this.router.navigate(['/']);
+  //       },
+  //       error: (error: any) => {
+  //         console.log('Error occurred', error);
+  //         this.toastr.error('Error submitting form', 'Error');
+  //       },
+  //     });
+  //   } else {
+  //     console.log('Form not valid');
+  //     this.contactForm.markAllAsTouched();
+  //   }
+  // }
 
-            this.startOtpTimer();
-          } else {
-            this.otpStatus = 'error';
-            this.otpMessage = res.message || 'Failed to send OTP.';
-          }
-        },
-        error: () => {
-          this.isSubmitting = false;
-          this.otpStatus = 'error';
-          this.otpMessage = 'Failed to send OTP.';
-        },
-      });
-  }
+  // ngAfterViewInit(): void {
+  //   $(document).ready(() => {
+  //     const progressPath = document.querySelector(
+  //       '.progress-wrap path',
+  //     ) as SVGPathElement | null;
 
-  startOtpTimer(): void {
-    this.otpTimer = 30;
-    if (this.otpInterval) {
-      clearInterval(this.otpInterval);
-    }
-    this.otpInterval = setInterval(() => {
-      this.otpTimer--;
-      if (this.otpTimer <= 0) {
-        clearInterval(this.otpInterval);
-      }
-    }, 1000);
-  }
+  //     if (progressPath) {
+  //       const pathLength = progressPath.getTotalLength();
 
-  resendOtp(): void {
-    if (this.otpTimer > 0) {
-      return;
-    }
-    this.brochureForm.get('phone')?.enable();
-    this.brochureForm.get('email')?.enable();
-    this.sendOtp();
-  }
+  //       progressPath.style.transition = progressPath.style.webkitTransition =
+  //         'none';
+  //       progressPath.style.strokeDasharray = `${pathLength} ${pathLength}`;
+  //       progressPath.style.strokeDashoffset = `${pathLength}`;
+  //       progressPath.getBoundingClientRect();
+  //       progressPath.style.transition = progressPath.style.webkitTransition =
+  //         'stroke-dashoffset 10ms linear';
 
-  verifyOtp(): void {
-    if (this.isSubmitting || this.otpVerified) {
-      return;
-    }
+  //       const updateProgress = () => {
+  //         const scroll = $(window).scrollTop() || 0;
+  //         const height =
+  //           ($(document).height() || 0) - ($(window).height() || 0);
+  //         const progress = pathLength - (scroll * pathLength) / height;
+  //         progressPath.style.strokeDashoffset = `${progress}`;
+  //       };
 
-    const otp = this.brochureForm.get('otp')?.value?.toString().trim();
-    if (!otp || !/^\d{4}$/.test(otp)) {
-      return;
-    }
+  //       updateProgress();
+  //       $(window).scroll(updateProgress);
 
-    this.isSubmitting = true;
-    this.otpMessage = 'Verifying OTP...';
-    this.otpStatus = '';
+  //       const offset = 50;
+  //       const duration = 550;
 
-    this.landingService.verifyOtp(this.loginNo, otp).subscribe({
-      next: (res) => {
-        this.isSubmitting = false;
-        if (res.success) {
-          this.otpSent = false;
-          this.otpVerified = true;
-          this.formNo = res.formNo || '';
-          this.otpStatus = 'success';
-          this.otpMessage = '✅ OTP Verified Successfully';
-          this.brochureForm.get('otp')?.disable();
-          this.brochureForm.get('phone')?.disable();
-          this.brochureForm.get('email')?.disable();
-          this.brochureForm.get('countryCode')?.disable();
-        } else {
-          this.otpStatus = 'error';
-          this.otpMessage = res.message || 'Invalid OTP';
-        }
-      },
-      error: () => {
-        this.isSubmitting = false;
-        this.otpStatus = 'error';
-        this.otpMessage = 'OTP verification failed.';
-      },
-    });
-  }
+  //       $(window).on('scroll', () => {
+  //         if ($(window).scrollTop()! > offset) {
+  //           $('.progress-wrap').addClass('active-progress');
+  //         } else {
+  //           $('.progress-wrap').removeClass('active-progress');
+  //         }
+  //       });
 
-  onOtpInput(): void {
-    const otp = this.brochureForm.get('otp')?.value?.toString().trim();
-    if (!/^\d{4}$/.test(otp)) {
-      return;
-    }
-    if (this.otpVerified || this.isSubmitting) {
-      return;
-    }
-    this.verifyOtp();
-  }
+  //       $('.progress-wrap').on('click', (event) => {
+  //         event.preventDefault();
+  //         $('html, body').animate({ scrollTop: 0 }, duration);
+  //         return false;
+  //       });
+  //     }
+  //   });
+  // }
 
-  submitBrochureForm(): void {
-    if (this.brochureForm.invalid) {
-      this.brochureForm.markAllAsTouched();
-      return;
-    }
-
-    if (!this.otpVerified) {
-      alert('Please verify OTP first.');
-      return;
-    }
-
-    const formData = this.brochureForm.getRawValue();
-
-    const payload = {
-      Name: formData.name,
-      Email: formData.email,
-      Phone: formData.phone,
-      Message: 'Enquiry Form',
-      stype: 'EnquiryForm',
-      scountrycode: formData.countryCode,
-      spageurl: window.location.href,
-    };
-
-    this.apiService.allCourseSubmitEnquiryForm(payload).subscribe({
-      next: (res) => {
-        console.log('Success Response:', res);
-        this.closeBrochurePopup();
-        alert('Enquiry form submitted successfully!');
-      },
-      error: (err) => {
-        console.error('API Error:', err);
-      },
-    });
-  }
+  // formatFacultyName(sfullname: string): string {
+  //   return sfullname
+  //     .trim() // Trim leading and trailing spaces
+  //     .toLowerCase() // Convert to lowercase
+  //     .replace(/\s+/g, '-') // Replace one or more spaces with a single hyphen
+  //     .replace(/[^a-zA-Z0-9-]+/g, '') // Remove non-alphanumeric characters except hyphens
+  //     .replace(/-+/g, '-') // Replace multiple consecutive hyphens with a single hyphen
+  //     .replace(/^-+|-+$/g, ''); // Remove any leading or trailing hyphens
+  // }
 }

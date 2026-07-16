@@ -27,6 +27,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
   targetDate!: Date;
   showPopup = true;
 
+  showVirtualGuidance = true;
+
   constructor(
     private meta: Meta,
     private titleService: Title,
@@ -38,6 +40,10 @@ export class HomeComponent implements AfterViewInit, OnInit {
     this.updateMetaTags();
 
     this.getLastDate();
+
+    // Hide after 18 July 2026 (11:59:59 PM)
+    const expiryDate = new Date('2026-07-18T23:59:59');
+    this.showVirtualGuidance = new Date() <= expiryDate;
 
     setTimeout(() => {
       this.showPopup = false;

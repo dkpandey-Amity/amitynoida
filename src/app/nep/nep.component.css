@@ -1,9 +1,16 @@
-
 .accordion-card .accordion-button {
-    background-color: #0b2d4c !important;
-    color: #fff;
+  background-color: #0b2d4c !important;
+  color: #fff;
 }
 
 .accordion-card .accordion-button:after {
-    color: #ffffff;
+  color: #ffffff;
+}
+
+.nep-section h3 {
+  font-size: 20px;
+}
+
+.nep-section h2 {
+  font-size: 24px;
 }

@@ -39,7 +39,8 @@
                                 <li><a routerLink="/faq">FAQs</a></li>
                                 <li><a routerLink="/withdrawal">Withdrawal</a></li>
                                 <!-- <li><a href="https://amity.edu/microsite" target="_blank">Admission Portal</a></li> -->
-                                <li><a href="https://www.amity.edu/Lateral/" target="_blank">Lateral Admission</a></li>
+                                <li><a href="https://www.amity.edu/Lateral/" target="_blank"
+                                        rel="noopener noreferrer">Lateral Admission</a></li>
                             </ul>
                         </div>
                     </div>
@@ -49,15 +50,19 @@
                         <p class="widget_title">Other Links</p>
                         <div class="menu-all-pages-container">
                             <ul class="menu">
-                                <li><a href="https://amizone.net/amizone/" target="_blank">Amizone</a></li>
-                                <li><a href="https://noida.amity.edu/alumni/" target="_blank">Alumni Portal</a></li>
+                                <li><a href="https://amizone.net/amizone/" target="_blank"
+                                        rel="noopener noreferrer">Amizone</a></li>
+                                <li><a href="https://noida.amity.edu/alumni/" target="_blank"
+                                        rel="noopener noreferrer">Alumni Portal</a></li>
                                 <li><a routerLink="/placements">Placements</a></li>
                                 <li><a routerLink="/faculty">Faculty</a></li>
                                 <li><a routerLink="/study-abroad-program">Study Abroad</a></li>
                                 <li><a routerLink="/contact-us">Contact</a></li>
-                                <li><a href="https://amity.edu/summerschool/" target="_blank">Amity Summer School</a>
+                                <li><a href="https://amity.edu/summerschool/" target="_blank"
+                                        rel="noopener noreferrer">Amity Summer School</a>
                                 </li>
-                                <li><a href="https://amity.edu/amityeducationfoundation/" target="_blank">Amity
+                                <li><a href="https://amity.edu/amityeducationfoundation/" target="_blank"
+                                        rel="noopener noreferrer">Amity
                                         Foundation</a>
                                 </li>
                             </ul>
@@ -80,15 +85,15 @@
                         <div class="menu-all-pages-container">
                             <ul class="menu">
                                 <li>
-                                    <a href="https://amity.edu/360-VIEW.aspx" target="_blank">
+                                    <a href="https://amity.edu/360-VIEW.aspx" target="_blank" rel="noopener noreferrer">
                                         <img src="https://amity.edu/images/360-icon.png" alt="360° View Icon" width="24"
                                             height="24">
                                         360° VIEW
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://radioamity.com/" target="_blank"><i
-                                            class="fa fa-microphone">&nbsp;</i> Amity Radio Live</a>
+                                    <a href="https://radioamity.com/" target="_blank" rel="noopener noreferrer"><i
+                                            class="fa fa-microphone" aria-hidden="true">&nbsp;</i> Amity Radio Live</a>
                                 </li>
                             </ul>
                         </div>
@@ -99,21 +104,22 @@
                         <p class="widget_title">Get in touch!</p>
                         <div class="th-widget-contact">
                             <div class="info-box-wrap">
-                                <div class="info-box_icon"><i class="fas fa-location-dot"></i></div>
+                                <div class="info-box_icon"><i class="fas fa-location-dot" aria-hidden="true"></i></div>
                                 <p class="info-box_text">
                                     <a href="https://maps.app.goo.gl/y3kddHMA7haxBMsJ9" target="_blank"
-                                        style="color: #b3c1d3;">
+                                        rel="noopener noreferrer"
+                                        aria-label="View Amity University Noida on Google Maps" style="color: #b3c1d3;">
                                         Amity Rd, Sector 125, Noida, Uttar Pradesh 201301
                                     </a>
                                 </p>
                             </div>
                             <div class="info-box-wrap">
-                                <div class="info-box_icon"><i class="fas fa-envelope"></i></div>
+                                <div class="info-box_icon"><i class="fas fa-envelope" aria-hidden="true"></i></div>
                                 <a href="mailto:admissions&#64;amity.edu"
                                     class="info-box_link">admissions&#64;amity.edu</a>
                             </div>
                             <div class="info-box-wrap">
-                                <div class="info-box_icon"><i class="fas fa-phone"></i></div>
+                                <div class="info-box_icon"><i class="fas fa-phone" aria-hidden="true"></i></div>
                                 <a href="tel:01202445252" class="info-box_link">0120-2445252 /</a>
                                 <a style="margin-left: -12px;" class="info-box_link" href="tel:01204713600">4713600</a>
                             </div>
@@ -297,7 +303,7 @@
 </footer>
 
 
-
+<app-enquiryform></app-enquiryform>
 
 <!-- <div class="enquiry-now-btn">
     <img src="assets/img/enquiry-now.png" alt="Enquiry Now" data-bs-toggle="modal" data-bs-target="#enquiryNow">
@@ -453,142 +459,3 @@
         <p><b>Register for Career Planning Session</b></p>
     </a>
 </div> -->
-
-<div class="enquiry-now-btn">
-    <img src="assets/img/enquiry-now.png" alt="Enquiry Now" (click)="openBrochurePopup()">
-</div>
-
-<!-- Brochure Modal -->
-<div class="modal fade show" *ngIf="showBrochurePopup" style="display:block;background:rgba(0,0,0,.5)">
-
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title">Download Brochure</h5>
-
-                <button type="button" class="btn-close" (click)="showBrochurePopup=false">
-                </button>
-            </div>
-
-            <div class="modal-body">
-
-                <form [formGroup]="brochureForm">
-
-                    <!-- Name -->
-                    <div class="mb-3">
-                        <input type="text" class="form-control" placeholder="Name" formControlName="name">
-
-                        <div class="text-danger mt-1"
-                            *ngIf="brochureForm.get('name')?.touched && brochureForm.get('name')?.invalid">
-
-                            <small *ngIf="brochureForm.get('name')?.errors?.['required']">
-                                Name is required
-                            </small>
-
-                            <small *ngIf="brochureForm.get('name')?.errors?.['pattern']">
-                                Only letters are allowed
-                            </small>
-
-                        </div>
-                    </div>
-
-                    <!-- Email -->
-                    <div class="mb-3">
-
-                        <div class="input-group">
-
-                            <input type="email" class="form-control" placeholder="Email" formControlName="email">
-
-                            <button *ngIf="!isIndian && !otpVerified" type="button" class="btn btn-warning"
-                                (click)="otpSent ? resendOtp() : sendOtp()" [disabled]="otpSent && otpTimer > 0">
-
-                                {{ otpSent
-                                ? (otpTimer > 0
-                                ? 'Resend OTP (' + otpTimer + 's)'
-                                : 'Resend OTP')
-                                : 'Send OTP'
-                                }}
-
-                            </button>
-
-                        </div>
-
-                        <div class="text-danger mt-1"
-                            *ngIf="brochureForm.get('email')?.touched && brochureForm.get('email')?.invalid">
-
-                            <small *ngIf="brochureForm.get('email')?.errors?.['required']">
-                                Email is required
-                            </small>
-
-                            <small *ngIf="brochureForm.get('email')?.errors?.['email']">
-                                Enter valid email address
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                    <!-- Mobile -->
-                    <div class="mb-3">
-
-                        <div class="input-group">
-
-                            <select class="form-select" style="max-width:90px" formControlName="countryCode">
-
-                                <option *ngFor="let code of countryCodes" [value]="code">
-                                    {{ code }}
-                                </option>
-
-                            </select>
-
-                            <input type="text" class="form-control" placeholder="Mobile Number" formControlName="phone"
-                                [maxlength]="isIndian ? 10 : 15">
-
-                            <button *ngIf="isIndian && !otpVerified" type="button" class="btn btn-warning"
-                                (click)="otpSent ? resendOtp() : sendOtp()" [disabled]="otpSent && otpTimer > 0">
-
-                                {{ otpSent
-                                ? (otpTimer > 0
-                                ? 'Resend OTP (' + otpTimer + 's)'
-                                : 'Resend OTP')
-                                : 'Send OTP'
-                                }}
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                    <!-- OTP -->
-                    <div class="mt-3" *ngIf="otpSent || otpVerified">
-
-                        <!-- OTP input -->
-                        <input *ngIf="!otpVerified" type="text" class="form-control" placeholder="Enter OTP"
-                            formControlName="otp" maxlength="4" (input)="onOtpInput()">
-
-                        <!-- Success / Error message -->
-                        <div class="mt-2" *ngIf="otpMessage">
-                            <small [class.text-success]="otpStatus === 'success'"
-                                [class.text-danger]="otpStatus === 'error'">
-                                {{ otpMessage }}
-                            </small>
-                        </div>
-
-                    </div>
-
-                </form>
-
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" [disabled]="!otpVerified" (click)="submitBrochureForm()">
-                    Submit
-                </button>
-            </div>
-
-        </div>
-    </div>
-
-</div>

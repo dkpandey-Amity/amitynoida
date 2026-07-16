@@ -1,0 +1,182 @@
+<div class="enquiry-now-btn">
+    <img src="assets/img/enquiry-now.png" alt="Enquiry Now" (click)="openBrochurePopup()">
+</div>
+
+<!-- Brochure Modal -->
+<div class="modal fade show" *ngIf="showBrochurePopup" style="display:block;background:rgba(0,0,0,.5)">
+    <form [formGroup]="brochureForm">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Enquire Now</h5>
+
+                    <button type="button" class="btn-close" (click)="closeBrochurePopup()">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+
+
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Name" formControlName="name">
+
+                        <div class="text-danger mt-1"
+                            *ngIf="brochureForm.get('name')?.touched && brochureForm.get('name')?.invalid">
+
+                            <small *ngIf="brochureForm.get('name')?.errors?.['required']">
+                                Name is required
+                            </small>
+
+                            <small *ngIf="brochureForm.get('name')?.errors?.['pattern']">
+                                Only letters are allowed
+                            </small>
+
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+
+                        <div class="input-group">
+
+                            <input type="email" class="form-control" placeholder="Email" formControlName="email">
+
+                            <button *ngIf="!isIndian && !otpVerified" type="button" class="btn btn-warning"
+                                (click)="otpSent ? resendOtp() : sendOtp()"
+                                [disabled]="isSubmitting || (otpSent && otpTimer > 0)">
+
+                                {{ otpSent
+                                ? (otpTimer > 0
+                                ? 'Resend OTP (' + otpTimer + 's)'
+                                : 'Resend OTP')
+                                : 'Send OTP'
+                                }}
+
+                            </button>
+
+                        </div>
+
+                        <div class="text-danger mt-1"
+                            *ngIf="brochureForm.get('email')?.touched && brochureForm.get('email')?.invalid">
+
+                            <small *ngIf="brochureForm.get('email')?.errors?.['required']">
+                                Email is required
+                            </small>
+
+                            <small *ngIf="brochureForm.get('email')?.errors?.['email']">
+                                Enter valid email address
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Mobile -->
+                    <div class="mb-3">
+
+                        <div class="input-group">
+
+                            <select class="form-select" style="max-width:90px" formControlName="countryCode">
+
+                                <option *ngFor="let code of countryCodes" [value]="code">
+                                    {{ code }}
+                                </option>
+
+                            </select>
+
+                            <input type="text" class="form-control" placeholder="Mobile Number" formControlName="phone"
+                                [maxlength]="isIndian ? 10 : 15">
+
+                            <button *ngIf="isIndian && !otpVerified" type="button" class="btn btn-warning"
+                                (click)="otpSent ? resendOtp() : sendOtp()"
+                                [disabled]="isSubmitting || (otpSent && otpTimer > 0)">
+
+                                {{ otpSent
+                                ? (otpTimer > 0
+                                ? 'Resend OTP (' + otpTimer + 's)'
+                                : 'Resend OTP')
+                                : 'Send OTP'
+                                }}
+
+                            </button>
+                            <div class="text-danger mt-1" *ngIf="
+                                    brochureForm.get('phone')?.touched &&
+                                    brochureForm.get('phone')?.invalid
+                                ">
+                                <small *ngIf="brochureForm.get('phone')?.errors?.['required']">
+                                    Mobile number is required
+                                </small>
+
+                                <small *ngIf="brochureForm.get('phone')?.errors?.['pattern']">
+                                    {{
+                                    isIndian
+                                    ? 'Enter a valid 10-digit mobile number'
+                                    : 'Enter a valid mobile number'
+                                    }}
+                                </small>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- OTP -->
+                    <div class="mt-3" *ngIf="otpSent || otpVerified">
+
+                        <!-- OTP input -->
+                        <input *ngIf="!otpVerified" type="text" class="form-control" placeholder="Enter OTP"
+                            formControlName="otp" maxlength="4" (input)="onOtpInput()">
+
+                        <!-- Success / Error message -->
+                        <div class="mt-2" *ngIf="otpMessage">
+                            <small [class.text-success]="otpStatus === 'success'"
+                                [class.text-danger]="otpStatus === 'error'">
+                                {{ otpMessage }}
+                            </small>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+                <div class="modal-footer d-flex justify-content-between align-items-center gap-3">
+
+                    <!-- Authorization Checkbox -->
+                    <div class="form-check authorization-wrapper">
+
+                        <input class="form-check-input" type="checkbox" id="authorization"
+                            formControlName="authorization">
+
+                        <label class="form-check-label authorization-text" for="authorization">
+
+                            I authorise Amity University, Noida, to contact me with updates and
+                            notifications via Email / SMS / WhatsApp / Call, which overrides
+                            DND and NDNC registrations.
+
+                        </label>
+
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="button" class="btn btn-primary flex-shrink-0" [disabled]="!otpVerified"
+                        (click)="submitBrochureForm()">
+                        Submit
+                    </button>
+
+                </div>
+
+                <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-primary" [disabled]="!otpVerified" (click)="submitBrochureForm()">
+                    Submit
+                </button>
+            </div> -->
+
+            </div>
+        </div>
+    </form>
+</div>

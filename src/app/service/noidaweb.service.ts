@@ -802,6 +802,10 @@ export class ApiService {
     );
   }
 
+  getAllFaq(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/Amityapi/GetWebsiteFaq`);
+  }
+
   getOldUrlRewrite(oldUrl: string): Observable<any> {
     const cleanUrl = oldUrl.trim().replace(/\/$/, '');
     return this.http.get<any>(

@@ -1,871 +1,199 @@
+<!-- ================= BREADCRUMB ================= -->
+
 <div class="breadcumb-wrapper">
   <div class="container">
+
     <div class="breadcumb-content text-center">
-      <h1 class="breadcumb-title">Frequently Asked Questions</h1>
+
+      <h1 class="breadcumb-title">
+        Frequently Asked Questions
+      </h1>
+
       <ul class="breadcumb-menu">
-        <li><a routerLink="/home">Home</a></li>
-        <li>FAQ’s</li>
+
+        <li>
+          <a routerLink="/home">
+            Home
+          </a>
+        </li>
+
+        <li>
+          FAQs
+        </li>
+
       </ul>
+
     </div>
+
   </div>
 </div>
+
+
+<!-- ================= FAQ SECTION ================= -->
+
 <section class="space">
-  <div style="padding: 0px 0px 50px 0px">
+  <div style="padding: 0 0 50px">
     <div class="container">
-      <div class="row mb-4">
-        <div class="col-lg-4 mx-auto">
+
+      <!-- ================= FAQ SEARCH ================= -->
+
+      <div class="row justify-content-center mb-5">
+        <div class="col-lg-5">
           <div class="faq-search">
             <input type="text" class="form-control" placeholder="Search your question..." [(ngModel)]="searchText"
-              (input)="onSearch($event)" />
+              (input)="onSearch()" />
           </div>
         </div>
       </div>
+
+
+      <!-- ================= FAQ LOADER ================= -->
+
+      @if (isLoading) {
+      <div class="text-center py-5">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">
+            Loading FAQs...
+          </span>
+        </div>
+
+
+        <p class="mt-3 mb-0">
+          Loading FAQs...
+        </p>
+      </div>
+      }
+
+
+      <!-- ================= API ERROR ================= -->
+
+      @if (!isLoading && errorMessage) {
+      <div class="alert alert-danger text-center" role="alert">
+        {{ errorMessage }}
+      </div>
+      }
+
+
+      <!-- ================= DYNAMIC FAQ ================= -->
+
+      @if (
+      !isLoading &&
+      !errorMessage &&
+      filteredFaqList.length > 0
+      ) {
 
       <div class="row">
+
         <div class="col-md-12">
+
           <div class="accordion-area accordion" id="faqAccordion">
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-1">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-1" aria-expanded="false" aria-controls="collapse-1">
-                  1. When does the admission start in Amity University for PG
-                  and UG program and how does one apply?
-                </button>
-              </div>
-              <div id="collapse-1" class="accordion-collapse collapse" aria-labelledby="collapse-item-1"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;The admission process for PG
-                    and UG programs commences from&nbsp;<strong>January/ February.</strong>&nbsp;Application form is
-                    available on payment of
-                    Rs.1,500/- Applicants can apply online through&nbsp;<a href="https://amity.edu/apply-now.aspx"
-                      target="_blank"><strong>Click Here</strong></a>
-                  </p>
-                  <p>
-                    <strong>Form cost will not be refunded for any reason
-                      whatsoever.</strong>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-2">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-2" aria-expanded="true" aria-controls="collapse-2">
-                  2. Where can an applicant see the programs offered at Amity
-                  University?
-                </button>
-              </div>
-              <div id="collapse-2" class="accordion-collapse collapse" aria-labelledby="collapse-item-2"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;An applicant may please refer
-                    to
-                    <a href="https://noida.amity.edu/all-programs"><strong>Click Here</strong></a>
-                    and go on to specific discipline.
-                  </p>
-                  <p><strong>FEE NOTES:</strong></p>
-                  <ul>
-                    <li>
-                      One-time Academic Security Deposit of Rs. 20,000/- has to
-                      be paid at the time of admission.
-                    </li>
-                    <li>
-                      The Fee mentioned is for the 1st semester only and will
-                      increase by approximately 5% every year. Each Academic
-                      year is of 2 semesters.
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-3">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
-                  3. What documents are required along with the Application form
-                  and within how many days a form gets processed?
-                </button>
-              </div>
-              <div id="collapse-3" class="accordion-collapse collapse" aria-labelledby="collapse-item-3"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;Scanned copy of original class
-                    10th board mark-sheet and a recent colour passport size
-                    photograph are required to be uploaded along with the Online
-                    Application Form. Please keep checking the&nbsp;<strong>Admission Microsite</strong>&nbsp;regarding
-                    confirmation with respect to receipt of
-                    your form. It normally takes 2-3 working days to process the
-                    form.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-4">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
-                  4. What is Admission Microsite and how is the status of
-                  Application (Registration / Selection) communicated to the
-                  candidates?
-                </button>
-              </div>
-              <div id="collapse-4" class="accordion-collapse collapse" aria-labelledby="collapse-item-4"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;Admission Microsite is a
-                    window for two-way communication between the student and
-                    University. You can log on to the Admission Microsite (<a
-                      href="https://portal.amity.edu/NewOnlineForm/Candidate/SignUp" style="color: blue"
-                      target="_blank">https://portal.amity.edu/NewOnlineForm/Candidate/SignUp</a>) using the Profile ID
-                    (Registered Mobile Number) and
-                    Password issued to you while filling up the Application
-                    Form. No separate communication is sent with respect to
-                    Application / Admission / Selection Process.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-5">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
-                  5. What is the difference between sponsored and non-sponsored
-                  category and is the category change possible before/after the
-                  selection?
-                </button>
-              </div>
-              <div id="collapse-5" class="accordion-collapse collapse" aria-labelledby="collapse-item-5"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;<strong>Non-Sponsored</strong>&nbsp;- Normal
-                    eligibility criteria and cut-off in admission process.
-                  </p>
-                  <p>
-                    Non-Sponsored is general category for all applicants who
-                    fulfill the eligibility criteria and, it is also a high
-                    merit category.
-                  </p>
-                  <p>
-                    <strong>Sponsored Category</strong>- Reduced eligibility
-                    criteria (wherever applicable) and cut-off in admission
-                    process with differential fee structure.
-                  </p>
-                  <p>
-                    Sponsored category is basically a lower merit category with
-                    high fees.
-                  </p>
-                  <p>
-                    <em><strong>Please note:</strong></em>
-                  </p>
-                  <ul>
-                    <li>
-                      <em>Request for change in category will be entertained only
-                        prior to appearing for Selection Process.
-                      </em>
-                    </li>
-                    <li>
-                      <em>There is a possibility that the Admission Committee
-                        recommends your admission after the selection process in
-                        a category for which you had not applied in the
-                        Application Form. In such cases, you may exercise the
-                        option to accept or to deny the offer.</em>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-6">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-6" aria-expanded="false" aria-controls="collapse-6">
-                  6. Can a student apply for UG/PG program in absence of 10+2/
-                  Final year result of Graduation?
-                </button>
-              </div>
-              <div id="collapse-6" class="accordion-collapse collapse" aria-labelledby="collapse-item-6"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;Yes, a student may apply
-                    provisionally for any program but needs to produce all the
-                    original Marksheets/ Degrees at the time of Joining the
-                    Program. However, for the applicant of PG
-                    Program,&nbsp;<strong>31st October</strong>&nbsp;(of the
-                    current academic year) is the last date to submit the
-                    original Marksheets / Degrees.
-                  </p>
-                  <p>
-                    Your verification will remain incomplete in case you fail to
-                    submit the required documents. In the absence of
-                    verification, you will not be able to appear for the end
-                    semester examination.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-7">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-7" aria-expanded="false" aria-controls="collapse-7">
-                  7. Is there any limitation to number of programs for which one
-                  can apply in AUUP, Noida?
-                </button>
-              </div>
-              <div id="collapse-7" class="accordion-collapse collapse" aria-labelledby="collapse-item-7"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;An applicant can apply for as
-                    many programs as he/she desires. But for each program, a
-                    separate form is required to be filled. Please also note
-                    that one cannot apply for same program twice in the same
-                    academic year.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-8">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-8" aria-expanded="false" aria-controls="collapse-8">
-                  8. What are the grounds on which a form can be rejected and is
-                  the form cost refundable?
-                </button>
-              </div>
-              <div id="collapse-8" class="accordion-collapse collapse" aria-labelledby="collapse-item-8"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;Incorrect &amp; incomplete
-                    forms will be rejected.
-                    <strong>Form cost will not be refunded for any reason
-                      whatsoever.</strong>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-9">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-9" aria-expanded="false" aria-controls="collapse-9">
-                  9. What is the selection criterion of Amity University?
-                </button>
-              </div>
-              <div id="collapse-9" class="accordion-collapse collapse" aria-labelledby="collapse-item-9"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;For details regarding
-                    Subject-Specific Selection Process please refer the specific
-                    course under the Programmes section
-                  </p>
-                  <p>
-                    For details
-                    <a href="https://noida.amity.edu/all-programs"><strong>Click Here </strong></a>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-10">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-10" aria-expanded="false" aria-controls="collapse-10">
-                  10. Does Amity University, Noida Campus accept SAT score?
-                </button>
-              </div>
-              <div id="collapse-10" class="accordion-collapse collapse" aria-labelledby="collapse-item-10"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong> Amity University Noida is now a
-                    member of College Board India Global Alliance and accepts
-                    SAT for admissions to all its UG Programmes. DI Code: 9194.
-                  </p>
-                  <ul>
-                    <li>
-                      Valid scores of SAT (College Board DI Code: 9194) will be
-                      accepted for admissions.
-                    </li>
-                    <li>
-                      Aspirants can send their scores directly via SAT Exam form
-                      using the above-mentioned DI Code, without any additional
-                      charges on the SAT Exam.
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-11">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-11" aria-expanded="false" aria-controls="collapse-11">
-                  11. How will I get the intimation of admission after
-                  qualifying the selection process?
-                </button>
-              </div>
-              <div id="collapse-11" class="accordion-collapse collapse" aria-labelledby="collapse-item-11"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;The results are intimated to
-                    the students through Admission Microsite. A soft copy of the
-                    admission letter is uploaded online. No hard copy is issued
-                    or sent through post. Hence a student is advised to keep a
-                    regular check on Admission Microsite for all Admission
-                    related updates. The Admission Letter contains host of
-                    valuable information. Therefore, students are advised to go
-                    through the same meticulously and take action accordingly.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-12">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-12" aria-expanded="false" aria-controls="collapse-12">
-                  12. What system of education – Semester / Annual is followed
-                  at Amity University?
-                </button>
-              </div>
-              <div id="collapse-12" class="accordion-collapse collapse" aria-labelledby="collapse-item-12"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;Amity University follows
-                    semester system which is in conformity with the global
-                    practices and standards. Students are required to maintain
-                    minimum SGPA (Semester Grade Point Average) &amp; CGPA
-                    (Cumulative Grade Point average) to get promoted to the next
-                    semester and to qualify for Degree/Diploma.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-13">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-13" aria-expanded="false" aria-controls="collapse-13">
-                  13. What is the minimum requirement of attendance to appear in
-                  end semester examination and from when does it start?
-                </button>
-              </div>
-              <div id="collapse-13" class="accordion-collapse collapse" aria-labelledby="collapse-item-13"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;A minimum of 75% attendance is
-                    required to appear in the end semester examination.
-                    Attendance of a student is calculated from the date of
-                    commencement of the program or date of fee payment
-                    (whichever is later).
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-14">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-14" aria-expanded="false" aria-controls="collapse-14">
-                  14. What are the modes of fee payment?
-                </button>
-              </div>
-              <div id="collapse-14" class="accordion-collapse collapse" aria-labelledby="collapse-item-14"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;Students can make the payment
-                    through following options:
-                  </p>
-                  <p>1) Through Net banking/Credit Card/Debit Card</p>
-                  <p>2) Through Paytm</p>
-                  <p>3) Through NEFT / RTGS (NO IMPS) in Bank.</p>
-                  <p>
-                    4) Through Demand Draft/ Pay-order/ Cash at Axis Bank
-                    Branches
-                  </p>
-                  <p>
-                    5) Pay at Amity University Campus by way of Pay Order /
-                    Demand Draft.
-                  </p>
-                  <p>6) Through Bharat Bill Payment</p>
-                  <p>
-                    7) Easy Monthly Instalments through third party company,
-                    independent of Amity:
-                  </p>
-                  <p>
-                    <strong>Grayquest</strong> (For more details reach out on
-                    amity&#64;grayquest.com or call at 08044633885. You may also
-                    visit the website:
-                    <a href="https://www.grayquest.com/">https://www.grayquest.com/</a>
-                    )
-                  </p>
-                </div>
-              </div>
-            </div>
+
+
+            <!-- Loop through API FAQs -->
+
+            @for (
+            faq of filteredFaqList;
+            track faq.SNo;
+            let i = $index
+            ) {
 
             <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-15">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-15" aria-expanded="false" aria-controls="collapse-15">
-                  15. What if one fails to deposit the fee as per the last date
-                  mentioned on the admission letter?
+
+
+              <!-- ================= QUESTION ================= -->
+
+              <div class="accordion-header" [id]="'faq-heading-' + faq.SNo">
+
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" aria-expanded="false"
+                  [attr.data-bs-target]="
+                        '#faq-collapse-' + faq.SNo
+                      " [attr.aria-controls]="
+                        'faq-collapse-' + faq.SNo
+                      ">
+
+                  {{ i + 1 }}.
+
+                  {{ faq.Question }}
+
                 </button>
+
               </div>
-              <div id="collapse-15" class="accordion-collapse collapse" aria-labelledby="collapse-item-15"
-                data-bs-parent="#faqAccordion">
+
+
+              <!-- ================= ANSWER ================= -->
+
+              <div class="accordion-collapse collapse" [id]="
+                      'faq-collapse-' + faq.SNo
+                    " [attr.aria-labelledby]="
+                      'faq-heading-' + faq.SNo
+                    " data-bs-parent="#faqAccordion">
+
                 <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;If you are not able to pay the
-                    fees by the due date, you are required to approach the
-                    admission office through&nbsp;<strong>&ldquo;Post/track your query&rdquo;</strong>&nbsp;link
-                    available on Admission microsite. Request for
-                    extension of date will be considered by the Admission
-                    Committee, depending on the availability of seats.
-                    <br />
-                    <b>Please note that seats in all programmes are limited and will be allotted on first come, first
-                      served basis.</b>
-                  </p>
+
+                  <div class="faq-answer" [innerHTML]="faq.Answer">
+                  </div>
+
                 </div>
+
               </div>
+
             </div>
 
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-16">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-16" aria-expanded="false" aria-controls="collapse-16">
-                  16. How and from where the fee paid status can be checked?
-                </button>
-              </div>
-              <div id="collapse-16" class="accordion-collapse collapse" aria-labelledby="collapse-item-16"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;The status of fee payment can
-                    be checked online on Admission Microsite. After realization
-                    of payment, Amizone login credentials (ID and Password) will
-                    get activated on the Admission Microsite.
-                  </p>
-                </div>
-              </div>
-            </div>
+            }
 
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-17">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-17" aria-expanded="false" aria-controls="collapse-17">
-                  17. What is AMIZONE and how can it be accessed?
-                </button>
-              </div>
-              <div id="collapse-17" class="accordion-collapse collapse" aria-labelledby="collapse-item-17"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;Amizone is a portal through
-                    which student can access vital information pertaining to
-                    academic and administration. It constitutes an IT nerve
-                    center for dissemination of information and instruction
-                    relevant to academic journey of the student during their
-                    tenure at Amity University. Amizone will be activated after
-                    realization of fee payment at Amity for Post-Graduate
-                    programs. For Under-Graduate programs Amizone will be
-                    activated after realization of fee payment and meeting the
-                    eligibility criteria of the selected program.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-18">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-18" aria-expanded="false" aria-controls="collapse-18">
-                  18. When should the candidate report for Registration to the
-                  Institution/Hostel and what are the documents required at the
-                  time of reporting?
-                </button>
-              </div>
-              <div id="collapse-18" class="accordion-collapse collapse" aria-labelledby="collapse-item-18"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;Students should report on
-                    commencement date of the program. List of documents required
-                    at the time of reporting can be obtained from Admission
-                    Letter and Amizone.
-                  </p>
-                  <p>
-                    Date of reporting to Hostel is communicated separately
-                    through Amizone.
-                  </p>
-                  <p>
-                    <em><strong>Please Note: </strong></em>
-                  </p>
-                  <ul>
-                    <li>
-                      <em>
-                        Student will be allowed to enter the campus on the
-                        commencement date through gate number 1 &amp; 4
-                        only.</em>
-                    </li>
-                    <li>
-                      <em>
-                        Students will not be allowed to register for the
-                        program/hostel 10 days post the commencement date under
-                        any circumstances. Hostel seat (if applicable) will
-                        automatically get cancelled.</em>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-19">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-19" aria-expanded="false" aria-controls="collapse-19">
-                  19. What are the various Scholarships offered by Amity?
-                </button>
-              </div>
-              <div id="collapse-19" class="accordion-collapse collapse" aria-labelledby="collapse-item-19"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;Amity Scholarships are
-                    instituted to help those who are brilliant in academics and
-                    deserve world class education. Diverse Scholarships are
-                    offered at Amity.
-                  </p>
-                  <p>
-                    For Details:
-                    <a href="https://noida.amity.edu/scholarships"><strong>Click Here</strong></a>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-20">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#collapse-20"
-                  aria-expanded="false"
-                  aria-controls="collapse-20"
-                >
-                  20. What are the privileges for Amity Alumni?
-                </button>
-              </div>
-              <div
-                id="collapse-20"
-                class="accordion-collapse collapse"
-                aria-labelledby="collapse-item-20"
-                data-bs-parent="#faqAccordion"
-              >
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer: 1.</strong>&nbsp;Under &ldquo;Amity
-                    Advantage Scheme&rdquo;, 10% fee concession is offered to
-                    Amity Alumni, who wish to continue their higher education
-                    with AUUP, Noida Campus (applicable for pass outs of 2024 /
-                    2025 / 2026 only)
-                  </p>
-                  <p><strong>Procedure to Apply:</strong></p>
-                  <ul>
-                    <li>
-                      Documentary proof of successful completion of class 12th/
-                      Graduation to be mailed to
-                      <a href="mailto:admitted&#64;amity.edu"
-                        >admitted&#64;amity.edu</a
-                      >
-                      .
-                    </li>
-                    <li>
-                      Concession shall be granted based on verification of
-                      documents by Admission Department.
-                    </li>
-                    
-                  </ul>
-                </div>
-              </div>
-            </div> -->
-
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-21">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-211" aria-expanded="false" aria-controls="collapse-21">
-                  20. Does Amity University offer assistance in availing
-                  Education Loan?
-                </button>
-              </div>
-              <div id="collapse-21" class="accordion-collapse collapse" aria-labelledby="collapse-item-21"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;Amity has tie ups with premier
-                    banks to offer easy Education Loans to selected students.
-                  </p>
-                  <p>
-                    For Details:
-                    <a href="https://amity.edu/education-loan.aspx"><strong>Click Here</strong></a>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-22">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-22" aria-expanded="false" aria-controls="collapse-22">
-                  21. What is Study Abroad Program (SAP) offered by Amity?
-                </button>
-              </div>
-              <div id="collapse-22" class="accordion-collapse collapse" aria-labelledby="collapse-item-22"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;SAP stands for Study Abroad
-                    Program. To give international exposure, every Amitian can
-                    avail option to proceed on SAP.
-                  </p>
-                  <p>
-                    For Details:&nbsp;<a href="https://amity.edu/sap/" target="_blank"><strong>Click Here</strong></a>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-23">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-23" aria-expanded="false" aria-controls="collapse-23">
-                  22. What is the campus placement criteria of the University?
-                </button>
-              </div>
-              <div id="collapse-23" class="accordion-collapse collapse" aria-labelledby="collapse-item-23"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;Amity assures 100% placement
-                    assistance. In order to be eligible for the recruitment
-                    process, every student is required to achieve a minimum 6
-                    CGPA on a 10 point scale.
-                  </p>
-                  <p>
-                    For Details:&nbsp;<a href="https://amity.edu/placement/" target="_blank"><strong>Click
-                        Here</strong></a>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-24">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-24" aria-expanded="false" aria-controls="collapse-24">
-                  23. Is Hostel/Residential facility available within the Amity
-                  University campus?
-                </button>
-              </div>
-              <div id="collapse-24" class="accordion-collapse collapse" aria-labelledby="collapse-item-24"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;Yes, Amity provides
-                    comprehensive AC hostel facilities for boys and girls
-                    separately within the University campus.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-25">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-25" aria-expanded="false" aria-controls="collapse-25">
-                  24. What is the hostel fee and what does the hostel fee
-                  include?
-                </button>
-              </div>
-              <div id="collapse-25" class="accordion-collapse collapse" aria-labelledby="collapse-item-25"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;The hostel fee for 2026
-                    session:
-                  </p>
-                  <p>For AC Rooms- Rs. 1,95,000 per annum.</p>
-                  <p>
-                    <em>One-time Hostel Security Deposit of Rs. 15,000/- has to
-                      be paid along with the Hostel fee.</em>
-                  </p>
-                  <p>
-                    The hostel fee is inclusive of the boarding and the laundry
-                    charges. There are Multi cuisine cafeterias available in the
-                    campus. Students can choose the type of food they wish to
-                    have.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-26">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-26" aria-expanded="false" aria-controls="collapse-26">
-                  25. What are the facilities offered in AC hostel
-                  accommodation?
-                </button>
-              </div>
-              <div id="collapse-26" class="accordion-collapse collapse" aria-labelledby="collapse-item-26"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong>&nbsp;Apartment styled AC
-                    accommodation is a single occupancy concept in a 4-room
-                    apartment which is air conditioned along with sitting
-                    lounge, cable TV, refrigerator, Wi-Fi connection and
-                    essential furniture including bed mattress, study table,
-                    chair, cupboard, bed sheets, pillow covers, towels and
-                    laundry services.
-                  </p>
-                  <p><strong>Link for Hostel Video:</strong></p>
-                  <p>
-                    <strong>AC Room:&nbsp;</strong><a href="https://www.youtube.com/watch?v=ja_wj2utFa4"><strong>Click
-                        Here</strong></a>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-27">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-27" aria-expanded="false" aria-controls="collapse-27">
-                  26. What are the Withdrawal Guidelines for refund of fees?
-                </button>
-              </div>
-              <div id="collapse-27" class="accordion-collapse collapse" aria-labelledby="collapse-item-27"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <em>For detailed information, please read our “AUUP
-                      Withdrawal Guidelines: (<a href="https://noida.amity.edu/withdrawal">
-                        <strong>Click Here</strong>
-                      </a>
-                      )</em>
-                  </p>
-
-                  <!-- <p>Refund is as per following Amity University refund guidelines. Application for
-                                        withdrawal from the program is to be submitted through Amizone (<a
-                                            href="http://www.amizone.net/">www.amizone.net</a>&nbsp;). Please take a
-                                        printout all pages of the withdrawal form, sign and send the form with a copy of
-                                        the cancelled cheque, by registered post / speed post to the address mentioned
-                                        in the Amizone portal. <strong>Withdrawal request shall be processed ONLY on
-                                            receipt of your physical documents.</strong></p>
-                                    <p>If a student withdraws his/her admission up to 15 days before the commencement of
-                                        the academic session, the student will receive a refund of 100% of the semester
-                                        fees and the Security Deposit after deduction of an amount not more than 5% of
-                                        the fees (subject to a maximum of Rs.5000.00) as processing charges.&nbsp;</p>
-                                    <p>If a student withdraws his/her admission less than 15 days prior to the
-                                        commencement of the academic session, the student will receive a refund of 90%
-                                        of the semester fees and the Security Deposit.&nbsp;</p>
-                                    <p>If a student withdraws his/her admission up to 15 days post the commencement of
-                                        the academic session, the student will receive a refund of 80% of the semester
-                                        fees and the Security Deposit.&nbsp;</p>
-                                    <p>If a student withdraws his/her admission between 16-30 days post the commencement
-                                        of the academic session, the student will receive a refund of 50% of the
-                                        semester fees and the Security Deposit.&nbsp;</p>
-                                    <p>If a student withdraws his/her admission on or post 30 days of commencement of
-                                        the academic session, none of the semester fees will be refunded except for the
-                                        Security Deposit.&nbsp;</p>
-                                    <p><strong>Scholarship case:</strong>&nbsp;If a student who is offered Amity
-                                        scholarship decides to withdraw, he / she will be treated as a non-scholarship
-                                        student and the withdrawal guidelines as given above will be applicable.&nbsp;
-                                    </p>
-                                    <p><strong>100% Scholarship case:</strong>&nbsp;Security deposit will be forfeited
-                                        in case a student applies for withdrawal after registration / reporting for the
-                                        program.&nbsp;</p>
-                                    <p><strong>Hostel Refund:</strong>&nbsp;Hostel fee once paid will not be refunded in
-                                        case of withdrawal at any point of time.</p>
-                                    <p><strong>Form cost will not be refunded for any reason whatsoever.</strong></p> -->
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-28">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-28" aria-expanded="false" aria-controls="collapse-28">
-                  27. Is there any transportation facility for day scholars?
-                </button>
-              </div>
-              <div id="collapse-28" class="accordion-collapse collapse" aria-labelledby="collapse-item-28"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <!-- <p>
-                    <strong>Answer:</strong>&nbsp;Yes, Amity offers Bus service
-                    on selected routes. For Details, please contact at Amity Bus
-                    Service; 0120-4392484.
-                  </p> -->
-                  <p>
-                    Yes, Amity offers Bus service on selected routes. For
-                    Details, please contact at Amity Bus Service; 0120-4392484
-                    or E- mail at busservice&#64;amity.edu .
-                  </p>
-                  <p>
-                    AUUP Noida is well connected with Metro. Okhla Bird
-                    Sanctuary Metro Station and Botanical Garden Metro Station
-                    are nearest.
-                  </p>
-                  <p>
-                    Private cab service is also a popular mode of transport for
-                    Faculty and Students.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-card wow fadeInUp">
-              <div class="accordion-header" id="collapse-item-29">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapse-29" aria-expanded="false" aria-controls="collapse-29">
-                  28. What is CUET and is Amity Participating in Common
-                  University Entrance Test (CUET) -2026?
-                </button>
-              </div>
-              <div id="collapse-29" class="accordion-collapse collapse" aria-labelledby="collapse-item-29"
-                data-bs-parent="#faqAccordion">
-                <div class="accordion-body checklist">
-                  <p>
-                    <strong>Answer:</strong> The Common University Entrance Test
-                    (CUET), is an all-India test being organized by National
-                    Testing Agency for admission to various Undergraduate,
-                    Integrated, Postgraduate, Diploma, Certification courses and
-                    Research Programmes in 45 Central Universities of India, as
-                    per guidelines mentioned in NEP 2020.
-                  </p>
-                  <p>
-                    We accepted CUET scores in AY 2025-26 and we would accept it
-                    in AY 2026-27 also.
-                  </p>
-                  <p>
-                    For More Details on NEP&ndash;2020:
-                    <a href="https://noida.amity.edu/nep" target="_blank">
-                      <strong>Click Here </strong></a>
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
+
         </div>
+
       </div>
+
+      }
+
+
+      <!-- ================= NO FAQ FOUND ================= -->
+
+      @if (
+      !isLoading &&
+      !errorMessage &&
+      filteredFaqList.length === 0
+      ) {
+
+      <div class="text-center py-5">
+
+        <h5>
+
+          No FAQs found
+
+        </h5>
+
+
+        @if (searchText) {
+
+        <p>
+
+          No FAQ matched
+
+          <strong>
+            "{{ searchText }}"
+          </strong>
+
+        </p>
+
+        }
+
+
+        <button type="button" class="btn btn-primary" (click)="clearSearch()">
+
+          View All FAQs
+
+        </button>
+
+      </div>
+
+      }
+
     </div>
+
   </div>
+
 </section>

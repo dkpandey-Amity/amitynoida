@@ -42,10 +42,10 @@ export class ContactUsComponent {
       Email: ['', [Validators.required, Validators.email]],
       Phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       Message: ['', [Validators.required, Validators.minLength(10)]],
-      stype: [''], // Default to UG program (G)
-      captcha: ['', Validators.required],
+      stype: [''],
       scoursecode: [''],
-      scountrycode: [''],
+      scountrycode: ['+91'],
+      captcha: ['', Validators.required],
     });
 
     this.generateCaptcha();
@@ -76,20 +76,66 @@ export class ContactUsComponent {
       return;
     }
 
-    const formData = this.contactForm.value;
+    const payload = {
+      Name: this.contactForm.value.Name,
+      Email: this.contactForm.value.Email,
+      Phone: this.contactForm.value.Phone,
+      Message: this.contactForm.value.Message,
+      scoursecode: this.contactForm.value.scoursecode || '',
+      stype: this.contactForm.value.stype || '',
+      scountrycode: this.contactForm.value.scountrycode || '+91',
+      spageurl: window.location.href,
+    };
 
-    this.apiService.postEnquiryForm(formData).subscribe({
+    this.apiService.postEnquiryForm(payload).subscribe({
       next: (response: any) => {
         this.toastr.success('Form submitted successfully!', 'Success');
         this.contactForm.reset();
+
+        // Optional: reset default values
+        this.contactForm.patchValue({
+          stype: '',
+          scoursecode: '',
+          scountrycode: '+91',
+        });
+
         this.generateCaptcha();
         this.router.navigate(['/']);
       },
       error: (error: any) => {
+        console.error(error);
         this.toastr.error('Error submitting form', 'Error');
       },
     });
   }
+
+  // onSubmit() {
+  //   if (this.contactForm.invalid) {
+  //     this.contactForm.markAllAsTouched();
+  //     return;
+  //   }
+
+  //   if (+this.contactForm.value.captcha !== this.captchaAnswer) {
+  //     this.toastr.error('Invalid captcha');
+  //     this.generateCaptcha();
+  //     this.contactForm.patchValue({ captcha: '' });
+  //     return;
+  //   }
+
+  //   const formData = this.contactForm.value;
+
+  //   this.apiService.postEnquiryForm(formData).subscribe({
+  //     next: (response: any) => {
+  //       this.toastr.success('Form submitted successfully!', 'Success');
+  //       this.contactForm.reset();
+  //       this.generateCaptcha();
+  //       this.router.navigate(['/']);
+  //     },
+  //     error: (error: any) => {
+  //       this.toastr.error('Error submitting form', 'Error');
+  //     },
+  //   });
+  // }
 
   // onSubmit() {
 

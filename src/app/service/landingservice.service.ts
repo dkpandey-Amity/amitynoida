@@ -76,7 +76,7 @@ export class LandingserviceService {
     email: string;
     countryCode: string;
     mobile: string;
-    Coursecd?: string; // <-- Add this
+    Coursecd?: string;
     target?: 'mobile' | 'email';
     pageUrl?: string;
     campusId?: string;
@@ -92,32 +92,32 @@ export class LandingserviceService {
     sGCLID?: string;
     mx_Is_brochure_Leads?: string;
   }): Observable<OtpResponse> {
+    const payload = {
+      pageUrl: window.location.href,
+
+      // Default UTM values
+      utm_source: 'Direct Traffic',
+      utm_medium: 'Brochure',
+      utm_campaign: 'Brochure',
+      CampusId: '1',
+      mx_Is_brochure_Leads: 'Yes',
+
+      ...data,
+    };
+
     return this.http
-      .post<{ d: string }>(
-        this.sendOtpUrl,
-        this.encBody({
-          pageUrl: window.location.href,
-
-          // Default UTM values
-          utm_source: 'Direct Traffic',
-          utm_medium: 'Brochure',
-          utm_campaign: 'Brochure',
-          CampusId: '1',
-          mx_Is_brochure_Leads: 'Yes',
-
-          ...data, // Coursecd will automatically be included
-        }),
-        { headers: this.headers },
-      )
+      .post<{
+        d: string;
+      }>(this.sendOtpUrl, this.encBody(payload), { headers: this.headers })
       .pipe(this.dec<OtpResponse>());
   }
 
-    enquirysendOtp(data: {
+  enquirysendOtp(data: {
     firstName: string;
     email: string;
     countryCode: string;
     mobile: string;
-    Coursecd?: string; // <-- Add this
+    Coursecd?: string;
     target?: 'mobile' | 'email';
     pageUrl?: string;
     campusId?: string;
@@ -133,25 +133,160 @@ export class LandingserviceService {
     sGCLID?: string;
     mx_Is_brochure_Leads?: string;
   }): Observable<OtpResponse> {
+    const payload = {
+      pageUrl: window.location.href,
+
+      // Default UTM values
+      utm_source: 'Direct Traffic',
+      utm_medium: 'Enquiry Form',
+      utm_campaign: 'Enquiry Form',
+      CampusId: '1',
+      mx_Is_brochure_Leads: 'Yes',
+
+      ...data,
+    };
+
     return this.http
-      .post<{ d: string }>(
-        this.sendOtpUrl,
-        this.encBody({
-          pageUrl: window.location.href,
-
-          // Default UTM values
-          utm_source: 'Direct Traffic',
-          utm_medium: 'Enquiry Form',
-          utm_campaign: 'Enquiry Form',
-          CampusId: '1',
-          mx_Is_brochure_Leads: 'Yes',
-
-          ...data, // Coursecd will automatically be included
-        }),
-        { headers: this.headers },
-      )
+      .post<{
+        d: string;
+      }>(this.sendOtpUrl, this.encBody(payload), { headers: this.headers })
       .pipe(this.dec<OtpResponse>());
   }
+
+  // sendOtp(data: {
+  //   firstName: string;
+  //   email: string;
+  //   countryCode: string;
+  //   mobile: string;
+  //   Coursecd?: string;
+  //   target?: 'mobile' | 'email';
+  //   pageUrl?: string;
+  //   campusId?: string;
+  //   utm_source?: string;
+  //   utm_medium?: string;
+  //   utm_campaign?: string;
+  //   utm_content?: string;
+  //   utm_term?: string;
+  //   utm_location?: string;
+  //   state?: string;
+  //   city?: string;
+  //   sourceReferral?: string;
+  //   sGCLID?: string;
+  //   mx_Is_brochure_Leads?: string;
+  // }): Observable<OtpResponse> {
+
+  //   const payload = {
+  //     pageUrl: window.location.href,
+
+  //     // Default UTM values
+  //     utm_source: 'Direct Traffic',
+  //     utm_medium: 'Brochure',
+  //     utm_campaign: 'Brochure',
+  //     CampusId: '1',
+  //     mx_Is_brochure_Leads: 'Yes',
+
+  //     ...data,
+  //   };
+
+  //   // Console complete data before encryption
+  //   console.log('Brochure Send OTP Payload:', payload);
+
+  //   return this.http
+  //     .post<{ d: string }>(
+  //       this.sendOtpUrl,
+  //       this.encBody(payload),
+  //       { headers: this.headers },
+  //     )
+  //     .pipe(this.dec<OtpResponse>());
+  // }
+
+  // enquirysendOtp(data: {
+  //   firstName: string;
+  //   email: string;
+  //   countryCode: string;
+  //   mobile: string;
+  //   Coursecd?: string;
+  //   target?: 'mobile' | 'email';
+  //   pageUrl?: string;
+  //   campusId?: string;
+  //   utm_source?: string;
+  //   utm_medium?: string;
+  //   utm_campaign?: string;
+  //   utm_content?: string;
+  //   utm_term?: string;
+  //   utm_location?: string;
+  //   state?: string;
+  //   city?: string;
+  //   sourceReferral?: string;
+  //   sGCLID?: string;
+  //   mx_Is_brochure_Leads?: string;
+  // }): Observable<OtpResponse> {
+
+  //   const payload = {
+  //     pageUrl: window.location.href,
+
+  //     // Default UTM values
+  //     utm_source: 'Direct Traffic',
+  //     utm_medium: 'Enquiry Form',
+  //     utm_campaign: 'Enquiry Form',
+  //     CampusId: '1',
+  //     mx_Is_brochure_Leads: 'Yes',
+
+  //     ...data,
+  //   };
+
+  //   // Console complete data before encryption
+  //   console.log('Brochure Send OTP Payload:', payload);
+
+  //   return this.http
+  //     .post<{ d: string }>(
+  //       this.sendOtpUrl,
+  //       this.encBody(payload),
+  //       { headers: this.headers },
+  //     )
+  //     .pipe(this.dec<OtpResponse>());
+  // }
+
+  // enquirysendOtp(data: {
+  //   firstName: string;
+  //   email: string;
+  //   countryCode: string;
+  //   mobile: string;
+  //   Coursecd?: string; // <-- Add this
+  //   target?: 'mobile' | 'email';
+  //   pageUrl?: string;
+  //   campusId?: string;
+  //   utm_source?: string;
+  //   utm_medium?: string;
+  //   utm_campaign?: string;
+  //   utm_content?: string;
+  //   utm_term?: string;
+  //   utm_location?: string;
+  //   state?: string;
+  //   city?: string;
+  //   sourceReferral?: string;
+  //   sGCLID?: string;
+  //   mx_Is_brochure_Leads?: string;
+  // }): Observable<OtpResponse> {
+  //   return this.http
+  //     .post<{ d: string }>(
+  //       this.sendOtpUrl,
+  //       this.encBody({
+  //         pageUrl: window.location.href,
+
+  //         // Default UTM values
+  //         utm_source: 'Direct Traffic',
+  //         utm_medium: 'Enquiry Form',
+  //         utm_campaign: 'Enquiry Form',
+  //         CampusId: '1',
+  //         mx_Is_brochure_Leads: 'Yes',
+
+  //         ...data, // Coursecd will automatically be included
+  //       }),
+  //       { headers: this.headers },
+  //     )
+  //     .pipe(this.dec<OtpResponse>());
+  // }
 
   verifyOtp(
     loginNo: string,
