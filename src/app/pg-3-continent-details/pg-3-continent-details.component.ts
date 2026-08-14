@@ -17,6 +17,8 @@ import {
   OtpResponse,
 } from '../service/landingservice.service';
 
+declare var Moengage: any;
+
 @Component({
   selector: 'app-pg-3-continent-details',
   standalone: true,
@@ -113,9 +115,7 @@ export class Pg3ContinentDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.loadCountryCodes();
 
-    this.getAllUgProgramMetas();
     this.sCourseCode = this.route.snapshot.params['SlugName'];
-    //this.sCourseCode = history.state.code;
 
     this.apiService
       .getAllPgIndustryProgramsDetails(this.sCourseCode)
@@ -123,16 +123,21 @@ export class Pg3ContinentDetailsComponent implements OnInit {
         next: (data: any[]) => {
           if (data && data.length > 0) {
             this.GetPG3ContinentProgramsData = data;
+
             this.GetPG3ContinentProgramsData.forEach((program: any) => {
               this.programCD = program.CourseCD;
               this.getPgProgramDetailsSemester(this.programCD);
             });
+
+            // IMPORTANT:
+            // Load meta + schema only after program data is available
+            this.getAllUgProgramMetas();
           } else {
             console.error('No data found for the provided course code.');
           }
         },
         error: (error: any) => {
-          console.error('Error fetching UG program details:', error);
+          console.error('Error fetching PG program details:', error);
         },
       });
 
@@ -172,6 +177,44 @@ export class Pg3ContinentDetailsComponent implements OnInit {
     if (this.otpInterval) {
       clearInterval(this.otpInterval);
     }
+  }
+
+  private trackMoEngage(eventName: string, eventData: any = {}) {
+    if (
+      typeof Moengage === 'undefined' ||
+      typeof Moengage.track_event !== 'function'
+    ) {
+      console.warn('MoEngage SDK not available');
+      return;
+    }
+
+    const raw = this.brochureForm.getRawValue();
+
+    const mobile =
+      raw.countryCode.replace(/\D/g, '') + raw.phone.replace(/\D/g, '');
+
+    try {
+      Moengage.add_unique_user_id(`${raw.countryCode}-${raw.phone}`);
+
+      Moengage.add_mobile(`+${mobile}`);
+
+      if (raw.name) Moengage.add_first_name(raw.name);
+
+      if (raw.email) Moengage.add_email(raw.email);
+
+      if (this.loginNo) Moengage.add_user_attribute('login_no', this.loginNo);
+
+      if (this.formNo) Moengage.add_user_attribute('form_no', this.formNo);
+    } catch (e) {
+      console.log(e);
+    }
+
+    Moengage.track_event(eventName, {
+      ...eventData,
+      loginNo: this.loginNo,
+      formNo: this.formNo,
+      page_url: window.location.href,
+    });
   }
 
   loadCountryCodes(): void {
@@ -233,6 +276,17 @@ export class Pg3ContinentDetailsComponent implements OnInit {
           if (res.success) {
             this.loginNo = res.loginNo || '';
             this.otpSent = true;
+
+            this.trackMoEngage('downloadbrouchure_otp_generate_clicked', {
+              name: formData.name,
+              email: formData.email,
+              phone: formData.phone,
+              countryCode: formData.countryCode,
+              otpType: target,
+              courseCode: this.programCD,
+              courseName: this.selectedBrochure?.PrimaryCourseName || '',
+              pageUrl: window.location.href,
+            });
 
             this.otpStatus = 'success';
             this.otpMessage =
@@ -312,6 +366,19 @@ export class Pg3ContinentDetailsComponent implements OnInit {
           this.otpSent = false;
           this.otpVerified = true;
           this.formNo = res.formNo || '';
+
+          const formData = this.brochureForm.getRawValue();
+
+          this.trackMoEngage('otp_verified', {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            countryCode: formData.countryCode,
+            courseCode: this.programCD,
+            courseName: this.selectedBrochure?.PrimaryCourseName || '',
+            formNo: res.formNo || '',
+            pageUrl: window.location.href,
+          });
 
           this.otpStatus = 'success';
           this.otpMessage = '✅ OTP Verified Successfully';
@@ -435,225 +502,667 @@ export class Pg3ContinentDetailsComponent implements OnInit {
     return 1;
   }
 
-  getAllUgProgramMetas() {
+  getAllUgProgramMetas(): void {
     this.sCourseCode = this.route.snapshot.params['SlugName'];
+
     this.apiService.getAllProgramMetas(this.sCourseCode).subscribe({
       next: (data: any[]) => {
-        const pageData = data && data.length > 0 ? data[0] : null;
-        if (pageData) {
-          // Set the page title with a fallback
-          this.titleService.setTitle(pageData.Title || 'Default Title');
+        const pageData = data?.length ? data[0] : null;
 
-          // Update meta tags with fallbacks
-          this.meta.updateTag({
-            name: 'description',
-            content: pageData.Description || 'Default description',
-          });
+        if (!pageData) {
+          console.warn('No page meta data found');
+          return;
+        }
+
+        const baseUrl = 'https://noida.amity.edu';
+
+        // =====================================================
+        // CANONICAL URL
+        // =====================================================
+        const pageUrl =
+          pageData?.CanonicalUrl ||
+          pageData?.canonicalUrl ||
+          `${baseUrl}${this.router.url.split('?')[0].split('#')[0]}`;
+
+        // =====================================================
+        // PROGRAM DATA
+        // =====================================================
+        const program =
+          this.GetPG3ContinentProgramsData?.length > 0
+            ? this.GetPG3ContinentProgramsData[0]
+            : null;
+
+        const programName =
+          program?.PrimaryCourseName ||
+          program?.ProgramName ||
+          program?.sfullname ||
+          pageData?.ProgramName ||
+          pageData?.Title ||
+          'PG 3 Continent Program';
+
+        const title =
+          pageData?.Title || `${programName} | Amity University Noida`;
+
+        const description =
+          pageData?.Description ||
+          program?.Description ||
+          program?.CourseDescription ||
+          'A globally immersive postgraduate programme offered by Amity University Noida.';
+
+        // =====================================================
+        // IMAGE
+        // =====================================================
+        const imageUrl = pageData?.ImageUrl
+          ? pageData.ImageUrl.startsWith('http')
+            ? pageData.ImageUrl
+            : `${baseUrl}/${pageData.ImageUrl.replace(/^\/+/, '')}`
+          : `${baseUrl}/assets/img/breadcrump_bg.jpg`;
+
+        // =====================================================
+        // TITLE
+        // =====================================================
+        this.titleService.setTitle(title);
+
+        // =====================================================
+        // BASIC META
+        // =====================================================
+        this.meta.updateTag({
+          name: 'description',
+          content: description,
+        });
+
+        if (pageData?.Keywords) {
           this.meta.updateTag({
             name: 'keywords',
-            content: pageData.Keywords || 'default, keywords',
+            content: pageData.Keywords,
           });
-
-          // Prepare dynamic values
-          const pageUrl = pageData.canonicalUrl || window.location.href;
-
-          const title =
-            pageData.Title || 'PG 3 Continent Program – Amity University Noida';
-
-          const description =
-            pageData.Description ||
-            'A globally immersive postgraduate program with study opportunities across multiple continents.';
-
-          const imageUrl = pageData.ImageUrl
-            ? `https://noida.amity.edu/${pageData.ImageUrl}`
-            : 'https://noida.amity.edu/assets/img/breadcrump_bg.jpg';
-
-          // ================= Open Graph Meta Tags =================
-          this.meta.updateTag({ property: 'og:locale', content: 'en_IN' });
-
-          this.meta.updateTag({ property: 'og:type', content: 'website' });
-
-          this.meta.updateTag({
-            property: 'og:title',
-            content: title,
-          });
-
-          this.meta.updateTag({
-            property: 'og:description',
-            content: description,
-          });
-
-          this.meta.updateTag({
-            property: 'og:url',
-            content: pageUrl,
-          });
-
-          this.meta.updateTag({
-            property: 'og:site_name',
-            content: 'Amity University Noida',
-          });
-
-          this.meta.updateTag({
-            property: 'og:image',
-            content: imageUrl,
-          });
-
-          this.meta.updateTag({
-            property: 'og:image:alt',
-            content: title,
-          });
-
-          // ================= Twitter (X) Meta Tags =================
-          this.meta.updateTag({
-            name: 'twitter:card',
-            content: 'summary_large_image',
-          });
-
-          this.meta.updateTag({
-            name: 'twitter:title',
-            content: title,
-          });
-
-          this.meta.updateTag({
-            name: 'twitter:description',
-            content: description,
-          });
-
-          this.meta.updateTag({
-            name: 'twitter:image',
-            content: imageUrl,
-          });
-
-          this.meta.updateTag({
-            name: 'twitter:image:alt',
-            content: title,
-          });
-
-          this.meta.updateTag({
-            name: 'twitter:site',
-            content: '@AmityUni',
-          });
-
-          this.meta.updateTag({
-            name: 'twitter:creator',
-            content: '@AmityUni',
-          });
-
-          // Set canonical link with a fallback
-          // Set canonical link
-          this.setCanonicalLink(pageData.canonicalUrl || window.location.href);
-
-          // Call function to inject structured schema
-          this.injectStructuredData(pageData);
-        } else {
-          console.warn('No page data found');
         }
+
+        // =====================================================
+        // OPEN GRAPH
+        // =====================================================
+        this.meta.updateTag({
+          property: 'og:locale',
+          content: 'en_IN',
+        });
+
+        this.meta.updateTag({
+          property: 'og:type',
+          content: 'website',
+        });
+
+        this.meta.updateTag({
+          property: 'og:title',
+          content: title,
+        });
+
+        this.meta.updateTag({
+          property: 'og:description',
+          content: description,
+        });
+
+        this.meta.updateTag({
+          property: 'og:url',
+          content: pageUrl,
+        });
+
+        this.meta.updateTag({
+          property: 'og:site_name',
+          content: 'Amity University Noida',
+        });
+
+        this.meta.updateTag({
+          property: 'og:image',
+          content: imageUrl,
+        });
+
+        this.meta.updateTag({
+          property: 'og:image:alt',
+          content: programName,
+        });
+
+        // =====================================================
+        // TWITTER / X
+        // =====================================================
+        this.meta.updateTag({
+          name: 'twitter:card',
+          content: 'summary_large_image',
+        });
+
+        this.meta.updateTag({
+          name: 'twitter:title',
+          content: title,
+        });
+
+        this.meta.updateTag({
+          name: 'twitter:description',
+          content: description,
+        });
+
+        this.meta.updateTag({
+          name: 'twitter:image',
+          content: imageUrl,
+        });
+
+        this.meta.updateTag({
+          name: 'twitter:image:alt',
+          content: programName,
+        });
+
+        this.meta.updateTag({
+          name: 'twitter:site',
+          content: '@AmityUni',
+        });
+
+        this.meta.updateTag({
+          name: 'twitter:creator',
+          content: '@AmityUni',
+        });
+
+        // =====================================================
+        // CANONICAL
+        // =====================================================
+        this.setCanonicalLink(pageUrl);
+
+        // =====================================================
+        // STRUCTURED DATA
+        // =====================================================
+        this.injectStructuredData(pageData);
+      },
+
+      error: (error: any) => {
+        console.error('Error fetching program meta data:', error);
       },
     });
   }
 
   injectStructuredData(pageData: any): void {
     const baseUrl = 'https://noida.amity.edu';
+
+    // =====================================================
+    // PROGRAM
+    // =====================================================
+    const program =
+      this.GetPG3ContinentProgramsData?.length > 0
+        ? this.GetPG3ContinentProgramsData[0]
+        : null;
+
+    if (!program) {
+      console.warn('Program data not available for structured data');
+      return;
+    }
+
+    // =====================================================
+    // PAGE URL
+    // =====================================================
     const pageUrl =
-      pageData.CanonicalUrl || `${baseUrl}/pg-3-continent/${this.sCourseCode}`;
+      pageData?.CanonicalUrl ||
+      pageData?.canonicalUrl ||
+      `${baseUrl}${this.router.url.split('?')[0].split('#')[0]}`;
 
-    const schema = {
-      '@context': 'https://schema.org',
-      '@graph': [
+    // =====================================================
+    // PROGRAM NAME
+    // =====================================================
+    const programName =
+      program?.PrimaryCourseName ||
+      program?.ProgramName ||
+      program?.sfullname ||
+      pageData?.ProgramName ||
+      pageData?.Title ||
+      'PG 3 Continent Program';
+
+    // =====================================================
+    // COURSE CODE
+    // =====================================================
+    const courseCode =
+      program?.sCourseCode ||
+      program?.CourseCode ||
+      program?.CourseCD ||
+      this.programCD ||
+      '';
+
+    // =====================================================
+    // DESCRIPTION
+    // =====================================================
+    const description =
+      pageData?.Description ||
+      program?.Description ||
+      program?.CourseDescription ||
+      'A postgraduate programme offering globally focused academic learning at Amity University Noida.';
+
+    // =====================================================
+    // DEGREE
+    // =====================================================
+    const degreeName =
+      program?.DegreeName ||
+      program?.Degree ||
+      pageData?.DegreeName ||
+      programName;
+
+    // =====================================================
+    // DURATION
+    // =====================================================
+    const duration =
+      program?.Duration || program?.CourseDuration || pageData?.Duration || '';
+
+    // =====================================================
+    // ELIGIBILITY
+    // =====================================================
+    const eligibility =
+      program?.Eligibility ||
+      program?.EligibilityCriteria ||
+      pageData?.Eligibility ||
+      '';
+
+    // =====================================================
+    // DISCIPLINE
+    // =====================================================
+    const disciplineName =
+      program?.DisciplineName ||
+      program?.Discipline ||
+      pageData?.DisciplineName ||
+      'Postgraduate Programmes';
+
+    // =====================================================
+    // DURATION -> ISO 8601
+    // =====================================================
+    let isoDuration = '';
+
+    if (duration) {
+      const durationText = duration.toString().toLowerCase();
+
+      const yearMatch = durationText.match(
+        /(\d+(?:\.\d+)?)\s*(year|years|yr|yrs)/i,
+      );
+
+      const monthMatch = durationText.match(/(\d+)\s*(month|months)/i);
+
+      if (yearMatch) {
+        const years = Number(yearMatch[1]);
+
+        if (Number.isInteger(years)) {
+          isoDuration = `P${years}Y`;
+        } else {
+          const months = Math.round(years * 12);
+          isoDuration = `P${months}M`;
+        }
+      } else if (monthMatch) {
+        isoDuration = `P${monthMatch[1]}M`;
+      }
+    }
+
+    // =====================================================
+    // GRAPH
+    // =====================================================
+    const graph: any[] = [];
+
+    // =====================================================
+    // 1. UNIVERSITY
+    // =====================================================
+    graph.push({
+      '@type': 'CollegeOrUniversity',
+
+      '@id': `${baseUrl}/#university`,
+
+      name: 'Amity University Noida',
+
+      alternateName: 'Amity University Uttar Pradesh, Noida Campus',
+
+      url: `${baseUrl}/`,
+
+      address: {
+        '@type': 'PostalAddress',
+
+        streetAddress: 'Sector 125',
+
+        addressLocality: 'Noida',
+
+        addressRegion: 'Uttar Pradesh',
+
+        postalCode: '201313',
+
+        addressCountry: 'IN',
+      },
+
+      telephone: ['+91-120-2445252', '+91-120-4713600'],
+    });
+
+    // =====================================================
+    // 2. WEBSITE
+    // =====================================================
+    graph.push({
+      '@type': 'WebSite',
+
+      '@id': `${baseUrl}/#website`,
+
+      url: `${baseUrl}/`,
+
+      name: 'Amity University Noida',
+
+      publisher: {
+        '@id': `${baseUrl}/#university`,
+      },
+
+      inLanguage: 'en-IN',
+    });
+
+    // =====================================================
+    // 3. WEB PAGE
+    // =====================================================
+    graph.push({
+      '@type': 'WebPage',
+
+      '@id': `${pageUrl}#webpage`,
+
+      url: pageUrl,
+
+      name: programName,
+
+      description: description,
+
+      isPartOf: {
+        '@id': `${baseUrl}/#website`,
+      },
+
+      about: [
         {
-          '@type': ['EducationalOccupationalProgram', 'WebPage'],
-          '@id': pageUrl,
-          url: pageUrl,
-          name: pageData.Title || 'MBA – PG 3 Continent Program',
-          description:
-            pageData.Description ||
-            'A specialized MBA program with study opportunities across three continents.',
-          programType: 'Postgraduate 3 Continent Program',
-          provider: { '@id': `${baseUrl}#college` },
-          hasCourse: { '@id': `${pageUrl}#course-details` },
-          occupationalCredentialAwarded: 'Master of Business Administration',
-          breadcrumb: { '@id': `${pageUrl}#breadcrumb` },
+          '@id': `${pageUrl}#course`,
         },
-
         {
-          '@type': 'Course',
-          '@id': `${pageUrl}#course-details`,
-          name: 'Global Business Management',
-          description:
-            'Course covering international market practices and cross-continent business environments.',
-          provider: { '@id': `${baseUrl}#college` },
+          '@id': `${pageUrl}#programme`,
         },
+      ],
 
-        {
-          '@type': ['CollegeOrUniversity', 'EducationalOrganization'],
-          '@id': `${baseUrl}#college`,
+      breadcrumb: {
+        '@id': `${pageUrl}#breadcrumb`,
+      },
+
+      mainEntity: {
+        '@id': `${pageUrl}#course`,
+      },
+
+      inLanguage: 'en-IN',
+    });
+
+    // =====================================================
+    // 4. COURSE
+    // =====================================================
+    const courseSchema: any = {
+      '@type': 'Course',
+
+      '@id': `${pageUrl}#course`,
+
+      url: pageUrl,
+
+      name: programName,
+
+      description: description,
+
+      provider: {
+        '@id': `${baseUrl}/#university`,
+      },
+
+      educationalCredentialAwarded: degreeName,
+
+      hasCourseInstance: {
+        '@type': 'CourseInstance',
+
+        '@id': `${pageUrl}#course-instance`,
+
+        name: `${programName} – Full-time`,
+
+        courseMode: 'Full-time',
+
+        location: {
+          '@type': 'Place',
+
           name: 'Amity University Noida',
-          url: baseUrl,
-          logo: `${baseUrl}/assets/images/amity-logo.png`,
-          foundingDate: '2005',
-          description:
-            'Amity University is a leading private university in India offering globally benchmarked education.',
+
           address: {
             '@type': 'PostalAddress',
+
             streetAddress: 'Sector 125',
+
             addressLocality: 'Noida',
+
             addressRegion: 'Uttar Pradesh',
-            postalCode: '201301',
+
+            postalCode: '201313',
+
             addressCountry: 'IN',
           },
         },
+      },
 
-        {
-          '@type': 'BreadcrumbList',
-          '@id': `${pageUrl}#breadcrumb`,
-          itemListElement: [
-            {
-              '@type': 'ListItem',
-              position: 1,
-              name: 'Home',
-              item: baseUrl,
-            },
-            {
-              '@type': 'ListItem',
-              position: 2,
-              name: 'PG 3 Continent Programs',
-              item: `${baseUrl}/pg-3-continent`,
-            },
-            {
-              '@type': 'ListItem',
-              position: 3,
-              name: pageData.Title || 'MBA – PG 3 Continent Program',
-              item: pageUrl,
-            },
-          ],
-        },
-      ],
+      mainEntityOfPage: {
+        '@id': `${pageUrl}#webpage`,
+      },
+
+      inLanguage: 'en-IN',
     };
 
+    // Add only when data exists
+    if (courseCode) {
+      courseSchema.courseCode = courseCode.toString();
+    }
+
+    if (isoDuration) {
+      courseSchema.timeRequired = isoDuration;
+
+      courseSchema.hasCourseInstance.courseWorkload = isoDuration;
+    }
+
+    if (eligibility) {
+      courseSchema.coursePrerequisites = eligibility;
+    }
+
+    graph.push(courseSchema);
+
+    // =====================================================
+    // 5. EDUCATIONAL OCCUPATIONAL PROGRAM
+    // =====================================================
+    const programmeSchema: any = {
+      '@type': 'EducationalOccupationalProgram',
+
+      '@id': `${pageUrl}#programme`,
+
+      url: pageUrl,
+
+      name: programName,
+
+      description: description,
+
+      programType: 'Postgraduate 3 Continent degree programme',
+
+      educationalCredentialAwarded: degreeName,
+
+      provider: {
+        '@id': `${baseUrl}/#university`,
+      },
+    };
+
+    if (isoDuration) {
+      programmeSchema.timeToComplete = isoDuration;
+    }
+
+    if (eligibility) {
+      programmeSchema.programPrerequisites = eligibility;
+    }
+
+    graph.push(programmeSchema);
+
+    // =====================================================
+    // 6. BREADCRUMB
+    // =====================================================
+    graph.push({
+      '@type': 'BreadcrumbList',
+
+      '@id': `${pageUrl}#breadcrumb`,
+
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: `${baseUrl}/`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Postgraduate Programmes',
+          item: `${baseUrl}/pg`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'PG 3 Continent Programs',
+          item: `${baseUrl}/pg-3-continent`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 4,
+          name: programName,
+          item: pageUrl,
+        },
+      ],
+    });
+
+    // =====================================================
+    // FINAL JSON-LD
+    // =====================================================
+    const schema = {
+      '@context': 'https://schema.org',
+
+      '@graph': graph,
+    };
+
+    // =====================================================
+    // REMOVE PREVIOUS SCHEMA
+    // =====================================================
     const existingScript = document.getElementById('structured-data');
+
     if (existingScript) {
       existingScript.remove();
     }
 
+    // =====================================================
+    // CREATE JSON-LD SCRIPT
+    // =====================================================
     const script = document.createElement('script');
-    script.type = 'application/ld+json';
+
     script.id = 'structured-data';
-    script.text = JSON.stringify(schema);
+
+    script.type = 'application/ld+json';
+
+    script.textContent = JSON.stringify(schema);
+
     document.head.appendChild(script);
   }
 
-  private setCanonicalLink(url: string) {
-    // Remove any existing canonical link
-    const link: HTMLLinkElement =
-      document.querySelector('link[rel="canonical"]') ||
-      document.createElement('link');
-    link.setAttribute('rel', 'canonical');
-    link.setAttribute('href', url);
+  // injectStructuredData(pageData: any): void {
+  //   const baseUrl = 'https://noida.amity.edu';
+  //   const pageUrl =
+  //     pageData.CanonicalUrl || `${baseUrl}/pg-3-continent/${this.sCourseCode}`;
 
-    // Append to head if it's a new element
-    if (!link.parentNode) {
+  //   const schema = {
+  //     '@context': 'https://schema.org',
+  //     '@graph': [
+  //       {
+  //         '@type': ['EducationalOccupationalProgram', 'WebPage'],
+  //         '@id': pageUrl,
+  //         url: pageUrl,
+  //         name: pageData.Title || 'MBA – PG 3 Continent Program',
+  //         description:
+  //           pageData.Description ||
+  //           'A specialized MBA program with study opportunities across three continents.',
+  //         programType: 'Postgraduate 3 Continent Program',
+  //         provider: { '@id': `${baseUrl}#college` },
+  //         hasCourse: { '@id': `${pageUrl}#course-details` },
+  //         occupationalCredentialAwarded: 'Master of Business Administration',
+  //         breadcrumb: { '@id': `${pageUrl}#breadcrumb` },
+  //       },
+
+  //       {
+  //         '@type': 'Course',
+  //         '@id': `${pageUrl}#course-details`,
+  //         name: 'Global Business Management',
+  //         description:
+  //           'Course covering international market practices and cross-continent business environments.',
+  //         provider: { '@id': `${baseUrl}#college` },
+  //       },
+
+  //       {
+  //         '@type': ['CollegeOrUniversity', 'EducationalOrganization'],
+  //         '@id': `${baseUrl}#college`,
+  //         name: 'Amity University Noida',
+  //         url: baseUrl,
+  //         logo: `${baseUrl}/assets/images/amity-logo.png`,
+  //         foundingDate: '2005',
+  //         description:
+  //           'Amity University is a leading private university in India offering globally benchmarked education.',
+  //         address: {
+  //           '@type': 'PostalAddress',
+  //           streetAddress: 'Sector 125',
+  //           addressLocality: 'Noida',
+  //           addressRegion: 'Uttar Pradesh',
+  //           postalCode: '201301',
+  //           addressCountry: 'IN',
+  //         },
+  //       },
+
+  //       {
+  //         '@type': 'BreadcrumbList',
+  //         '@id': `${pageUrl}#breadcrumb`,
+  //         itemListElement: [
+  //           {
+  //             '@type': 'ListItem',
+  //             position: 1,
+  //             name: 'Home',
+  //             item: baseUrl,
+  //           },
+  //           {
+  //             '@type': 'ListItem',
+  //             position: 2,
+  //             name: 'PG 3 Continent Programs',
+  //             item: `${baseUrl}/pg-3-continent`,
+  //           },
+  //           {
+  //             '@type': 'ListItem',
+  //             position: 3,
+  //             name: pageData.Title || 'MBA – PG 3 Continent Program',
+  //             item: pageUrl,
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   };
+
+  //   const existingScript = document.getElementById('structured-data');
+  //   if (existingScript) {
+  //     existingScript.remove();
+  //   }
+
+  //   const script = document.createElement('script');
+  //   script.type = 'application/ld+json';
+  //   script.id = 'structured-data';
+  //   script.text = JSON.stringify(schema);
+  //   document.head.appendChild(script);
+  // }
+
+  private setCanonicalLink(url: string): void {
+    let link = document.querySelector(
+      'link[rel="canonical"]',
+    ) as HTMLLinkElement | null;
+
+    if (!link) {
+      link = document.createElement('link');
+
+      link.rel = 'canonical';
+
       document.head.appendChild(link);
     }
+
+    link.href = url;
   }
 
   // Fetch UG program semester details based on the CourseCD

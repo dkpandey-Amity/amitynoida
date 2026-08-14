@@ -820,6 +820,10 @@ export class ApiService {
     );
   }
 
+  getVirtualSession(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/Amityapi/GetVirtualSession`);
+  }
+
   private jsonHeaders(token?: string) {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     if (token) {

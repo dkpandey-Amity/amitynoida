@@ -18,6 +18,8 @@ import {
   OtpResponse,
 } from '../service/landingservice.service';
 
+declare var Moengage: any;
+
 @Component({
   selector: 'app-phd-course-details',
   standalone: true,
@@ -105,7 +107,6 @@ export class PhdCourseDetailsComponent implements OnInit {
       const categorySlug = params['SlugName'];
 
       if (disciplineSlug && categorySlug) {
-        this.getAllProgramMetas(categorySlug);
         this.loadPhdProgram(disciplineSlug, categorySlug);
       } else {
         console.warn('Required params missing in URL');
@@ -148,6 +149,44 @@ export class PhdCourseDetailsComponent implements OnInit {
     if (this.otpInterval) {
       clearInterval(this.otpInterval);
     }
+  }
+
+  private trackMoEngage(eventName: string, eventData: any = {}) {
+    if (
+      typeof Moengage === 'undefined' ||
+      typeof Moengage.track_event !== 'function'
+    ) {
+      console.warn('MoEngage SDK not available');
+      return;
+    }
+
+    const raw = this.brochureForm.getRawValue();
+
+    const mobile =
+      raw.countryCode.replace(/\D/g, '') + raw.phone.replace(/\D/g, '');
+
+    try {
+      Moengage.add_unique_user_id(`${raw.countryCode}-${raw.phone}`);
+
+      Moengage.add_mobile(`+${mobile}`);
+
+      if (raw.name) Moengage.add_first_name(raw.name);
+
+      if (raw.email) Moengage.add_email(raw.email);
+
+      if (this.loginNo) Moengage.add_user_attribute('login_no', this.loginNo);
+
+      if (this.formNo) Moengage.add_user_attribute('form_no', this.formNo);
+    } catch (e) {
+      console.log(e);
+    }
+
+    Moengage.track_event(eventName, {
+      ...eventData,
+      loginNo: this.loginNo,
+      formNo: this.formNo,
+      page_url: window.location.href,
+    });
   }
 
   loadCountryCodes(): void {
@@ -208,6 +247,17 @@ export class PhdCourseDetailsComponent implements OnInit {
           if (res.success) {
             this.loginNo = res.loginNo || '';
             this.otpSent = true;
+
+            this.trackMoEngage('downloadbrouchure_otp_generate_clicked', {
+              name: formData.name,
+              email: formData.email,
+              phone: formData.phone,
+              countryCode: formData.countryCode,
+              otpType: target,
+              courseCode: this.programCD,
+              courseName: this.selectedBrochure?.PrimaryCourseName || '',
+              pageUrl: window.location.href,
+            });
 
             this.otpStatus = 'success';
             this.otpMessage =
@@ -287,6 +337,19 @@ export class PhdCourseDetailsComponent implements OnInit {
           this.otpSent = false;
           this.otpVerified = true;
           this.formNo = res.formNo || '';
+
+          const formData = this.brochureForm.getRawValue();
+
+          this.trackMoEngage('otp_verified', {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            countryCode: formData.countryCode,
+            courseCode: this.programCD,
+            courseName: this.selectedBrochure?.PrimaryCourseName || '',
+            formNo: res.formNo || '',
+            pageUrl: window.location.href,
+          });
 
           this.otpStatus = 'success';
           this.otpMessage = '✅ OTP Verified Successfully';
@@ -433,10 +496,6 @@ export class PhdCourseDetailsComponent implements OnInit {
 
           // ✅ META + SCHEMA after data
           this.getAllProgramMetas(categorySlug);
-
-          if (this.pageMeta) {
-            this.injectStructuredData(this.pageMeta);
-          }
         },
         error: (err) => {
           console.error(err);
@@ -488,422 +547,982 @@ export class PhdCourseDetailsComponent implements OnInit {
   //   });
   // }
 
-  getAllProgramMetas(slug: string) {
+  getAllProgramMetas(slug: string): void {
     this.apiService.getAllProgramMetas(slug).subscribe({
       next: (data: any[]) => {
         const pageData = data?.[0];
 
-        if (pageData) {
-          this.pageMeta = pageData;
+        if (!pageData) {
+          return;
+        }
 
-          this.titleService.setTitle(pageData.Title);
-          this.meta.updateTag({
-            name: 'description',
-            content: pageData.Description,
-          });
+        this.pageMeta = pageData;
+
+        // =====================================================
+        // ROUTE + CANONICAL URL
+        // =====================================================
+        const disciplineSlug =
+          this.route.snapshot.paramMap.get('Disciplineslugname');
+
+        const programSlug = this.route.snapshot.paramMap.get('SlugName');
+
+        const canonicalUrl =
+          pageData?.canonical ||
+          pageData?.CanonicalUrl ||
+          `https://noida.amity.edu/phd/${disciplineSlug}/${programSlug}`;
+
+        // =====================================================
+        // PROGRAM DATA
+        // =====================================================
+        const program =
+          this.getPhdProgramData?.length > 0 ? this.getPhdProgramData[0] : null;
+
+        // =====================================================
+        // TITLE + DESCRIPTION
+        // =====================================================
+        const title =
+          pageData?.Title ||
+          program?.sfullname ||
+          program?.ProgramName ||
+          'PhD Programme';
+
+        const description =
+          pageData?.Description ||
+          program?.sshortdesc ||
+          program?.Description ||
+          'Explore PhD programme at Amity University Noida.';
+
+        const keywords = pageData?.Keywords || program?.MetaKeyword || '';
+
+        // =====================================================
+        // IMAGE
+        // =====================================================
+        const imageUrl = pageData?.ImageUrl
+          ? pageData.ImageUrl.startsWith('http')
+            ? pageData.ImageUrl
+            : `https://noida.amity.edu/${pageData.ImageUrl.replace(/^\/+/, '')}`
+          : 'https://noida.amity.edu/assets/img/breadcrump_bg.jpg';
+
+        // =====================================================
+        // BASIC META
+        // =====================================================
+        this.titleService.setTitle(title);
+
+        this.meta.updateTag({
+          name: 'description',
+          content: description,
+        });
+
+        if (keywords) {
           this.meta.updateTag({
             name: 'keywords',
-            content: pageData.Keywords,
+            content: keywords,
           });
-
-          // ================= Open Graph + Twitter =================
-
-          // Prepare dynamic values
-          const pageUrl = window.location.href;
-
-          const program =
-            this.getPhdProgramData && this.getPhdProgramData.length > 0
-              ? this.getPhdProgramData[0]
-              : null;
-
-          const title =
-            pageData?.Title || program?.ProgramName || 'PhD Programme';
-
-          const description =
-            pageData?.Description ||
-            program?.Description ||
-            'Explore PhD programme at Amity University Noida.';
-
-          const imageUrl = pageData?.ImageUrl
-            ? `https://noida.amity.edu/${pageData.ImageUrl}`
-            : 'https://noida.amity.edu/assets/img/breadcrump_bg.jpg';
-
-          // ================= Open Graph =================
-          this.meta.updateTag({ property: 'og:locale', content: 'en_IN' });
-
-          this.meta.updateTag({ property: 'og:type', content: 'website' });
-
-          this.meta.updateTag({
-            property: 'og:title',
-            content: title,
-          });
-
-          this.meta.updateTag({
-            property: 'og:description',
-            content: description,
-          });
-
-          this.meta.updateTag({
-            property: 'og:url',
-            content: pageUrl,
-          });
-
-          this.meta.updateTag({
-            property: 'og:site_name',
-            content: 'Amity University Noida',
-          });
-
-          this.meta.updateTag({
-            property: 'og:image',
-            content: imageUrl,
-          });
-
-          this.meta.updateTag({
-            property: 'og:image:alt',
-            content: title,
-          });
-
-          // ================= Twitter =================
-          this.meta.updateTag({
-            name: 'twitter:card',
-            content: 'summary_large_image',
-          });
-
-          this.meta.updateTag({
-            name: 'twitter:title',
-            content: title,
-          });
-
-          this.meta.updateTag({
-            name: 'twitter:description',
-            content: description,
-          });
-
-          this.meta.updateTag({
-            name: 'twitter:image',
-            content: imageUrl,
-          });
-
-          this.meta.updateTag({
-            name: 'twitter:image:alt',
-            content: title,
-          });
-
-          this.meta.updateTag({
-            name: 'twitter:site',
-            content: '@AmityUni',
-          });
-
-          this.meta.updateTag({
-            name: 'twitter:creator',
-            content: '@AmityUni',
-          });
-
-          this.setCanonicalLink(window.location.href);
         }
+
+        // =====================================================
+        // OPEN GRAPH
+        // =====================================================
+        this.meta.updateTag({
+          property: 'og:locale',
+          content: 'en_IN',
+        });
+
+        this.meta.updateTag({
+          property: 'og:type',
+          content: 'website',
+        });
+
+        this.meta.updateTag({
+          property: 'og:title',
+          content: title,
+        });
+
+        this.meta.updateTag({
+          property: 'og:description',
+          content: description,
+        });
+
+        this.meta.updateTag({
+          property: 'og:url',
+          content: canonicalUrl,
+        });
+
+        this.meta.updateTag({
+          property: 'og:site_name',
+          content: 'Amity University Noida',
+        });
+
+        this.meta.updateTag({
+          property: 'og:image',
+          content: imageUrl,
+        });
+
+        this.meta.updateTag({
+          property: 'og:image:alt',
+          content: title,
+        });
+
+        // =====================================================
+        // TWITTER / X
+        // =====================================================
+        this.meta.updateTag({
+          name: 'twitter:card',
+          content: 'summary_large_image',
+        });
+
+        this.meta.updateTag({
+          name: 'twitter:title',
+          content: title,
+        });
+
+        this.meta.updateTag({
+          name: 'twitter:description',
+          content: description,
+        });
+
+        this.meta.updateTag({
+          name: 'twitter:image',
+          content: imageUrl,
+        });
+
+        this.meta.updateTag({
+          name: 'twitter:image:alt',
+          content: title,
+        });
+
+        this.meta.updateTag({
+          name: 'twitter:site',
+          content: '@AmityUni',
+        });
+
+        this.meta.updateTag({
+          name: 'twitter:creator',
+          content: '@AmityUni',
+        });
+
+        // =====================================================
+        // CANONICAL
+        // =====================================================
+        this.setCanonicalLink(canonicalUrl);
+
+        // =====================================================
+        // STRUCTURED DATA
+        // =====================================================
+        this.injectStructuredData(pageData);
+      },
+
+      error: (err) => {
+        console.error('Failed to load program meta data:', err);
       },
     });
   }
+
   injectStructuredData(pageData: any): void {
     const baseUrl = 'https://noida.amity.edu';
+    const homeUrl = `${baseUrl}/`;
 
-    // Get slugs from route parameters - with fallbacks
-    let disciplineSlug = this.route.snapshot.paramMap.get('discipline');
-    const programSlug = this.route.snapshot.paramMap.get('SlugName');
-
-    // FALLBACK: If disciplineSlug is null, try to get it from pageData
-    if (!disciplineSlug && pageData && pageData.Disciplineslugname) {
-      disciplineSlug = pageData.Disciplineslugname;
-    }
-
-    // FALLBACK 2: If still null, use a default or construct from pageData.sDiscipline
-    if (!disciplineSlug && pageData && pageData.sDiscipline) {
-      disciplineSlug = pageData.sDiscipline.toLowerCase().replace(/\s+/g, '-');
-    }
-
-    // Construct the canonical URL - ONLY if we have a disciplineSlug
-    const canonicalUrl = disciplineSlug
-      ? `${baseUrl}/phd/${disciplineSlug}/${programSlug}`
-      : `${baseUrl}/phd/${programSlug}`; // Fallback without discipline
-
-    // Get program data for FAQ
     const program =
-      this.getPhdProgramData && this.getPhdProgramData.length > 0
-        ? this.getPhdProgramData[0]
-        : null;
+      this.getPhdProgramData?.length > 0 ? this.getPhdProgramData[0] : null;
 
-    let faqItems: any[] = [];
+    if (!program) {
+      return;
+    }
 
-    if (program) {
-      const faqPairs = [
-        { q: program.FaqQuestion, a: program.FaqAnswer },
-        { q: program.FaqQuestion2, a: program.FaqAnswer2 },
-        { q: program.FaqQuestion3, a: program.FaqAnswer3 },
-        { q: program.FaqQuestion4, a: program.FaqAnswer4 },
-        { q: program.FaqQuestion5, a: program.FaqAnswer5 },
-      ];
+    // =====================================================
+    // ROUTE
+    // =====================================================
+    const disciplineSlug =
+      this.route.snapshot.paramMap.get('Disciplineslugname') ||
+      program?.Disciplineslugname ||
+      pageData?.Disciplineslugname ||
+      '';
 
-      faqPairs.forEach((pair) => {
-        if (pair.q && pair.a) {
-          faqItems.push({
-            '@type': 'Question',
-            name: pair.q,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: pair.a,
-            },
-          });
+    const programSlug =
+      this.route.snapshot.paramMap.get('SlugName') || program?.SlugName || '';
+
+    // =====================================================
+    // CANONICAL URL
+    // =====================================================
+    const canonicalUrl =
+      pageData?.canonical ||
+      pageData?.CanonicalUrl ||
+      `${baseUrl}/phd/${disciplineSlug}/${programSlug}`;
+
+    // =====================================================
+    // CLEAN HTML
+    // =====================================================
+    const cleanText = (value: any): string => {
+      if (!value) {
+        return '';
+      }
+
+      const div = document.createElement('div');
+      div.innerHTML = String(value);
+
+      return (div.textContent || div.innerText || '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    };
+
+    // =====================================================
+    // BASIC PROGRAM DATA
+    // =====================================================
+    const programName =
+      program?.sfullname ||
+      program?.ProgramName ||
+      program?.CourseName ||
+      pageData?.Title ||
+      'PhD Programme';
+
+    const description = cleanText(
+      program?.sshortdesc ||
+        program?.Description ||
+        pageData?.Description ||
+        `${programName} offered by Amity University Noida.`,
+    );
+
+    const courseCode =
+      program?.CourseCD || program?.sCourseCode || this.programCD || '';
+
+    const disciplineName =
+      program?.sDiscipline ||
+      program?.DisciplineName ||
+      pageData?.sDiscipline ||
+      disciplineSlug;
+
+    // =====================================================
+    // DURATION -> ISO 8601
+    // =====================================================
+    const convertDurationToISO = (value: any): string | undefined => {
+      if (!value) {
+        return undefined;
+      }
+
+      const text = String(value).trim().toLowerCase();
+
+      // Already ISO format: P3Y / P6M / P3Y6M
+      if (/^p(?=\d)(?:\d+y)?(?:\d+m)?(?:\d+d)?$/i.test(text)) {
+        return text.toUpperCase();
+      }
+
+      const yearMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:year|years|yr|yrs)/);
+
+      if (yearMatch) {
+        const years = parseFloat(yearMatch[1]);
+
+        if (Number.isInteger(years)) {
+          return `P${years}Y`;
         }
+
+        const wholeYears = Math.floor(years);
+        const months = Math.round((years - wholeYears) * 12);
+
+        if (wholeYears && months) {
+          return `P${wholeYears}Y${months}M`;
+        }
+
+        if (months) {
+          return `P${months}M`;
+        }
+      }
+
+      const monthMatch = text.match(/(\d+)\s*(?:month|months)/);
+
+      if (monthMatch) {
+        return `P${monthMatch[1]}M`;
+      }
+
+      return undefined;
+    };
+
+    const duration = convertDurationToISO(
+      program?.Duration ||
+        program?.CourseDuration ||
+        program?.sDuration ||
+        pageData?.TimeToComplete,
+    );
+
+    // =====================================================
+    // ELIGIBILITY
+    // =====================================================
+    const prerequisites = cleanText(
+      program?.Eligibility ||
+        program?.EligibilityCriteria ||
+        program?.CourseEligibility ||
+        pageData?.ProgramPrerequisites ||
+        '',
+    );
+
+    // =====================================================
+    // DEGREE / CREDENTIAL
+    // =====================================================
+    const credential =
+      cleanText(
+        program?.DegreeName ||
+          program?.Degree ||
+          program?.CredentialAwarded ||
+          '',
+      ) || 'Doctor of Philosophy (PhD)';
+
+    // =====================================================
+    // CAREER / OCCUPATIONAL CATEGORIES
+    // =====================================================
+    const careerText =
+      program?.CareerOptions ||
+      program?.CareerOpportunities ||
+      program?.JobRoles ||
+      pageData?.OccupationalCategory ||
+      '';
+
+    const occupationalCategories: string[] = careerText
+      ? String(careerText)
+          .split(/[,;|]/)
+          .map((item: string) => cleanText(item))
+          .filter((item: string) => item.length > 0)
+      : [];
+
+    // =====================================================
+    // FEES
+    // =====================================================
+    const cleanPrice = (value: any): string | undefined => {
+      if (value === null || value === undefined || value === '') {
+        return undefined;
+      }
+
+      const price = String(value)
+        .replace(/,/g, '')
+        .match(/\d+(?:\.\d+)?/);
+
+      return price?.[0] || undefined;
+    };
+
+    const nonSponsoredFee = cleanPrice(
+      program?.NonSponsoredFee ||
+        program?.NonSponseredFee ||
+        program?.FirstSemesterFee ||
+        program?.SemesterFee,
+    );
+
+    const sponsoredFee = cleanPrice(
+      program?.SponsoredFee ||
+        program?.SponseredFee ||
+        program?.SponsoredSemesterFee,
+    );
+
+    // =====================================================
+    // OFFERS
+    // =====================================================
+    const offers: any[] = [];
+
+    if (nonSponsoredFee) {
+      offers.push({
+        '@type': 'Offer',
+
+        '@id': `${canonicalUrl}#non-sponsored-fee`,
+
+        name: 'Non-sponsored programme fee',
+
+        price: nonSponsoredFee,
+
+        priceCurrency: 'INR',
+
+        url: canonicalUrl,
+
+        availability: 'https://schema.org/InStock',
       });
     }
 
-    const faqSchema =
-      faqItems.length > 0
-        ? {
-            '@type': 'FAQPage',
-            '@id': `${canonicalUrl}#faq`,
-            mainEntity: faqItems,
-          }
-        : null;
+    if (sponsoredFee) {
+      offers.push({
+        '@type': 'Offer',
 
-    /* ================= MAIN GRAPH ================= */
-    const graph: any[] = [
-      /* ===== WEBPAGE ===== */
-      {
-        '@type': 'WebPage',
-        '@id': `${canonicalUrl}#webpage`,
+        '@id': `${canonicalUrl}#sponsored-fee`,
+
+        name: 'Sponsored programme fee',
+
+        price: sponsoredFee,
+
+        priceCurrency: 'INR',
+
         url: canonicalUrl,
-        name: pageData?.Title || program?.Title || 'PhD Program',
-        description: pageData?.Description || program?.Description || '',
-        inLanguage: 'en',
-        isPartOf: {
-          '@id': `${baseUrl}/#website`,
-        },
-        about: {
-          '@id': `${canonicalUrl}#phd-program`,
-        },
-        breadcrumb: {
-          '@id': `${canonicalUrl}#breadcrumb`,
-        },
+
+        availability: 'https://schema.org/InStock',
+      });
+    }
+
+    // =====================================================
+    // 1. UNIVERSITY
+    // =====================================================
+    const universitySchema = {
+      '@type': 'CollegeOrUniversity',
+
+      '@id': `${homeUrl}#university`,
+
+      name: 'Amity University Noida',
+
+      alternateName: 'Amity University Uttar Pradesh, Noida Campus',
+
+      url: homeUrl,
+
+      address: {
+        '@type': 'PostalAddress',
+
+        streetAddress: 'Sector 125',
+
+        addressLocality: 'Noida',
+
+        addressRegion: 'Uttar Pradesh',
+
+        postalCode: '201313',
+
+        addressCountry: 'IN',
       },
 
-      /* ===== EDUCATIONAL PROGRAM ===== */
-      {
-        '@type': 'EducationalOccupationalProgram',
-        '@id': `${canonicalUrl}#phd-program`,
-        name: pageData?.Title || program?.ProgramName || 'PhD Program',
-        description: pageData?.Description || program?.Description || '',
-        educationalLevel: 'Doctoral',
-        programType: 'PhD Programme',
-        educationalCredentialAwarded: 'PhD',
-        provider: {
-          '@id': `${baseUrl}/#university`,
-        },
-        ...(pageData?.ProgramMode && {
-          educationalProgramMode: pageData.ProgramMode,
-        }),
-        ...(pageData?.OccupationalCategory && {
-          occupationalCategory: pageData.OccupationalCategory,
-        }),
-        ...(pageData?.TimeToComplete && {
-          timeToComplete: pageData.TimeToComplete,
-        }),
-        ...(pageData?.ProgramPrerequisites && {
-          programPrerequisites: pageData.ProgramPrerequisites,
-        }),
+      telephone: ['+91-120-2445252', '+91-120-4713600'],
+    };
+
+    // =====================================================
+    // 2. WEBSITE
+    // =====================================================
+    const websiteSchema = {
+      '@type': 'WebSite',
+
+      '@id': `${homeUrl}#website`,
+
+      url: homeUrl,
+
+      name: 'Amity University Noida',
+
+      publisher: {
+        '@id': `${homeUrl}#university`,
       },
 
-      /* ===== UNIVERSITY ===== */
-      {
-        '@type': 'CollegeOrUniversity',
-        '@id': `${baseUrl}/#university`,
-        name: 'Amity University Noida',
-        url: baseUrl,
-        logo: {
-          '@type': 'ImageObject',
-          url: `${baseUrl}/assets/images/amity-logo.png`,
-        },
+      inLanguage: 'en-IN',
+    };
+
+    // =====================================================
+    // 3. WEBPAGE
+    // =====================================================
+    const webPageSchema: any = {
+      '@type': 'WebPage',
+
+      '@id': `${canonicalUrl}#webpage`,
+
+      url: canonicalUrl,
+
+      name: programName,
+
+      description: description,
+
+      isPartOf: {
+        '@id': `${homeUrl}#website`,
       },
 
-      /* ===== BREADCRUMB LIST ===== */
-      {
-        '@type': 'BreadcrumbList',
+      about: [
+        {
+          '@id': `${canonicalUrl}#course`,
+        },
+        {
+          '@id': `${canonicalUrl}#programme`,
+        },
+      ],
+
+      breadcrumb: {
         '@id': `${canonicalUrl}#breadcrumb`,
-        itemListElement: [
-          {
-            '@type': 'ListItem',
-            position: 1,
-            name: 'Home',
-            item: `${baseUrl}/`,
-          },
-          {
-            '@type': 'ListItem',
-            position: 2,
-            name: 'PhD Programmes',
-            item: `${baseUrl}/phd`,
-          },
-          {
-            '@type': 'ListItem',
-            position: 3,
-            name: pageData?.sDiscipline || disciplineSlug || 'PhD',
-            item: disciplineSlug
-              ? `${baseUrl}/phd/${disciplineSlug}`
-              : `${baseUrl}/phd`,
-          },
-          {
-            '@type': 'ListItem',
-            position: 4,
-            name: pageData?.Title || program?.ProgramName || 'Program Details',
-            item: canonicalUrl,
-          },
-        ],
       },
 
-      /* ===== WEBSITE ===== */
-      {
-        '@type': 'WebSite',
-        '@id': `${baseUrl}/#website`,
-        url: baseUrl,
+      inLanguage: 'en-IN',
+    };
+
+    // =====================================================
+    // 4. COURSE
+    // =====================================================
+    const courseSchema: any = {
+      '@type': 'Course',
+
+      '@id': `${canonicalUrl}#course`,
+
+      url: canonicalUrl,
+
+      name: programName,
+
+      description: description,
+
+      provider: {
+        '@id': `${homeUrl}#university`,
+      },
+
+      educationalCredentialAwarded: credential,
+
+      mainEntityOfPage: {
+        '@id': `${canonicalUrl}#webpage`,
+      },
+
+      inLanguage: 'en-IN',
+    };
+
+    if (courseCode) {
+      courseSchema.courseCode = String(courseCode);
+    }
+
+    if (duration) {
+      courseSchema.timeRequired = duration;
+    }
+
+    if (prerequisites) {
+      courseSchema.coursePrerequisites = prerequisites;
+    }
+
+    if (offers.length) {
+      courseSchema.offers = offers;
+    }
+
+    // =====================================================
+    // COURSE INSTANCE
+    // =====================================================
+    const courseInstance: any = {
+      '@type': 'CourseInstance',
+
+      '@id': `${canonicalUrl}#course-instance`,
+
+      name: `${programName} – Full-time`,
+
+      courseMode: pageData?.ProgramMode || program?.ProgramMode || 'Full-time',
+
+      location: {
+        '@type': 'Place',
+
         name: 'Amity University Noida',
-        publisher: {
-          '@id': `${baseUrl}/#university`,
+
+        address: {
+          '@type': 'PostalAddress',
+
+          streetAddress: 'Sector 125',
+
+          addressLocality: 'Noida',
+
+          addressRegion: 'Uttar Pradesh',
+
+          postalCode: '201313',
+
+          addressCountry: 'IN',
         },
+      },
+    };
+
+    if (duration) {
+      courseInstance.courseWorkload = duration;
+    }
+
+    courseSchema.hasCourseInstance = courseInstance;
+
+    // =====================================================
+    // 5. EDUCATIONAL OCCUPATIONAL PROGRAM
+    // =====================================================
+    const programmeSchema: any = {
+      '@type': 'EducationalOccupationalProgram',
+
+      '@id': `${canonicalUrl}#programme`,
+
+      url: canonicalUrl,
+
+      name: programName,
+
+      description: description,
+
+      educationalLevel: 'Doctoral',
+
+      programType: 'Doctoral degree programme',
+
+      educationalCredentialAwarded: credential,
+
+      provider: {
+        '@id': `${homeUrl}#university`,
+      },
+    };
+
+    if (duration) {
+      programmeSchema.timeToComplete = duration;
+    }
+
+    if (prerequisites) {
+      programmeSchema.programPrerequisites = prerequisites;
+    }
+
+    if (occupationalCategories.length) {
+      programmeSchema.occupationalCategory = occupationalCategories;
+    }
+
+    if (offers.length) {
+      programmeSchema.offers = offers.map((offer: any) => ({
+        '@id': offer['@id'],
+      }));
+    }
+
+    // =====================================================
+    // 6. BREADCRUMB
+    // =====================================================
+    const breadcrumbSchema = {
+      '@type': 'BreadcrumbList',
+
+      '@id': `${canonicalUrl}#breadcrumb`,
+
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+
+          position: 1,
+
+          name: 'Home',
+
+          item: homeUrl,
+        },
+
+        {
+          '@type': 'ListItem',
+
+          position: 2,
+
+          name: 'PhD Programmes',
+
+          item: `${baseUrl}/phd`,
+        },
+
+        {
+          '@type': 'ListItem',
+
+          position: 3,
+
+          name: disciplineName,
+
+          item: `${baseUrl}/phd/${disciplineSlug}`,
+        },
+
+        {
+          '@type': 'ListItem',
+
+          position: 4,
+
+          name: programName,
+
+          item: canonicalUrl,
+        },
+      ],
+    };
+
+    // =====================================================
+    // 7. FAQ
+    // =====================================================
+    const faqPairs = [
+      {
+        q: program?.FaqQuestion,
+        a: program?.FaqAnswer,
+      },
+      {
+        q: program?.FaqQuestion2,
+        a: program?.FaqAnswer2,
+      },
+      {
+        q: program?.FaqQuestion3,
+        a: program?.FaqAnswer3,
+      },
+      {
+        q: program?.FaqQuestion4,
+        a: program?.FaqAnswer4,
+      },
+      {
+        q: program?.FaqQuestion5,
+        a: program?.FaqAnswer5,
       },
     ];
 
-    /* ===== ADD FAQ IF EXISTS ===== */
+    const faqItems = faqPairs
+      .filter((faq) => cleanText(faq.q) && cleanText(faq.a))
+      .map((faq) => ({
+        '@type': 'Question',
+
+        name: cleanText(faq.q),
+
+        acceptedAnswer: {
+          '@type': 'Answer',
+
+          text: cleanText(faq.a),
+        },
+      }));
+
+    const faqSchema: any = faqItems.length
+      ? {
+          '@type': 'FAQPage',
+
+          '@id': `${canonicalUrl}#faq`,
+
+          url: canonicalUrl,
+
+          mainEntity: faqItems,
+        }
+      : null;
+
+    // =====================================================
+    // CONNECT FAQ WITH WEBPAGE
+    // =====================================================
+    if (faqSchema) {
+      webPageSchema.mainEntity = [
+        {
+          '@id': `${canonicalUrl}#course`,
+        },
+        {
+          '@id': `${canonicalUrl}#programme`,
+        },
+        {
+          '@id': `${canonicalUrl}#faq`,
+        },
+      ];
+    }
+
+    // =====================================================
+    // BUILD GRAPH
+    // =====================================================
+    const graph: any[] = [
+      universitySchema,
+
+      websiteSchema,
+
+      webPageSchema,
+
+      courseSchema,
+
+      programmeSchema,
+
+      breadcrumbSchema,
+    ];
+
     if (faqSchema) {
       graph.push(faqSchema);
     }
 
+    // =====================================================
+    // FINAL JSON-LD
+    // =====================================================
     const schema = {
       '@context': 'https://schema.org',
+
       '@graph': graph,
     };
 
-    // Remove existing structured data script if present
+    // =====================================================
+    // REMOVE OLD SCHEMA
+    // =====================================================
     const existing = document.getElementById('structured-data');
-    if (existing) existing.remove();
 
-    // Add new structured data script
+    if (existing) {
+      existing.remove();
+    }
+
+    // =====================================================
+    // ADD NEW SCHEMA
+    // =====================================================
     const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.id = 'structured-data';
-    script.text = JSON.stringify(schema, null, 2); // Pretty print for debugging
-    document.head.appendChild(script);
 
-    // Debug log to verify
-    //console.log('Structured Data Generated:', schema);
+    script.type = 'application/ld+json';
+
+    script.id = 'structured-data';
+
+    script.text = JSON.stringify(schema);
+
+    document.head.appendChild(script);
   }
 
   // injectStructuredData(pageData: any): void {
   //   const baseUrl = 'https://noida.amity.edu';
-  //   const canonicalUrl = pageData.CanonicalUrl || window.location.href;
+
+  //   // Get slugs from route parameters - with fallbacks
+  //   let disciplineSlug = this.route.snapshot.paramMap.get('discipline');
+  //   const programSlug = this.route.snapshot.paramMap.get('SlugName');
+
+  //   // FALLBACK: If disciplineSlug is null, try to get it from pageData
+  //   if (!disciplineSlug && pageData && pageData.Disciplineslugname) {
+  //     disciplineSlug = pageData.Disciplineslugname;
+  //   }
+
+  //   // FALLBACK 2: If still null, use a default or construct from pageData.sDiscipline
+  //   if (!disciplineSlug && pageData && pageData.sDiscipline) {
+  //     disciplineSlug = pageData.sDiscipline.toLowerCase().replace(/\s+/g, '-');
+  //   }
+
+  //   // Construct the canonical URL - ONLY if we have a disciplineSlug
+  //   const canonicalUrl = disciplineSlug
+  //     ? `${baseUrl}/phd/${disciplineSlug}/${programSlug}`
+  //     : `${baseUrl}/phd/${programSlug}`; // Fallback without discipline
+
+  //   // Get program data for FAQ
+  //   const program =
+  //     this.getPhdProgramData && this.getPhdProgramData.length > 0
+  //       ? this.getPhdProgramData[0]
+  //       : null;
+
+  //   let faqItems: any[] = [];
+
+  //   if (program) {
+  //     const faqPairs = [
+  //       { q: program.FaqQuestion, a: program.FaqAnswer },
+  //       { q: program.FaqQuestion2, a: program.FaqAnswer2 },
+  //       { q: program.FaqQuestion3, a: program.FaqAnswer3 },
+  //       { q: program.FaqQuestion4, a: program.FaqAnswer4 },
+  //       { q: program.FaqQuestion5, a: program.FaqAnswer5 },
+  //     ];
+
+  //     faqPairs.forEach((pair) => {
+  //       if (pair.q && pair.a) {
+  //         faqItems.push({
+  //           '@type': 'Question',
+  //           name: pair.q,
+  //           acceptedAnswer: {
+  //             '@type': 'Answer',
+  //             text: pair.a,
+  //           },
+  //         });
+  //       }
+  //     });
+  //   }
+
+  //   const faqSchema =
+  //     faqItems.length > 0
+  //       ? {
+  //           '@type': 'FAQPage',
+  //           '@id': `${canonicalUrl}#faq`,
+  //           mainEntity: faqItems,
+  //         }
+  //       : null;
+
+  //   /* ================= MAIN GRAPH ================= */
+  //   const graph: any[] = [
+  //     /* ===== WEBPAGE ===== */
+  //     {
+  //       '@type': 'WebPage',
+  //       '@id': `${canonicalUrl}#webpage`,
+  //       url: canonicalUrl,
+  //       name: pageData?.Title || program?.Title || 'PhD Program',
+  //       description: pageData?.Description || program?.Description || '',
+  //       inLanguage: 'en',
+  //       isPartOf: {
+  //         '@id': `${baseUrl}/#website`,
+  //       },
+  //       about: {
+  //         '@id': `${canonicalUrl}#phd-program`,
+  //       },
+  //       breadcrumb: {
+  //         '@id': `${canonicalUrl}#breadcrumb`,
+  //       },
+  //     },
+
+  //     /* ===== EDUCATIONAL PROGRAM ===== */
+  //     {
+  //       '@type': 'EducationalOccupationalProgram',
+  //       '@id': `${canonicalUrl}#phd-program`,
+  //       name: pageData?.Title || program?.ProgramName || 'PhD Program',
+  //       description: pageData?.Description || program?.Description || '',
+  //       educationalLevel: 'Doctoral',
+  //       programType: 'PhD Programme',
+  //       educationalCredentialAwarded: 'PhD',
+  //       provider: {
+  //         '@id': `${baseUrl}/#university`,
+  //       },
+  //       ...(pageData?.ProgramMode && {
+  //         educationalProgramMode: pageData.ProgramMode,
+  //       }),
+  //       ...(pageData?.OccupationalCategory && {
+  //         occupationalCategory: pageData.OccupationalCategory,
+  //       }),
+  //       ...(pageData?.TimeToComplete && {
+  //         timeToComplete: pageData.TimeToComplete,
+  //       }),
+  //       ...(pageData?.ProgramPrerequisites && {
+  //         programPrerequisites: pageData.ProgramPrerequisites,
+  //       }),
+  //     },
+
+  //     /* ===== UNIVERSITY ===== */
+  //     {
+  //       '@type': 'CollegeOrUniversity',
+  //       '@id': `${baseUrl}/#university`,
+  //       name: 'Amity University Noida',
+  //       url: baseUrl,
+  //       logo: {
+  //         '@type': 'ImageObject',
+  //         url: `${baseUrl}/assets/images/amity-logo.png`,
+  //       },
+  //     },
+
+  //     /* ===== BREADCRUMB LIST ===== */
+  //     {
+  //       '@type': 'BreadcrumbList',
+  //       '@id': `${canonicalUrl}#breadcrumb`,
+  //       itemListElement: [
+  //         {
+  //           '@type': 'ListItem',
+  //           position: 1,
+  //           name: 'Home',
+  //           item: `${baseUrl}/`,
+  //         },
+  //         {
+  //           '@type': 'ListItem',
+  //           position: 2,
+  //           name: 'PhD Programmes',
+  //           item: `${baseUrl}/phd`,
+  //         },
+  //         {
+  //           '@type': 'ListItem',
+  //           position: 3,
+  //           name: pageData?.sDiscipline || disciplineSlug || 'PhD',
+  //           item: disciplineSlug
+  //             ? `${baseUrl}/phd/${disciplineSlug}`
+  //             : `${baseUrl}/phd`,
+  //         },
+  //         {
+  //           '@type': 'ListItem',
+  //           position: 4,
+  //           name: pageData?.Title || program?.ProgramName || 'Program Details',
+  //           item: canonicalUrl,
+  //         },
+  //       ],
+  //     },
+
+  //     /* ===== WEBSITE ===== */
+  //     {
+  //       '@type': 'WebSite',
+  //       '@id': `${baseUrl}/#website`,
+  //       url: baseUrl,
+  //       name: 'Amity University Noida',
+  //       publisher: {
+  //         '@id': `${baseUrl}/#university`,
+  //       },
+  //     },
+  //   ];
+
+  //   /* ===== ADD FAQ IF EXISTS ===== */
+  //   if (faqSchema) {
+  //     graph.push(faqSchema);
+  //   }
 
   //   const schema = {
   //     '@context': 'https://schema.org',
-  //     '@graph': [
-  //       /* ================= WEBPAGE ================= */
-  //       {
-  //         '@type': 'WebPage',
-  //         '@id': `${canonicalUrl}#webpage`,
-  //         url: canonicalUrl,
-  //         name: pageData.Title,
-  //         description: pageData.Description,
-  //         inLanguage: 'en',
-  //         isPartOf: { '@id': `${baseUrl}/#website` },
-  //         about: { '@id': `${canonicalUrl}#phd-program` },
-  //         breadcrumb: { '@id': `${canonicalUrl}#breadcrumb` },
-  //       },
-
-  //       /* ================= PHD PROGRAM ================= */
-  //       {
-  //         '@type': 'EducationalOccupationalProgram',
-  //         '@id': `${canonicalUrl}#phd-program`,
-  //         name: pageData.Title,
-  //         description: pageData.Description,
-  //         educationalLevel: 'Doctoral',
-  //         programType: 'PhD Programme',
-  //         educationalCredentialAwarded: 'PhD',
-  //         provider: { '@id': `${baseUrl}/#university` },
-
-  //         ...(pageData.ProgramMode && {
-  //           educationalProgramMode: pageData.ProgramMode,
-  //         }),
-  //         ...(pageData.OccupationalCategory && {
-  //           occupationalCategory: pageData.OccupationalCategory,
-  //         }),
-  //         ...(pageData.TimeToComplete && {
-  //           timeToComplete: pageData.TimeToComplete,
-  //         }),
-  //         ...(pageData.ProgramPrerequisites && {
-  //           programPrerequisites: pageData.ProgramPrerequisites,
-  //         }),
-  //       },
-
-  //       /* ================= UNIVERSITY ================= */
-  //       {
-  //         '@type': 'CollegeOrUniversity',
-  //         '@id': `${baseUrl}/#university`,
-  //         name: 'Amity University Noida',
-  //         url: baseUrl,
-  //         logo: {
-  //           '@type': 'ImageObject',
-  //           url: `${baseUrl}/assets/images/amity-logo.png`,
-  //         },
-  //       },
-
-  //       /* ================= BREADCRUMB ================= */
-  //       {
-  //         '@type': 'BreadcrumbList',
-  //         '@id': `${canonicalUrl}#breadcrumb`,
-  //         itemListElement: [
-  //           {
-  //             '@type': 'ListItem',
-  //             position: 1,
-  //             name: 'Home',
-  //             item: `${baseUrl}/`,
-  //           },
-  //           {
-  //             '@type': 'ListItem',
-  //             position: 2,
-  //             name: 'PhD Programmes',
-  //             item: `${baseUrl}/phd`,
-  //           },
-  //           {
-  //             '@type': 'ListItem',
-  //             position: 3,
-  //             name: pageData.sDiscipline,
-  //             item: `${baseUrl}/phd/${pageData.Disciplineslugname}`,
-  //           },
-  //           {
-  //             '@type': 'ListItem',
-  //             position: 4,
-  //             name: pageData.Title,
-  //             item: canonicalUrl,
-  //           },
-  //         ],
-  //       },
-
-  //       /* ================= WEBSITE ================= */
-  //       {
-  //         '@type': 'WebSite',
-  //         '@id': `${baseUrl}/#website`,
-  //         url: baseUrl,
-  //         name: 'Amity University Noida',
-  //         publisher: { '@id': `${baseUrl}/#university` },
-  //       },
-  //     ],
+  //     '@graph': graph,
   //   };
 
+  //   // Remove existing structured data script if present
   //   const existing = document.getElementById('structured-data');
   //   if (existing) existing.remove();
 
+  //   // Add new structured data script
   //   const script = document.createElement('script');
   //   script.type = 'application/ld+json';
   //   script.id = 'structured-data';
-  //   script.text = JSON.stringify(schema);
+  //   script.text = JSON.stringify(schema, null, 2); // Pretty print for debugging
   //   document.head.appendChild(script);
+
+  //   // Debug log to verify
+  //   //console.log('Structured Data Generated:', schema);
   // }
 
   private setCanonicalLink(url: string) {

@@ -18,6 +18,8 @@ import {
   OtpResponse,
 } from '../service/landingservice.service';
 
+declare var Moengage: any;
+
 @Component({
   selector: 'app-pg-programs-details',
   standalone: true,
@@ -160,6 +162,44 @@ export class PgProgramsDetailsComponent implements OnInit {
     }
   }
 
+  private trackMoEngage(eventName: string, eventData: any = {}) {
+    if (
+      typeof Moengage === 'undefined' ||
+      typeof Moengage.track_event !== 'function'
+    ) {
+      console.warn('MoEngage SDK not available');
+      return;
+    }
+
+    const raw = this.brochureForm.getRawValue();
+
+    const mobile =
+      raw.countryCode.replace(/\D/g, '') + raw.phone.replace(/\D/g, '');
+
+    try {
+      Moengage.add_unique_user_id(`${raw.countryCode}-${raw.phone}`);
+
+      Moengage.add_mobile(`+${mobile}`);
+
+      if (raw.name) Moengage.add_first_name(raw.name);
+
+      if (raw.email) Moengage.add_email(raw.email);
+
+      if (this.loginNo) Moengage.add_user_attribute('login_no', this.loginNo);
+
+      if (this.formNo) Moengage.add_user_attribute('form_no', this.formNo);
+    } catch (e) {
+      console.log(e);
+    }
+
+    Moengage.track_event(eventName, {
+      ...eventData,
+      loginNo: this.loginNo,
+      formNo: this.formNo,
+      page_url: window.location.href,
+    });
+  }
+
   loadCountryCodes(): void {
     this.landingService.getCountryCodes().subscribe({
       next: (res) => {
@@ -219,6 +259,17 @@ export class PgProgramsDetailsComponent implements OnInit {
           if (res.success) {
             this.loginNo = res.loginNo || '';
             this.otpSent = true;
+
+            this.trackMoEngage('downloadbrouchure_otp_generate_clicked', {
+              name: formData.name,
+              email: formData.email,
+              phone: formData.phone,
+              countryCode: formData.countryCode,
+              otpType: target,
+              courseCode: this.programCD,
+              courseName: this.selectedBrochure?.PrimaryCourseName || '',
+              pageUrl: window.location.href,
+            });
 
             this.otpStatus = 'success';
             this.otpMessage =
@@ -298,6 +349,19 @@ export class PgProgramsDetailsComponent implements OnInit {
           this.otpSent = false;
           this.otpVerified = true;
           this.formNo = res.formNo || '';
+
+          const formData = this.brochureForm.getRawValue();
+
+          this.trackMoEngage('otp_verified', {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            countryCode: formData.countryCode,
+            courseCode: this.programCD,
+            courseName: this.selectedBrochure?.PrimaryCourseName || '',
+            formNo: res.formNo || '',
+            pageUrl: window.location.href,
+          });
 
           this.otpStatus = 'success';
           this.otpMessage = '✅ OTP Verified Successfully';
@@ -535,6 +599,7 @@ export class PgProgramsDetailsComponent implements OnInit {
 
           const canonicalUrl =
             pageData?.canonical ||
+            pageData?.CanonicalUrl ||
             `${baseUrl}/${section}/${discipline}/${slug}`;
 
           // ================= Open Graph + Twitter =================
@@ -632,6 +697,9 @@ export class PgProgramsDetailsComponent implements OnInit {
           this.setCanonicalLink(canonicalUrl);
 
           this.pageMetaData = pageData;
+
+          // Generate Course schema
+          this.injectStructuredData(pageData);
         } else {
           console.warn('No page data found');
         }
@@ -820,148 +888,730 @@ export class PgProgramsDetailsComponent implements OnInit {
 
   injectStructuredData(pageData: any): void {
     const baseUrl = 'https://noida.amity.edu';
+    const homeUrl = `${baseUrl}/`;
 
     const program =
       this.getPgProgramData?.length > 0 ? this.getPgProgramData[0] : null;
 
-    if (!program) return;
+    if (!program) {
+      return;
+    }
 
-    // ✅ FIX 1: discipline fallback (IMPORTANT)
+    // =====================================================
+    // ROUTE DATA
+    // =====================================================
     const disciplineSlug =
-      this.route.snapshot.params['discipline'] ||
+      this.route.snapshot.params['Disciplineslugname'] ||
       program?.Disciplineslugname ||
-      'management';
+      '';
 
-    // ✅ FIX 2: program slug
     const programSlug =
-      this.route.snapshot.params['SlugName'] || program?.SlugName;
+      this.route.snapshot.params['SlugName'] || program?.SlugName || '';
 
-    // ✅ FIX 3: canonical URL
+    // =====================================================
+    // CANONICAL URL
+    // =====================================================
     const canonicalUrl =
-      pageData?.canonicalUrl ||
+      pageData?.canonical ||
+      pageData?.CanonicalUrl ||
       `${baseUrl}/pg/${disciplineSlug}/${programSlug}`;
 
-    /* ================= FAQ ================= */
-    let faqItems: any[] = [];
+    // =====================================================
+    // BASIC PROGRAM DATA
+    // =====================================================
+    const programName =
+      program?.sfullname ||
+      program?.CourseName ||
+      pageData?.Title ||
+      'Postgraduate Programme';
 
+    const description = this.stripHtml(
+      program?.sshortdesc ||
+        pageData?.Description ||
+        `Postgraduate programme offered by Amity University Noida.`,
+    );
+
+    const courseCode =
+      program?.CourseCD || program?.sCourseCode || this.programCD || '';
+
+    // =====================================================
+    // DEGREE / CREDENTIAL
+    // =====================================================
+    const degreeName =
+      program?.DegreeName ||
+      program?.Degree ||
+      program?.CredentialAwarded ||
+      '';
+
+    // =====================================================
+    // DURATION
+    //
+    // Schema.org expects ISO 8601:
+    // 2 years = P2Y
+    // 3 years = P3Y
+    // =====================================================
+    const convertDurationToISO = (value: any): string | undefined => {
+      if (!value) {
+        return undefined;
+      }
+
+      const text = String(value).toLowerCase().trim();
+
+      // Already ISO duration
+      if (/^p\d+[ymd]$/i.test(text)) {
+        return text.toUpperCase();
+      }
+
+      const yearMatch = text.match(/(\d+(?:\.\d+)?)\s*(year|years|yr|yrs)/);
+
+      if (yearMatch) {
+        const years = parseFloat(yearMatch[1]);
+
+        if (Number.isInteger(years)) {
+          return `P${years}Y`;
+        }
+
+        // Example 1.5 years
+        const wholeYears = Math.floor(years);
+        const months = Math.round((years - wholeYears) * 12);
+
+        if (wholeYears && months) {
+          return `P${wholeYears}Y${months}M`;
+        }
+
+        if (months) {
+          return `P${months}M`;
+        }
+      }
+
+      const monthMatch = text.match(/(\d+)\s*(month|months)/);
+
+      if (monthMatch) {
+        return `P${monthMatch[1]}M`;
+      }
+
+      return undefined;
+    };
+
+    const duration = convertDurationToISO(
+      program?.Duration || program?.CourseDuration || program?.sDuration,
+    );
+
+    // =====================================================
+    // ELIGIBILITY / PREREQUISITES
+    // =====================================================
+    const prerequisites = this.stripHtml(
+      program?.Eligibility ||
+        program?.EligibilityCriteria ||
+        program?.CourseEligibility ||
+        '',
+    );
+
+    // =====================================================
+    // FEES
+    // =====================================================
+    const cleanPrice = (value: any): string | undefined => {
+      if (value === null || value === undefined || value === '') {
+        return undefined;
+      }
+
+      const price = String(value).replace(/[^0-9.]/g, '');
+
+      return price || undefined;
+    };
+
+    const nonSponsoredFee = cleanPrice(
+      program?.NonSponsoredFee ||
+        program?.NonSponseredFee ||
+        program?.FirstSemesterFee ||
+        program?.SemesterFee,
+    );
+
+    const sponsoredFee = cleanPrice(
+      program?.SponsoredFee ||
+        program?.SponseredFee ||
+        program?.SponsoredSemesterFee,
+    );
+
+    // =====================================================
+    // OFFERS
+    // =====================================================
+    const offers: any[] = [];
+
+    if (nonSponsoredFee) {
+      offers.push({
+        '@type': 'Offer',
+
+        '@id': `${canonicalUrl}#non-sponsored-fee`,
+
+        name: 'First-year non-sponsored semester fee',
+
+        price: nonSponsoredFee,
+
+        priceCurrency: 'INR',
+
+        url: canonicalUrl,
+
+        availability: 'https://schema.org/InStock',
+      });
+    }
+
+    if (sponsoredFee) {
+      offers.push({
+        '@type': 'Offer',
+
+        '@id': `${canonicalUrl}#sponsored-fee`,
+
+        name: 'First-year sponsored semester fee',
+
+        price: sponsoredFee,
+
+        priceCurrency: 'INR',
+
+        url: canonicalUrl,
+
+        availability: 'https://schema.org/InStock',
+      });
+    }
+
+    // =====================================================
+    // OCCUPATIONAL CATEGORIES
+    // =====================================================
+    const careerText =
+      program?.CareerOptions ||
+      program?.CareerOpportunities ||
+      program?.JobRoles ||
+      '';
+
+    const occupationalCategories: string[] = careerText
+      ? String(careerText)
+          .split(/[,;|]/)
+          .map((item: string) => this.stripHtml(item).trim())
+          .filter((item: string) => item.length > 0)
+      : [];
+
+    // =====================================================
+    // 1. UNIVERSITY
+    // =====================================================
+    const universitySchema = {
+      '@type': 'CollegeOrUniversity',
+
+      '@id': `${homeUrl}#university`,
+
+      name: 'Amity University Noida',
+
+      alternateName: 'Amity University Uttar Pradesh, Noida Campus',
+
+      url: homeUrl,
+
+      address: {
+        '@type': 'PostalAddress',
+
+        streetAddress: 'Sector 125',
+
+        addressLocality: 'Noida',
+
+        addressRegion: 'Uttar Pradesh',
+
+        postalCode: '201313',
+
+        addressCountry: 'IN',
+      },
+
+      telephone: ['+91-120-2445252', '+91-120-4713600'],
+    };
+
+    // =====================================================
+    // 2. WEBSITE
+    // =====================================================
+    const websiteSchema = {
+      '@type': 'WebSite',
+
+      '@id': `${homeUrl}#website`,
+
+      url: homeUrl,
+
+      name: 'Amity University Noida',
+
+      publisher: {
+        '@id': `${homeUrl}#university`,
+      },
+
+      inLanguage: 'en-IN',
+    };
+
+    // =====================================================
+    // 3. WEBPAGE
+    // =====================================================
+    const webPageSchema: any = {
+      '@type': 'WebPage',
+
+      '@id': `${canonicalUrl}#webpage`,
+
+      url: canonicalUrl,
+
+      name: programName,
+
+      isPartOf: {
+        '@id': `${homeUrl}#website`,
+      },
+
+      about: [
+        {
+          '@id': `${canonicalUrl}#course`,
+        },
+        {
+          '@id': `${canonicalUrl}#programme`,
+        },
+      ],
+
+      breadcrumb: {
+        '@id': `${canonicalUrl}#breadcrumb`,
+      },
+
+      inLanguage: 'en-IN',
+    };
+
+    // =====================================================
+    // 4. COURSE
+    // =====================================================
+    const courseSchema: any = {
+      '@type': 'Course',
+
+      '@id': `${canonicalUrl}#course`,
+
+      url: canonicalUrl,
+
+      name: programName,
+
+      description:
+        description || `${programName} offered by Amity University Noida.`,
+
+      provider: {
+        '@id': `${homeUrl}#university`,
+      },
+
+      mainEntityOfPage: {
+        '@id': `${canonicalUrl}#webpage`,
+      },
+
+      inLanguage: 'en-IN',
+    };
+
+    if (courseCode) {
+      courseSchema.courseCode = String(courseCode);
+    }
+
+    if (degreeName) {
+      courseSchema.educationalCredentialAwarded = degreeName;
+    }
+
+    if (duration) {
+      courseSchema.timeRequired = duration;
+    }
+
+    if (prerequisites) {
+      courseSchema.coursePrerequisites = prerequisites;
+    }
+
+    if (offers.length) {
+      courseSchema.offers = offers;
+    }
+
+    // =====================================================
+    // COURSE INSTANCE
+    // =====================================================
+    const courseInstance: any = {
+      '@type': 'CourseInstance',
+
+      '@id': `${canonicalUrl}#course-instance`,
+
+      name: `${programName} – Full-time`,
+
+      courseMode: 'Full-time',
+
+      location: {
+        '@type': 'Place',
+
+        name: 'Amity University Noida',
+
+        address: {
+          '@type': 'PostalAddress',
+
+          streetAddress: 'Sector 125',
+
+          addressLocality: 'Noida',
+
+          addressRegion: 'Uttar Pradesh',
+
+          postalCode: '201313',
+
+          addressCountry: 'IN',
+        },
+      },
+    };
+
+    if (duration) {
+      courseInstance.courseWorkload = duration;
+    }
+
+    courseSchema.hasCourseInstance = courseInstance;
+
+    // =====================================================
+    // 5. EDUCATIONAL OCCUPATIONAL PROGRAM
+    // =====================================================
+    const programmeSchema: any = {
+      '@type': 'EducationalOccupationalProgram',
+
+      '@id': `${canonicalUrl}#programme`,
+
+      url: canonicalUrl,
+
+      name: programName,
+
+      programType: 'Postgraduate degree programme',
+
+      provider: {
+        '@id': `${homeUrl}#university`,
+      },
+    };
+
+    if (degreeName) {
+      programmeSchema.educationalCredentialAwarded = degreeName;
+    }
+
+    if (duration) {
+      programmeSchema.timeToComplete = duration;
+    }
+
+    if (prerequisites) {
+      programmeSchema.programPrerequisites = prerequisites;
+    }
+
+    if (occupationalCategories.length) {
+      programmeSchema.occupationalCategory = occupationalCategories;
+    }
+
+    // Reference the same Offer entities
+    if (offers.length) {
+      programmeSchema.offers = offers.map((offer: any) => ({
+        '@id': offer['@id'],
+      }));
+    }
+
+    // =====================================================
+    // 6. BREADCRUMB
+    // =====================================================
+    const breadcrumbSchema = {
+      '@type': 'BreadcrumbList',
+
+      '@id': `${canonicalUrl}#breadcrumb`,
+
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+
+          position: 1,
+
+          name: 'Home',
+
+          item: homeUrl,
+        },
+
+        {
+          '@type': 'ListItem',
+
+          position: 2,
+
+          name: 'Postgraduate Programmes',
+
+          item: `${baseUrl}/pg`,
+        },
+
+        {
+          '@type': 'ListItem',
+
+          position: 3,
+
+          name:
+            program?.sDiscipline || program?.DisciplineName || disciplineSlug,
+
+          item: `${baseUrl}/pg/${disciplineSlug}`,
+        },
+
+        {
+          '@type': 'ListItem',
+
+          position: 4,
+
+          name: programName,
+
+          item: canonicalUrl,
+        },
+      ],
+    };
+
+    // =====================================================
+    // 7. FAQ SCHEMA
+    // =====================================================
     const faqPairs = [
-      { q: program.FaqQuestion, a: program.FaqAnswer },
-      { q: program.FaqQuestion2, a: program.FaqAnswer2 },
-      { q: program.FaqQuestion3, a: program.FaqAnswer3 },
-      { q: program.FaqQuestion4, a: program.FaqAnswer4 },
-      { q: program.FaqQuestion5, a: program.FaqAnswer5 },
+      {
+        q: program?.FaqQuestion,
+        a: program?.FaqAnswer,
+      },
+      {
+        q: program?.FaqQuestion2,
+        a: program?.FaqAnswer2,
+      },
+      {
+        q: program?.FaqQuestion3,
+        a: program?.FaqAnswer3,
+      },
+      {
+        q: program?.FaqQuestion4,
+        a: program?.FaqAnswer4,
+      },
+      {
+        q: program?.FaqQuestion5,
+        a: program?.FaqAnswer5,
+      },
     ];
 
-    faqItems = faqPairs
-      .filter((faq) => faq.q && faq.a)
+    const faqItems = faqPairs
+      .filter(
+        (faq) =>
+          faq.q &&
+          faq.a &&
+          this.stripHtml(faq.q).trim() &&
+          this.stripHtml(faq.a).trim(),
+      )
       .map((faq) => ({
         '@type': 'Question',
+
         name: this.stripHtml(faq.q),
+
         acceptedAnswer: {
           '@type': 'Answer',
           text: this.stripHtml(faq.a),
         },
       }));
 
-    const faqSchema = faqItems.length
-      ? {
-          '@type': 'FAQPage',
-          '@id': `${canonicalUrl}#faq`,
-          mainEntity: faqItems,
-        }
-      : null;
+    const faqSchema =
+      faqItems.length > 0
+        ? {
+            '@type': 'FAQPage',
+            '@id': `${canonicalUrl}#faq`,
+            url: canonicalUrl,
+            mainEntity: faqItems,
+          }
+        : null;
 
-    /* ================= GRAPH ================= */
+    // =====================================================
+    // GRAPH
+    // =====================================================
     const graph: any[] = [
-      {
-        '@type': ['EducationalOccupationalProgram', 'WebPage'],
-        '@id': canonicalUrl,
-        url: canonicalUrl,
-        name: pageData.Title || program.sfullname,
-        description:
-          pageData.Description ||
-          'A two-year postgraduate program focusing on advanced learning.',
-        programType: 'Postgraduate Program',
-        provider: { '@id': `${baseUrl}#university` },
-        hasCourse: { '@id': `${canonicalUrl}#course-details` },
-        occupationalCredentialAwarded:
-          program.DegreeName || 'Postgraduate Degree',
-        breadcrumb: {
-          '@id': `${canonicalUrl}#breadcrumb`,
-        },
-      },
-
-      {
-        '@type': 'Course',
-        '@id': `${canonicalUrl}#course-details`,
-        name: program.CourseName || program.sfullname,
-        description:
-          program.sshortdesc ||
-          'Course covering strategic and professional competencies.',
-        provider: { '@id': `${baseUrl}#university` },
-      },
-
-      {
-        '@type': ['CollegeOrUniversity', 'EducationalOrganization'],
-        '@id': `${baseUrl}#university`,
-        name: 'Amity University Noida',
-        url: `${baseUrl}/`,
-        description:
-          'A leading university offering industry-oriented postgraduate programs.',
-      },
-
-      /* ================= ✅ FIXED BREADCRUMB ================= */
-      {
-        '@type': 'BreadcrumbList',
-        '@id': `${canonicalUrl}#breadcrumb`,
-        itemListElement: [
-          {
-            '@type': 'ListItem',
-            position: 1,
-            name: 'Home',
-            item: `${baseUrl}/`, // ✅ FIX
-          },
-          {
-            '@type': 'ListItem',
-            position: 2,
-            name: 'PG Programs',
-            item: `${baseUrl}/pg`, // ✅ FIX (IMPORTANT)
-          },
-          {
-            '@type': 'ListItem',
-            position: 3,
-            name: program.sDiscipline || 'Discipline',
-            item: `${baseUrl}/pg/${disciplineSlug}`,
-          },
-          {
-            '@type': 'ListItem',
-            position: 4,
-            name: program.sfullname,
-            item: canonicalUrl,
-          },
-        ],
-      },
+      universitySchema,
+      websiteSchema,
+      webPageSchema,
+      courseSchema,
+      programmeSchema,
+      breadcrumbSchema,
     ];
 
+    // Add FAQ only when FAQ data exists
     if (faqSchema) {
       graph.push(faqSchema);
+
+      // Connect FAQ with WebPage
+      webPageSchema.mainEntity = [
+        {
+          '@id': `${canonicalUrl}#course`,
+        },
+        {
+          '@id': `${canonicalUrl}#programme`,
+        },
+        {
+          '@id': `${canonicalUrl}#faq`,
+        },
+      ];
     }
 
+    // =====================================================
+    // FINAL JSON-LD
+    // =====================================================
     const schema = {
       '@context': 'https://schema.org',
+
       '@graph': graph,
     };
 
+    // =====================================================
+    // REMOVE OLD SCHEMA
+    // =====================================================
     const existingScript = document.getElementById('structured-data');
-    if (existingScript) existingScript.remove();
 
+    if (existingScript) {
+      existingScript.remove();
+    }
+
+    // =====================================================
+    // INSERT SCHEMA
+    // =====================================================
     const script = document.createElement('script');
+
     script.type = 'application/ld+json';
+
     script.id = 'structured-data';
+
     script.text = JSON.stringify(schema);
 
     document.head.appendChild(script);
   }
+
+  // injectStructuredData(pageData: any): void {
+  //   const baseUrl = 'https://noida.amity.edu';
+
+  //   const program =
+  //     this.getPgProgramData?.length > 0 ? this.getPgProgramData[0] : null;
+
+  //   if (!program) return;
+
+  //   // ✅ FIX 1: discipline fallback (IMPORTANT)
+  //   const disciplineSlug =
+  //     this.route.snapshot.params['discipline'] ||
+  //     program?.Disciplineslugname ||
+  //     'management';
+
+  //   // ✅ FIX 2: program slug
+  //   const programSlug =
+  //     this.route.snapshot.params['SlugName'] || program?.SlugName;
+
+  //   // ✅ FIX 3: canonical URL
+  //   const canonicalUrl =
+  //     pageData?.canonicalUrl ||
+  //     `${baseUrl}/pg/${disciplineSlug}/${programSlug}`;
+
+  //   /* ================= FAQ ================= */
+  //   let faqItems: any[] = [];
+
+  //   const faqPairs = [
+  //     { q: program.FaqQuestion, a: program.FaqAnswer },
+  //     { q: program.FaqQuestion2, a: program.FaqAnswer2 },
+  //     { q: program.FaqQuestion3, a: program.FaqAnswer3 },
+  //     { q: program.FaqQuestion4, a: program.FaqAnswer4 },
+  //     { q: program.FaqQuestion5, a: program.FaqAnswer5 },
+  //   ];
+
+  //   faqItems = faqPairs
+  //     .filter((faq) => faq.q && faq.a)
+  //     .map((faq) => ({
+  //       '@type': 'Question',
+  //       name: this.stripHtml(faq.q),
+  //       acceptedAnswer: {
+  //         '@type': 'Answer',
+  //         text: this.stripHtml(faq.a),
+  //       },
+  //     }));
+
+  //   const faqSchema = faqItems.length
+  //     ? {
+  //         '@type': 'FAQPage',
+  //         '@id': `${canonicalUrl}#faq`,
+  //         mainEntity: faqItems,
+  //       }
+  //     : null;
+
+  //   /* ================= GRAPH ================= */
+  //   const graph: any[] = [
+  //     {
+  //       '@type': ['EducationalOccupationalProgram', 'WebPage'],
+  //       '@id': canonicalUrl,
+  //       url: canonicalUrl,
+  //       name: pageData.Title || program.sfullname,
+  //       description:
+  //         pageData.Description ||
+  //         'A two-year postgraduate program focusing on advanced learning.',
+  //       programType: 'Postgraduate Program',
+  //       provider: { '@id': `${baseUrl}#university` },
+  //       hasCourse: { '@id': `${canonicalUrl}#course-details` },
+  //       occupationalCredentialAwarded:
+  //         program.DegreeName || 'Postgraduate Degree',
+  //       breadcrumb: {
+  //         '@id': `${canonicalUrl}#breadcrumb`,
+  //       },
+  //     },
+
+  //     {
+  //       '@type': 'Course',
+  //       '@id': `${canonicalUrl}#course-details`,
+  //       name: program.CourseName || program.sfullname,
+  //       description:
+  //         program.sshortdesc ||
+  //         'Course covering strategic and professional competencies.',
+  //       provider: { '@id': `${baseUrl}#university` },
+  //     },
+
+  //     {
+  //       '@type': ['CollegeOrUniversity', 'EducationalOrganization'],
+  //       '@id': `${baseUrl}#university`,
+  //       name: 'Amity University Noida',
+  //       url: `${baseUrl}/`,
+  //       description:
+  //         'A leading university offering industry-oriented postgraduate programs.',
+  //     },
+
+  //     /* ================= ✅ FIXED BREADCRUMB ================= */
+  //     {
+  //       '@type': 'BreadcrumbList',
+  //       '@id': `${canonicalUrl}#breadcrumb`,
+  //       itemListElement: [
+  //         {
+  //           '@type': 'ListItem',
+  //           position: 1,
+  //           name: 'Home',
+  //           item: `${baseUrl}/`, // ✅ FIX
+  //         },
+  //         {
+  //           '@type': 'ListItem',
+  //           position: 2,
+  //           name: 'PG Programs',
+  //           item: `${baseUrl}/pg`, // ✅ FIX (IMPORTANT)
+  //         },
+  //         {
+  //           '@type': 'ListItem',
+  //           position: 3,
+  //           name: program.sDiscipline || 'Discipline',
+  //           item: `${baseUrl}/pg/${disciplineSlug}`,
+  //         },
+  //         {
+  //           '@type': 'ListItem',
+  //           position: 4,
+  //           name: program.sfullname,
+  //           item: canonicalUrl,
+  //         },
+  //       ],
+  //     },
+  //   ];
+
+  //   if (faqSchema) {
+  //     graph.push(faqSchema);
+  //   }
+
+  //   const schema = {
+  //     '@context': 'https://schema.org',
+  //     '@graph': graph,
+  //   };
+
+  //   const existingScript = document.getElementById('structured-data');
+  //   if (existingScript) existingScript.remove();
+
+  //   const script = document.createElement('script');
+  //   script.type = 'application/ld+json';
+  //   script.id = 'structured-data';
+  //   script.text = JSON.stringify(schema);
+
+  //   document.head.appendChild(script);
+  // }
 
   formatFacultyName(name: string): string {
     return name

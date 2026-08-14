@@ -20473,8 +20473,9 @@ body {
 }
 #myCarousel .carousel-item .carousel-caption {
   text-align: left;
-  top: 22%;
+  /* top: 22%; */
   left: 4%;
+  bottom: 10%;
 }
 .carousel-control-next,
 .carousel-control-prev {
@@ -20805,7 +20806,7 @@ body {
   #myCarousel .carousel-item .carousel-caption {
     text-align: left !important;
     left: 3%;
-    top: 6%;
+    bottom: 0px;
   }
   .nav-sec {
     border-top-left-radius: 0 00px;

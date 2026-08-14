@@ -4,13 +4,20 @@ import { ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { ApiService } from '../service/noidaweb.service';
 import { CommonModule } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
+import { AboutsectionComponent } from '../aboutsection/aboutsection.component';
+import { WhychooseusComponent } from '../whychooseus/whychooseus.component';
 declare var bootstrap: any; // Declare bootstrap globally
 declare var gtag: any; // Declare gtag for Google Analytics
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [
+    CommonModule,
+    RouterLink,
+    AboutsectionComponent,
+    WhychooseusComponent,
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'], // Fixed incorrect `styleUrl` to `styleUrls`
 })
@@ -27,6 +34,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
   targetDate!: Date;
   showPopup = true;
 
+  virtualSession: any = null;
   showVirtualGuidance = true;
 
   constructor(
@@ -41,9 +49,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
     this.getLastDate();
 
-    // Hide after 18 July 2026 (11:59:59 PM)
-    const expiryDate = new Date('2026-07-18T23:59:59');
-    this.showVirtualGuidance = new Date() <= expiryDate;
+    this.getVirtualSession();
 
     setTimeout(() => {
       this.showPopup = false;
@@ -56,6 +62,27 @@ export class HomeComponent implements AfterViewInit, OnInit {
       },
       error: (err: any) => {
         console.error('Error fetching events data', err);
+      },
+    });
+  }
+
+  getVirtualSession(): void {
+    this.apiService.getVirtualSession().subscribe({
+      next: (res: any) => {
+        if (Array.isArray(res) && res.length > 0) {
+          // If API returns Status
+          const activeSession =
+            res.find((x: any) => x.Status === 'Active') || res[0];
+
+          this.virtualSession = activeSession;
+          this.showVirtualGuidance = true;
+        } else {
+          this.showVirtualGuidance = false;
+        }
+      },
+      error: (err) => {
+        console.error('Virtual Session Error', err);
+        this.showVirtualGuidance = false;
       },
     });
   }
@@ -528,96 +555,244 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   injectStructuredData(metaData: any): void {
     const baseUrl = 'https://noida.amity.edu';
-    const pageUrl = metaData.CanonicalUrl || `${baseUrl}/`;
+    const homeUrl = `${baseUrl}/`;
+
+    // Use API meta values where available
+    const pageName = metaData?.Title || 'Amity University Noida';
+
+    const pageDescription =
+      metaData?.Description ||
+      'Amity University Noida offers undergraduate, postgraduate and doctoral programmes across multiple disciplines.';
 
     const schema = {
       '@context': 'https://schema.org',
+
       '@graph': [
+        // =====================================================
+        // COLLEGE / UNIVERSITY
+        // =====================================================
         {
-          '@type': 'WebPage',
-          '@id': pageUrl,
-          url: pageUrl,
-          name: metaData.Title || 'Amity University Noida – Home',
-          description:
-            metaData.Description ||
-            'Welcome to the official website of Amity University Noida, offering world-class education across undergraduate, postgraduate, and doctoral programs.',
-          isPartOf: { '@id': `${baseUrl}/#website` },
-          breadcrumb: { '@id': `${baseUrl}/#breadcrumb-home` },
-        },
+          '@type': 'CollegeOrUniversity',
 
-        {
-          '@type': 'WebSite',
-          '@id': `${baseUrl}/#website`,
-          url: `${baseUrl}/`,
-          name: 'Amity University Noida',
-          publisher: { '@id': `${baseUrl}/#university` },
-          logo: 'https://noida.amity.edu/assets/images/amity-logo.png',
-        },
+          '@id': `${homeUrl}#university`,
 
-        {
-          '@type': [
-            'CollegeOrUniversity',
-            'EducationalOrganization',
-            'Organization',
-          ],
-          '@id': `${baseUrl}/#university`,
           name: 'Amity University Noida',
-          url: `${baseUrl}/`,
-          foundingDate: '2005',
-          logo: 'https://noida.amity.edu/assets/images/amity-logo.png',
-          description:
-            "Amity University Noida is one of India's leading private universities offering high-quality education across a wide range of disciplines.",
+
+          alternateName: 'Amity University Uttar Pradesh, Noida Campus',
+
+          url: homeUrl,
+
           address: {
             '@type': 'PostalAddress',
+
             streetAddress: 'Sector 125',
+
             addressLocality: 'Noida',
+
             addressRegion: 'Uttar Pradesh',
+
             postalCode: '201313',
+
             addressCountry: 'IN',
           },
+
+          telephone: ['+91-120-2445252', '+91-120-4713600'],
+
           contactPoint: [
             {
               '@type': 'ContactPoint',
-              telephone: '0120-2445252',
-              email: 'info@amity.edu',
-              contactType: 'customer service',
+
+              telephone: '+91-120-2445252',
+
+              contactType: 'Admissions and campus enquiries',
+
               areaServed: 'IN',
+
+              availableLanguage: ['English', 'Hindi'],
             },
-          ],
-          sameAs: [
-            'https://www.facebook.com/amityuni',
-            'https://twitter.com/AmityUni',
-            'https://www.instagram.com/amityuniversity/',
-            'https://www.linkedin.com/school/amity-university/',
+
+            {
+              '@type': 'ContactPoint',
+
+              telephone: '+91-120-4713600',
+
+              contactType: 'Campus enquiries',
+
+              areaServed: 'IN',
+
+              availableLanguage: ['English', 'Hindi'],
+            },
           ],
         },
 
+        // =====================================================
+        // WEBSITE
+        // =====================================================
         {
-          '@type': 'BreadcrumbList',
-          '@id': `${baseUrl}/#breadcrumb-home`,
-          itemListElement: [
-            {
-              '@type': 'ListItem',
-              position: 1,
-              name: 'Home',
-              item: `${baseUrl}/`,
-            },
-          ],
+          '@type': 'WebSite',
+
+          '@id': `${homeUrl}#website`,
+
+          url: homeUrl,
+
+          name: 'Amity University Noida',
+
+          publisher: {
+            '@id': `${homeUrl}#university`,
+          },
+
+          inLanguage: 'en-IN',
+        },
+
+        // =====================================================
+        // HOME WEBPAGE
+        // =====================================================
+        {
+          '@type': 'WebPage',
+
+          '@id': `${homeUrl}#webpage`,
+
+          url: homeUrl,
+
+          name: pageName,
+
+          description: pageDescription,
+
+          isPartOf: {
+            '@id': `${homeUrl}#website`,
+          },
+
+          about: {
+            '@id': `${homeUrl}#university`,
+          },
+
+          mainEntity: {
+            '@id': `${homeUrl}#university`,
+          },
+
+          inLanguage: 'en-IN',
         },
       ],
     };
 
+    // =====================================================
+    // REMOVE PREVIOUS SCHEMA
+    // =====================================================
     const existingScript = document.getElementById('structured-data');
+
     if (existingScript) {
       existingScript.remove();
     }
 
+    // =====================================================
+    // CREATE JSON-LD SCRIPT
+    // =====================================================
     const script = document.createElement('script');
+
     script.type = 'application/ld+json';
+
     script.id = 'structured-data';
+
     script.text = JSON.stringify(schema);
+
+    // =====================================================
+    // ADD TO <HEAD>
+    // =====================================================
     document.head.appendChild(script);
   }
+
+  // injectStructuredData(metaData: any): void {
+  //   const baseUrl = 'https://noida.amity.edu';
+  //   const pageUrl = metaData.CanonicalUrl || `${baseUrl}/`;
+
+  //   const schema = {
+  //     '@context': 'https://schema.org',
+  //     '@graph': [
+  //       {
+  //         '@type': 'WebPage',
+  //         '@id': pageUrl,
+  //         url: pageUrl,
+  //         name: metaData.Title || 'Amity University Noida – Home',
+  //         description:
+  //           metaData.Description ||
+  //           'Welcome to the official website of Amity University Noida, offering world-class education across undergraduate, postgraduate, and doctoral programs.',
+  //         isPartOf: { '@id': `${baseUrl}/#website` },
+  //         breadcrumb: { '@id': `${baseUrl}/#breadcrumb-home` },
+  //       },
+
+  //       {
+  //         '@type': 'WebSite',
+  //         '@id': `${baseUrl}/#website`,
+  //         url: `${baseUrl}/`,
+  //         name: 'Amity University Noida',
+  //         publisher: { '@id': `${baseUrl}/#university` },
+  //         logo: 'https://noida.amity.edu/assets/images/amity-logo.png',
+  //       },
+
+  //       {
+  //         '@type': [
+  //           'CollegeOrUniversity',
+  //           'EducationalOrganization',
+  //           'Organization',
+  //         ],
+  //         '@id': `${baseUrl}/#university`,
+  //         name: 'Amity University Noida',
+  //         url: `${baseUrl}/`,
+  //         foundingDate: '2005',
+  //         logo: 'https://noida.amity.edu/assets/images/amity-logo.png',
+  //         description:
+  //           "Amity University Noida is one of India's leading private universities offering high-quality education across a wide range of disciplines.",
+  //         address: {
+  //           '@type': 'PostalAddress',
+  //           streetAddress: 'Sector 125',
+  //           addressLocality: 'Noida',
+  //           addressRegion: 'Uttar Pradesh',
+  //           postalCode: '201313',
+  //           addressCountry: 'IN',
+  //         },
+  //         contactPoint: [
+  //           {
+  //             '@type': 'ContactPoint',
+  //             telephone: '0120-2445252',
+  //             email: 'info@amity.edu',
+  //             contactType: 'customer service',
+  //             areaServed: 'IN',
+  //           },
+  //         ],
+  //         sameAs: [
+  //           'https://www.facebook.com/amityuni',
+  //           'https://twitter.com/AmityUni',
+  //           'https://www.instagram.com/amityuniversity/',
+  //           'https://www.linkedin.com/school/amity-university/',
+  //         ],
+  //       },
+
+  //       {
+  //         '@type': 'BreadcrumbList',
+  //         '@id': `${baseUrl}/#breadcrumb-home`,
+  //         itemListElement: [
+  //           {
+  //             '@type': 'ListItem',
+  //             position: 1,
+  //             name: 'Home',
+  //             item: `${baseUrl}/`,
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   };
+
+  //   const existingScript = document.getElementById('structured-data');
+  //   if (existingScript) {
+  //     existingScript.remove();
+  //   }
+
+  //   const script = document.createElement('script');
+  //   script.type = 'application/ld+json';
+  //   script.id = 'structured-data';
+  //   script.text = JSON.stringify(schema);
+  //   document.head.appendChild(script);
+  // }
 
   private setCanonicalLink(url: string): void {
     let link: HTMLLinkElement | null = document.querySelector(

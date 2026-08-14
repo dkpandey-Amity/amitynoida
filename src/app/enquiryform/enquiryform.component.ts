@@ -14,6 +14,8 @@ import {
   OtpResponse,
 } from '../service/landingservice.service';
 
+declare var Moengage: any;
+
 @Component({
   selector: 'app-enquiryform',
   standalone: true,
@@ -77,6 +79,44 @@ export class EnquiryformComponent implements OnInit, OnDestroy {
     if (this.otpInterval) {
       clearInterval(this.otpInterval);
     }
+  }
+
+  private trackMoEngage(eventName: string, eventData: any = {}) {
+    if (
+      typeof Moengage === 'undefined' ||
+      typeof Moengage.track_event !== 'function'
+    ) {
+      console.warn('MoEngage SDK not available');
+      return;
+    }
+
+    const raw = this.brochureForm.getRawValue();
+
+    const mobile =
+      raw.countryCode.replace(/\D/g, '') + raw.phone.replace(/\D/g, '');
+
+    try {
+      Moengage.add_unique_user_id(`${raw.countryCode}-${raw.phone}`);
+
+      Moengage.add_mobile(`+${mobile}`);
+
+      if (raw.name) Moengage.add_first_name(raw.name);
+
+      if (raw.email) Moengage.add_email(raw.email);
+
+      if (this.loginNo) Moengage.add_user_attribute('login_no', this.loginNo);
+
+      if (this.formNo) Moengage.add_user_attribute('form_no', this.formNo);
+    } catch (e) {
+      console.log(e);
+    }
+
+    Moengage.track_event(eventName, {
+      ...eventData,
+      loginNo: this.loginNo,
+      formNo: this.formNo,
+      page_url: window.location.href,
+    });
   }
 
   // Open Brochure Popup
@@ -182,9 +222,21 @@ export class EnquiryformComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: OtpResponse) => {
           this.isSubmitting = false;
+
           if (res.success) {
             this.loginNo = res.loginNo || '';
             this.otpSent = true;
+
+            // MoEngage Event
+            this.trackMoEngage('enquireNow_otp_generate_clicked', {
+              name: formData.name,
+              email: formData.email,
+              mobile: formData.phone,
+              country_code: formData.countryCode,
+              otp_type: target,
+              page_url: window.location.href,
+            });
+
             this.otpStatus = 'success';
             this.otpMessage =
               target === 'mobile'
@@ -260,6 +312,18 @@ export class EnquiryformComponent implements OnInit, OnDestroy {
           this.otpSent = false;
           this.otpVerified = true;
           this.formNo = res.formNo || '';
+
+          const formData = this.brochureForm.getRawValue();
+
+          // MoEngage Event
+          this.trackMoEngage('otp_verified', {
+            name: formData.name,
+            email: formData.email,
+            mobile: formData.phone,
+            country_code: formData.countryCode,
+            page_url: window.location.href,
+            form_no: res.formNo || '',
+          });
           this.otpStatus = 'success';
           this.otpMessage = '✅ OTP Verified Successfully';
           this.brochureForm.get('otp')?.disable();

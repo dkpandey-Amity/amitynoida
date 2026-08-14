@@ -17,6 +17,8 @@ import {
   OtpResponse,
 } from '../service/landingservice.service';
 
+declare var Moengage: any;
+
 @Component({
   selector: 'app-ug-3-continent-details',
   standalone: true,
@@ -114,7 +116,6 @@ export class Ug3ContinentDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.loadCountryCodes();
 
-    this.getAllUgProgramMetas();
     this.sCourseCode = this.route.snapshot.params['SlugName'];
     //this.sCourseCode = history.state.code;
     this.apiService
@@ -127,6 +128,9 @@ export class Ug3ContinentDetailsComponent implements OnInit {
               this.programCD = program.CourseCD;
               this.getUgProgramDetailsSemester(this.programCD);
             });
+            // IMPORTANT:
+            // Load meta + schema after program data is available
+            this.getAllUgProgramMetas();
           } else {
             console.error('No data found for the provided course code.');
           }
@@ -172,6 +176,44 @@ export class Ug3ContinentDetailsComponent implements OnInit {
     if (this.otpInterval) {
       clearInterval(this.otpInterval);
     }
+  }
+
+  private trackMoEngage(eventName: string, eventData: any = {}) {
+    if (
+      typeof Moengage === 'undefined' ||
+      typeof Moengage.track_event !== 'function'
+    ) {
+      console.warn('MoEngage SDK not available');
+      return;
+    }
+
+    const raw = this.brochureForm.getRawValue();
+
+    const mobile =
+      raw.countryCode.replace(/\D/g, '') + raw.phone.replace(/\D/g, '');
+
+    try {
+      Moengage.add_unique_user_id(`${raw.countryCode}-${raw.phone}`);
+
+      Moengage.add_mobile(`+${mobile}`);
+
+      if (raw.name) Moengage.add_first_name(raw.name);
+
+      if (raw.email) Moengage.add_email(raw.email);
+
+      if (this.loginNo) Moengage.add_user_attribute('login_no', this.loginNo);
+
+      if (this.formNo) Moengage.add_user_attribute('form_no', this.formNo);
+    } catch (e) {
+      console.log(e);
+    }
+
+    Moengage.track_event(eventName, {
+      ...eventData,
+      loginNo: this.loginNo,
+      formNo: this.formNo,
+      page_url: window.location.href,
+    });
   }
 
   loadCountryCodes(): void {
@@ -233,6 +275,17 @@ export class Ug3ContinentDetailsComponent implements OnInit {
           if (res.success) {
             this.loginNo = res.loginNo || '';
             this.otpSent = true;
+
+            this.trackMoEngage('downloadbrouchure_otp_generate_clicked', {
+              name: formData.name,
+              email: formData.email,
+              phone: formData.phone,
+              countryCode: formData.countryCode,
+              otpType: target,
+              courseCode: this.programCD,
+              courseName: this.selectedBrochure?.PrimaryCourseName || '',
+              pageUrl: window.location.href,
+            });
 
             this.otpStatus = 'success';
             this.otpMessage =
@@ -312,6 +365,19 @@ export class Ug3ContinentDetailsComponent implements OnInit {
           this.otpSent = false;
           this.otpVerified = true;
           this.formNo = res.formNo || '';
+
+          const formData = this.brochureForm.getRawValue();
+
+          this.trackMoEngage('otp_verified', {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            countryCode: formData.countryCode,
+            courseCode: this.programCD,
+            courseName: this.selectedBrochure?.PrimaryCourseName || '',
+            formNo: res.formNo || '',
+            pageUrl: window.location.href,
+          });
 
           this.otpStatus = 'success';
           this.otpMessage = '✅ OTP Verified Successfully';
@@ -557,97 +623,670 @@ export class Ug3ContinentDetailsComponent implements OnInit {
     });
   }
 
+  private stripHtml(html: string): string {
+    if (!html) {
+      return '';
+    }
+
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+
+    return tempDiv.textContent?.trim() || '';
+  }
+
   injectStructuredData(pageData: any): void {
     const baseUrl = 'https://noida.amity.edu';
-    const canonicalUrl = pageData.CanonicalUrl || window.location.href;
+
+    const program = this.GetUG3ContinentProgramsData?.[0];
+
+    if (!program) {
+      console.warn('Program data not available for schema');
+      return;
+    }
+
+    // =====================================================
+    // CANONICAL URL
+    // =====================================================
+
+    const currentPath = this.router.url.split('?')[0].split('#')[0];
+
+    const canonicalUrl =
+      pageData?.CanonicalUrl ||
+      pageData?.canonicalUrl ||
+      pageData?.canonical ||
+      `${baseUrl}${currentPath}`;
+
+    // =====================================================
+    // PROGRAM NAME
+    // =====================================================
 
     const programName =
-      pageData.ProgramName || pageData.Title || 'UG 3-Continent Programme';
+      program?.PrimaryCourseName ||
+      program?.ProgramName ||
+      program?.sfullname ||
+      pageData?.ProgramName ||
+      pageData?.Title ||
+      'UG 3-Continent Programme';
 
-    const schema = {
-      '@context': 'https://schema.org',
-      '@graph': [
-        /* ================= PROGRAM PAGE ================= */
+    // =====================================================
+    // DESCRIPTION
+    // =====================================================
+
+    const description = this.stripHtml(
+      pageData?.Description ||
+        program?.Description ||
+        program?.CourseDescription ||
+        program?.sshortdesc ||
+        `Explore ${programName} at Amity University Noida with international exposure and global learning experience.`,
+    );
+
+    // =====================================================
+    // COURSE CODE
+    // =====================================================
+
+    const courseCode =
+      program?.sCourseCode ||
+      program?.CourseCode ||
+      program?.CourseCD ||
+      this.programCD ||
+      '';
+
+    // =====================================================
+    // DEGREE
+    // =====================================================
+
+    const degreeName =
+      program?.DegreeName ||
+      program?.Degree ||
+      program?.sDegree ||
+      pageData?.DegreeName ||
+      programName;
+
+    // =====================================================
+    // DISCIPLINE
+    // =====================================================
+
+    const disciplineName =
+      program?.DisciplineName ||
+      program?.Discipline ||
+      program?.sDiscipline ||
+      pageData?.DisciplineName ||
+      'UG 3-Continent Programmes';
+
+    // =====================================================
+    // DURATION
+    // =====================================================
+
+    const durationText =
+      program?.Duration ||
+      program?.sDuration ||
+      program?.CourseDuration ||
+      pageData?.Duration ||
+      '';
+
+    let isoDuration = '';
+
+    if (durationText) {
+      const value = durationText.toString();
+
+      const yearMatch = value.match(/(\d+)\s*(year|years|yr|yrs)/i);
+
+      const monthMatch = value.match(/(\d+)\s*(month|months)/i);
+
+      if (yearMatch) {
+        isoDuration = `P${yearMatch[1]}Y`;
+      } else if (monthMatch) {
+        isoDuration = `P${monthMatch[1]}M`;
+      }
+    }
+
+    // =====================================================
+    // ELIGIBILITY
+    // =====================================================
+
+    const eligibility = this.stripHtml(
+      program?.Eligibility ||
+        program?.sEligibility ||
+        program?.EligibilityCriteria ||
+        program?.MinimumEligibility ||
+        pageData?.Eligibility ||
+        '',
+    );
+
+    // =====================================================
+    // FEES
+    // =====================================================
+
+    const cleanPrice = (value: any): string | null => {
+      if (value === null || value === undefined || value === '') {
+        return null;
+      }
+
+      const cleaned = value.toString().replace(/[^\d.]/g, '');
+
+      return cleaned || null;
+    };
+
+    const nonSponsoredFee =
+      program?.NonSponsoredFee ||
+      program?.NonSponsoredSemesterFee ||
+      program?.FirstSemesterFee ||
+      null;
+
+    const sponsoredFee =
+      program?.SponsoredFee || program?.SponsoredSemesterFee || null;
+
+    const nonSponsoredPrice = cleanPrice(nonSponsoredFee);
+
+    const sponsoredPrice = cleanPrice(sponsoredFee);
+
+    const offers: any[] = [];
+
+    if (nonSponsoredPrice) {
+      offers.push({
+        '@type': 'Offer',
+
+        '@id': `${canonicalUrl}#non-sponsored-fee`,
+
+        name: 'First-year non-sponsored semester fee',
+
+        price: nonSponsoredPrice,
+
+        priceCurrency: 'INR',
+
+        url: canonicalUrl,
+
+        availability: 'https://schema.org/InStock',
+      });
+    }
+
+    if (sponsoredPrice) {
+      offers.push({
+        '@type': 'Offer',
+
+        '@id': `${canonicalUrl}#sponsored-fee`,
+
+        name: 'First-year sponsored semester fee',
+
+        price: sponsoredPrice,
+
+        priceCurrency: 'INR',
+
+        url: canonicalUrl,
+
+        availability: 'https://schema.org/InStock',
+      });
+    }
+
+    // =====================================================
+    // UNIVERSITY
+    // =====================================================
+
+    const universitySchema = {
+      '@type': 'CollegeOrUniversity',
+
+      '@id': `${baseUrl}/#university`,
+
+      name: 'Amity University Noida',
+
+      alternateName: 'Amity University Uttar Pradesh, Noida Campus',
+
+      url: `${baseUrl}/`,
+
+      address: {
+        '@type': 'PostalAddress',
+
+        streetAddress: 'Sector 125',
+
+        addressLocality: 'Noida',
+
+        addressRegion: 'Uttar Pradesh',
+
+        postalCode: '201313',
+
+        addressCountry: 'IN',
+      },
+
+      telephone: ['+91-120-2445252', '+91-120-4713600'],
+    };
+
+    // =====================================================
+    // WEBSITE
+    // =====================================================
+
+    const websiteSchema = {
+      '@type': 'WebSite',
+
+      '@id': `${baseUrl}/#website`,
+
+      url: `${baseUrl}/`,
+
+      name: 'Amity University Noida',
+
+      publisher: {
+        '@id': `${baseUrl}/#university`,
+      },
+
+      inLanguage: 'en-IN',
+    };
+
+    // =====================================================
+    // WEBPAGE
+    // =====================================================
+
+    const webPageSchema: any = {
+      '@type': 'WebPage',
+
+      '@id': `${canonicalUrl}#webpage`,
+
+      url: canonicalUrl,
+
+      name: programName,
+
+      description: description,
+
+      isPartOf: {
+        '@id': `${baseUrl}/#website`,
+      },
+
+      about: [
         {
-          '@type': ['EducationalOccupationalProgram', 'WebPage'],
-          '@id': canonicalUrl,
-          url: canonicalUrl,
-          name: programName,
-          description:
-            pageData.Description ||
-            'UG 3-Continent undergraduate programme offering global exposure, leadership development, and international academic experience.',
-          programType: 'Undergraduate 3-Continent Program',
-          provider: { '@id': `${baseUrl}#university` },
-          occupationalCredentialAwarded:
-            pageData.DegreeName || 'Bachelor’s Degree',
-          hasCourse: {
-            '@id': `${canonicalUrl}#course-details`,
-          },
-          breadcrumb: {
-            '@id': `${canonicalUrl}#breadcrumb-ug-3c-program`,
-          },
+          '@id': `${canonicalUrl}#course`,
         },
-
-        /* ================= COURSE ================= */
         {
-          '@type': 'Course',
-          '@id': `${canonicalUrl}#course-details`,
-          name: programName,
-          description:
-            pageData.CourseOverview ||
-            'Curriculum covering leadership, global studies, international business, and cross-cultural learning.',
-          provider: { '@id': `${baseUrl}#university` },
+          '@id': `${canonicalUrl}#programme`,
         },
+      ],
 
-        /* ================= UNIVERSITY ================= */
-        {
-          '@type': ['CollegeOrUniversity', 'EducationalOrganization'],
-          '@id': `${baseUrl}#university`,
+      breadcrumb: {
+        '@id': `${canonicalUrl}#breadcrumb`,
+      },
+
+      inLanguage: 'en-IN',
+    };
+
+    // =====================================================
+    // COURSE
+    // =====================================================
+
+    const courseSchema: any = {
+      '@type': 'Course',
+
+      '@id': `${canonicalUrl}#course`,
+
+      url: canonicalUrl,
+
+      name: programName,
+
+      description: description,
+
+      provider: {
+        '@id': `${baseUrl}/#university`,
+      },
+
+      educationalCredentialAwarded: degreeName,
+
+      hasCourseInstance: {
+        '@type': 'CourseInstance',
+
+        '@id': `${canonicalUrl}#course-instance`,
+
+        name: `${programName} – Full-time`,
+
+        courseMode: 'Full-time',
+
+        location: {
+          '@type': 'Place',
+
           name: 'Amity University Noida',
-          url: baseUrl,
-          logo: `${baseUrl}/assets/images/amity-logo.png`,
-          foundingDate: '2005',
-          description:
-            'Amity University Noida delivers globally focused undergraduate programs including innovative 3-Continent pathways with international exposure.',
+
+          address: {
+            '@type': 'PostalAddress',
+
+            streetAddress: 'Sector 125',
+
+            addressLocality: 'Noida',
+
+            addressRegion: 'Uttar Pradesh',
+
+            postalCode: '201313',
+
+            addressCountry: 'IN',
+          },
+        },
+      },
+
+      mainEntityOfPage: {
+        '@id': `${canonicalUrl}#webpage`,
+      },
+
+      inLanguage: 'en-IN',
+    };
+
+    // Add course code only if available
+    if (courseCode) {
+      courseSchema.courseCode = courseCode.toString();
+    }
+
+    // Add duration only if available
+    if (isoDuration) {
+      courseSchema.timeRequired = isoDuration;
+
+      courseSchema.hasCourseInstance.courseWorkload = isoDuration;
+    }
+
+    // Add eligibility only if available
+    if (eligibility) {
+      courseSchema.coursePrerequisites = eligibility;
+    }
+
+    // Add fees only if actual API values exist
+    if (offers.length > 0) {
+      courseSchema.offers = offers;
+    }
+
+    // =====================================================
+    // EDUCATIONAL OCCUPATIONAL PROGRAM
+    // =====================================================
+
+    const programmeSchema: any = {
+      '@type': 'EducationalOccupationalProgram',
+
+      '@id': `${canonicalUrl}#programme`,
+
+      url: canonicalUrl,
+
+      name: programName,
+
+      programType: 'Undergraduate 3-Continent degree programme',
+
+      educationalCredentialAwarded: degreeName,
+
+      provider: {
+        '@id': `${baseUrl}/#university`,
+      },
+    };
+
+    if (isoDuration) {
+      programmeSchema.timeToComplete = isoDuration;
+    }
+
+    if (eligibility) {
+      programmeSchema.programPrerequisites = eligibility;
+    }
+
+    // Reference same Offer nodes
+    if (offers.length > 0) {
+      programmeSchema.offers = offers.map((offer) => ({
+        '@id': offer['@id'],
+      }));
+    }
+
+    // =====================================================
+    // BREADCRUMB
+    // =====================================================
+
+    const breadcrumbSchema = {
+      '@type': 'BreadcrumbList',
+
+      '@id': `${canonicalUrl}#breadcrumb`,
+
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+
+          position: 1,
+
+          name: 'Home',
+
+          item: `${baseUrl}/`,
         },
 
-        /* ================= BREADCRUMB ================= */
         {
-          '@type': 'BreadcrumbList',
-          '@id': `${canonicalUrl}#breadcrumb-ug-3c-program`,
-          itemListElement: [
-            {
-              '@type': 'ListItem',
-              position: 1,
-              name: 'Home',
-              item: baseUrl,
-            },
-            {
-              '@type': 'ListItem',
-              position: 2,
-              name: 'UG 3-Continent Programmes',
-              item: `${baseUrl}/ug-3-continent`,
-            },
-            {
-              '@type': 'ListItem',
-              position: 3,
-              name: programName,
-              item: canonicalUrl,
-            },
-          ],
+          '@type': 'ListItem',
+
+          position: 2,
+
+          name: 'UG 3-Continent Programmes',
+
+          item: `${baseUrl}/ug-3-continent`,
+        },
+
+        {
+          '@type': 'ListItem',
+
+          position: 3,
+
+          name: disciplineName,
+
+          item: canonicalUrl,
+        },
+
+        {
+          '@type': 'ListItem',
+
+          position: 4,
+
+          name: programName,
+
+          item: canonicalUrl,
         },
       ],
     };
 
+    // =====================================================
+    // FAQ
+    // =====================================================
+
+    const faqPairs = [
+      {
+        q: program?.FaqQuestion,
+        a: program?.FaqAnswer,
+      },
+
+      {
+        q: program?.FaqQuestion2,
+        a: program?.FaqAnswer2,
+      },
+
+      {
+        q: program?.FaqQuestion3,
+        a: program?.FaqAnswer3,
+      },
+
+      {
+        q: program?.FaqQuestion4,
+        a: program?.FaqAnswer4,
+      },
+
+      {
+        q: program?.FaqQuestion5,
+        a: program?.FaqAnswer5,
+      },
+    ];
+
+    const faqItems = faqPairs
+      .filter(
+        (faq) =>
+          faq.q && faq.a && this.stripHtml(faq.q) && this.stripHtml(faq.a),
+      )
+      .map((faq) => ({
+        '@type': 'Question',
+
+        name: this.stripHtml(faq.q),
+
+        acceptedAnswer: {
+          '@type': 'Answer',
+
+          text: this.stripHtml(faq.a),
+        },
+      }));
+
+    // =====================================================
+    // GRAPH
+    // =====================================================
+
+    const graph: any[] = [
+      universitySchema,
+
+      websiteSchema,
+
+      webPageSchema,
+
+      courseSchema,
+
+      programmeSchema,
+
+      breadcrumbSchema,
+    ];
+
+    // =====================================================
+    // ADD FAQ ONLY WHEN FAQ EXISTS
+    // =====================================================
+
+    if (faqItems.length > 0) {
+      graph.push({
+        '@type': 'FAQPage',
+
+        '@id': `${canonicalUrl}#faq`,
+
+        url: canonicalUrl,
+
+        mainEntity: faqItems,
+      });
+
+      // Connect FAQ with WebPage
+      webPageSchema.mainEntity = {
+        '@id': `${canonicalUrl}#faq`,
+      };
+    }
+
+    // =====================================================
+    // FINAL SCHEMA
+    // =====================================================
+
+    const schema = {
+      '@context': 'https://schema.org',
+
+      '@graph': graph,
+    };
+
+    // =====================================================
+    // REMOVE PREVIOUS SCHEMA
+    // =====================================================
+
     const existingScript = document.getElementById('structured-data');
-    if (existingScript) existingScript.remove();
+
+    if (existingScript) {
+      existingScript.remove();
+    }
+
+    // =====================================================
+    // ADD JSON-LD
+    // =====================================================
 
     const script = document.createElement('script');
+
     script.type = 'application/ld+json';
+
     script.id = 'structured-data';
+
     script.text = JSON.stringify(schema);
+
     document.head.appendChild(script);
   }
+
+  // injectStructuredData(pageData: any): void {
+  //   const baseUrl = 'https://noida.amity.edu';
+  //   const canonicalUrl = pageData.CanonicalUrl || window.location.href;
+
+  //   const programName =
+  //     pageData.ProgramName || pageData.Title || 'UG 3-Continent Programme';
+
+  //   const schema = {
+  //     '@context': 'https://schema.org',
+  //     '@graph': [
+  //       /* ================= PROGRAM PAGE ================= */
+  //       {
+  //         '@type': ['EducationalOccupationalProgram', 'WebPage'],
+  //         '@id': canonicalUrl,
+  //         url: canonicalUrl,
+  //         name: programName,
+  //         description:
+  //           pageData.Description ||
+  //           'UG 3-Continent undergraduate programme offering global exposure, leadership development, and international academic experience.',
+  //         programType: 'Undergraduate 3-Continent Program',
+  //         provider: { '@id': `${baseUrl}#university` },
+  //         occupationalCredentialAwarded:
+  //           pageData.DegreeName || 'Bachelor’s Degree',
+  //         hasCourse: {
+  //           '@id': `${canonicalUrl}#course-details`,
+  //         },
+  //         breadcrumb: {
+  //           '@id': `${canonicalUrl}#breadcrumb-ug-3c-program`,
+  //         },
+  //       },
+
+  //       /* ================= COURSE ================= */
+  //       {
+  //         '@type': 'Course',
+  //         '@id': `${canonicalUrl}#course-details`,
+  //         name: programName,
+  //         description:
+  //           pageData.CourseOverview ||
+  //           'Curriculum covering leadership, global studies, international business, and cross-cultural learning.',
+  //         provider: { '@id': `${baseUrl}#university` },
+  //       },
+
+  //       /* ================= UNIVERSITY ================= */
+  //       {
+  //         '@type': ['CollegeOrUniversity', 'EducationalOrganization'],
+  //         '@id': `${baseUrl}#university`,
+  //         name: 'Amity University Noida',
+  //         url: baseUrl,
+  //         logo: `${baseUrl}/assets/images/amity-logo.png`,
+  //         foundingDate: '2005',
+  //         description:
+  //           'Amity University Noida delivers globally focused undergraduate programs including innovative 3-Continent pathways with international exposure.',
+  //       },
+
+  //       /* ================= BREADCRUMB ================= */
+  //       {
+  //         '@type': 'BreadcrumbList',
+  //         '@id': `${canonicalUrl}#breadcrumb-ug-3c-program`,
+  //         itemListElement: [
+  //           {
+  //             '@type': 'ListItem',
+  //             position: 1,
+  //             name: 'Home',
+  //             item: baseUrl,
+  //           },
+  //           {
+  //             '@type': 'ListItem',
+  //             position: 2,
+  //             name: 'UG 3-Continent Programmes',
+  //             item: `${baseUrl}/ug-3-continent`,
+  //           },
+  //           {
+  //             '@type': 'ListItem',
+  //             position: 3,
+  //             name: programName,
+  //             item: canonicalUrl,
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   };
+
+  //   const existingScript = document.getElementById('structured-data');
+  //   if (existingScript) existingScript.remove();
+
+  //   const script = document.createElement('script');
+  //   script.type = 'application/ld+json';
+  //   script.id = 'structured-data';
+  //   script.text = JSON.stringify(schema);
+  //   document.head.appendChild(script);
+  // }
 
   private setCanonicalLink(url: string) {
     // Remove any existing canonical link

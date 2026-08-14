@@ -760,10 +760,12 @@ export const routes: Routes = [
     path: 'nep',
     component: NepComponent,
   },
+
   // {
   //   path: 'work-integrated-programs',
   //   component: WorkIntegratedProgramsComponent,
   // },
+  
   {
     path: 'program-brochures',
     component: ProgramBrochuresComponent,

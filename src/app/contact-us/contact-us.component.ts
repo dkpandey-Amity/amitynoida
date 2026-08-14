@@ -42,7 +42,7 @@ export class ContactUsComponent {
       Email: ['', [Validators.required, Validators.email]],
       Phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       Message: ['', [Validators.required, Validators.minLength(10)]],
-      stype: [''],
+      stype: ['contactus'],
       scoursecode: [''],
       scountrycode: ['+91'],
       captcha: ['', Validators.required],

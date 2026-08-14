@@ -36,363 +36,487 @@ export class BlogDetailsComponent {
   }
 
   updateMetaTags(blog: any): void {
-  this.apiService.getNewsMeta().subscribe({
-    next: (data: any[]) => {
-      const metaData =
-        Array.isArray(data) && data.length > 0 ? data[0] : {};
+    this.apiService.getNewsMeta().subscribe({
+      next: (data: any[]) => {
+        const metaData = Array.isArray(data) && data.length > 0 ? data[0] : {};
 
-      // Dynamic values
-      const pageTitle =
-        blog?.Title ||
-        metaData.Title ||
-        'Amity University, Noida';
+        // Dynamic values
+        const pageTitle =
+          blog?.Title || metaData.Title || 'Amity University, Noida';
 
-      const description =
-        blog?.ShortDescription ||
-        blog?.Description ||
-        metaData.Description ||
-        'Amity University, Noida';
-
-      const keywords =
-        metaData.Keywords || 'Amity University, Noida';
-
-      const canonicalUrl =
-        metaData.CanonicalUrl || window.location.href;
-
-      // ================= Basic Meta =================
-      this.titleService.setTitle(pageTitle);
-
-      this.meta.updateTag({
-        name: 'description',
-        content: description,
-      });
-
-      this.meta.updateTag({
-        name: 'keywords',
-        content: keywords,
-      });
-
-      // ================= Open Graph =================
-      this.meta.updateTag({
-        property: 'og:locale',
-        content: 'en_IN',
-      });
-
-      this.meta.updateTag({
-        property: 'og:type',
-        content: 'article',
-      });
-
-      this.meta.updateTag({
-        property: 'og:title',
-        content: pageTitle,
-      });
-
-      this.meta.updateTag({
-        property: 'og:description',
-        content: description,
-      });
-
-      this.meta.updateTag({
-        property: 'og:url',
-        content: canonicalUrl,
-      });
-
-      this.meta.updateTag({
-        property: 'og:site_name',
-        content: 'Amity University Noida',
-      });
-
-      if (blog?.ImageUrl) {
-        const imageUrl = blog.ImageUrl.startsWith('http')
-          ? blog.ImageUrl
-          : `https://noida.amity.edu/${blog.ImageUrl}`;
-
-        this.meta.updateTag({
-          property: 'og:image',
-          content: imageUrl,
-        });
-
-        this.meta.updateTag({
-          name: 'twitter:image',
-          content: imageUrl,
-        });
-      }
-
-      // ================= Twitter =================
-      this.meta.updateTag({
-        name: 'twitter:card',
-        content: 'summary_large_image',
-      });
-
-      this.meta.updateTag({
-        name: 'twitter:title',
-        content: pageTitle,
-      });
-
-      this.meta.updateTag({
-        name: 'twitter:description',
-        content: description,
-      });
-
-      this.meta.updateTag({
-        name: 'twitter:site',
-        content: '@AmityUni',
-      });
-
-      this.meta.updateTag({
-        name: 'twitter:creator',
-        content: '@AmityUni',
-      });
-
-      // ================= Canonical =================
-      this.setCanonicalLink(canonicalUrl);
-    },
-    error: (error: any) => {
-      console.error('Error fetching meta data:', error);
-
-      // Fallback to blog data
-      this.titleService.setTitle(blog?.Title || 'Amity University, Noida');
-
-      this.meta.updateTag({
-        name: 'description',
-        content:
+        const description =
           blog?.ShortDescription ||
           blog?.Description ||
-          'Amity University, Noida',
-      });
+          metaData.Description ||
+          'Amity University, Noida';
 
-      this.setCanonicalLink(window.location.href);
-    },
-  });
-}
+        const keywords = metaData.Keywords || 'Amity University, Noida';
 
+        const canonicalUrl = metaData.CanonicalUrl || window.location.href;
 
-  // ngOnInit(): void {
-  //   this.updateMetaTags();
-  //   this.Id = this.route.snapshot.params['Id'];
+        // ================= Basic Meta =================
+        this.titleService.setTitle(pageTitle);
 
-  //   this.apiService.getBlogDetails(this.Id).subscribe((data: any) => {
-  //     this.blogsData = data;
-  //   });
-  // }
+        this.meta.updateTag({
+          name: 'description',
+          content: description,
+        });
 
-  // updateMetaTags(): void {
-  //   this.apiService.getNewsMeta().subscribe({
-  //     next: (data: any[]) => {
-  //       if (Array.isArray(data) && data.length > 0) {
-  //         // Assuming you want to use the first item in the array
-  //         const metaData = data[0];
+        this.meta.updateTag({
+          name: 'keywords',
+          content: keywords,
+        });
 
-  //         // Update meta tags dynamically after data is fetched
-  //         this.titleService.setTitle(
-  //           metaData.Title || 'Amity University, Noida',
-  //         );
-  //         this.meta.updateTag({
-  //           name: 'description',
-  //           content: metaData.Description || 'Amity University, Noida',
-  //         });
-  //         this.meta.updateTag({
-  //           name: 'keywords',
-  //           content: metaData.Keywords || 'Amity University, Noida',
-  //         });
+        // ================= Open Graph =================
+        this.meta.updateTag({
+          property: 'og:locale',
+          content: 'en_IN',
+        });
 
-  //         // ================= Open Graph Meta Tags =================
-  //         this.meta.updateTag({
-  //           property: 'og:locale',
-  //           content: 'en_IN',
-  //         });
+        this.meta.updateTag({
+          property: 'og:type',
+          content: 'article',
+        });
 
-  //         this.meta.updateTag({
-  //           property: 'og:type',
-  //           content: 'article',
-  //         });
+        this.meta.updateTag({
+          property: 'og:title',
+          content: pageTitle,
+        });
 
-  //         this.meta.updateTag({
-  //           property: 'og:title',
-  //           content: metaData.Title || 'News – Amity University Noida',
-  //         });
+        this.meta.updateTag({
+          property: 'og:description',
+          content: description,
+        });
 
-  //         this.meta.updateTag({
-  //           property: 'og:description',
-  //           content:
-  //             metaData.Description ||
-  //             'Latest updates from Amity University Noida.',
-  //         });
+        this.meta.updateTag({
+          property: 'og:url',
+          content: canonicalUrl,
+        });
 
-  //         this.meta.updateTag({
-  //           property: 'og:url',
-  //           content: metaData.CanonicalUrl || window.location.href,
-  //         });
+        this.meta.updateTag({
+          property: 'og:site_name',
+          content: 'Amity University Noida',
+        });
 
-  //         this.meta.updateTag({
-  //           property: 'og:site_name',
-  //           content: 'Amity University Noida',
-  //         });
+        if (blog?.ImageUrl) {
+          const imageUrl = blog.ImageUrl.startsWith('http')
+            ? blog.ImageUrl
+            : `https://noida.amity.edu/${blog.ImageUrl}`;
 
-  //         // ================= Twitter (X) =================
-  //         this.meta.updateTag({
-  //           name: 'twitter:card',
-  //           content: 'summary_large_image',
-  //         });
+          this.meta.updateTag({
+            property: 'og:image',
+            content: imageUrl,
+          });
 
-  //         this.meta.updateTag({
-  //           name: 'twitter:title',
-  //           content: metaData.Title || 'News – Amity University Noida',
-  //         });
+          this.meta.updateTag({
+            name: 'twitter:image',
+            content: imageUrl,
+          });
+        }
 
-  //         this.meta.updateTag({
-  //           name: 'twitter:description',
-  //           content:
-  //             metaData.Description ||
-  //             'Latest updates from Amity University Noida.',
-  //         });
+        // ================= Twitter =================
+        this.meta.updateTag({
+          name: 'twitter:card',
+          content: 'summary_large_image',
+        });
 
-  //         this.meta.updateTag({
-  //           name: 'twitter:site',
-  //           content: '@AmityUni',
-  //         });
+        this.meta.updateTag({
+          name: 'twitter:title',
+          content: pageTitle,
+        });
 
-  //         this.meta.updateTag({
-  //           name: 'twitter:creator',
-  //           content: '@AmityUni',
-  //         });
+        this.meta.updateTag({
+          name: 'twitter:description',
+          content: description,
+        });
 
-  //         // Define and set the canonical URL
-  //         const canonicalUrl = metaData.CanonicalUrl || window.location.href;
-  //         this.setCanonicalLink(canonicalUrl);
-  //         // Call function to inject structured schema
-  //         this.injectStructuredData(metaData);
-  //       } else {
-  //         console.warn('No meta data received or array is empty.');
-  //       }
-  //     },
-  //     error: (error: any) => {
-  //       console.error('Error fetching meta data from API:', error);
-  //       this.setCanonicalLink(window.location.href);
-  //     },
-  //   });
-  // }
+        this.meta.updateTag({
+          name: 'twitter:site',
+          content: '@AmityUni',
+        });
 
-  injectStructuredData(metaData: any): void {
-    if (!this.blogsData) return;
+        this.meta.updateTag({
+          name: 'twitter:creator',
+          content: '@AmityUni',
+        });
+
+        // ================= Canonical =================
+        this.setCanonicalLink(canonicalUrl);
+      },
+      error: (error: any) => {
+        console.error('Error fetching meta data:', error);
+
+        // Fallback to blog data
+        this.titleService.setTitle(blog?.Title || 'Amity University, Noida');
+
+        this.meta.updateTag({
+          name: 'description',
+          content:
+            blog?.ShortDescription ||
+            blog?.Description ||
+            'Amity University, Noida',
+        });
+
+        this.setCanonicalLink(window.location.href);
+      },
+    });
+  }
+
+  injectStructuredData(blog: any): void {
+    if (!blog) {
+      return;
+    }
 
     const baseUrl = 'https://noida.amity.edu';
-    const pageUrl = metaData.CanonicalUrl || window.location.href;
 
-    const schema = {
-      '@context': 'https://schema.org',
-      '@graph': [
+    // =====================================================
+    // PAGE URL
+    // =====================================================
+    const currentPath = window.location.pathname;
+
+    const pageUrl = `${baseUrl}${currentPath}`;
+
+    // =====================================================
+    // BASIC ARTICLE DATA
+    // =====================================================
+    const title = blog?.Title || 'Amity University Noida News';
+
+    const description = blog?.ShortDescription || blog?.Description || '';
+
+    const articleSection = blog?.Category || 'News';
+
+    // =====================================================
+    // DATE
+    // Convert API date to YYYY-MM-DD
+    // =====================================================
+    const formatSchemaDate = (dateValue: any): string | undefined => {
+      if (!dateValue) {
+        return undefined;
+      }
+
+      const date = new Date(dateValue);
+
+      if (isNaN(date.getTime())) {
+        return undefined;
+      }
+
+      return date.toISOString().split('T')[0];
+    };
+
+    const publishedDate = formatSchemaDate(
+      blog?.PublishDate || blog?.PublishedDate || blog?.NewsDate,
+    );
+
+    const modifiedDate = formatSchemaDate(
+      blog?.ModifiedDate || blog?.UpdatedDate || blog?.PublishDate,
+    );
+
+    // =====================================================
+    // IMAGE
+    // =====================================================
+    let imageUrl: string | undefined;
+
+    if (blog?.ImageUrl) {
+      imageUrl = blog.ImageUrl.startsWith('http')
+        ? blog.ImageUrl
+        : `${baseUrl}/${blog.ImageUrl.replace(/^\/+/, '')}`;
+    }
+
+    // =====================================================
+    // UNIVERSITY
+    // =====================================================
+    const universitySchema = {
+      '@type': 'CollegeOrUniversity',
+
+      '@id': `${baseUrl}/#university`,
+
+      name: 'Amity University Noida',
+
+      alternateName: 'Amity University Uttar Pradesh, Noida Campus',
+
+      url: `${baseUrl}/`,
+
+      address: {
+        '@type': 'PostalAddress',
+
+        streetAddress: 'Sector 125',
+
+        addressLocality: 'Noida',
+
+        addressRegion: 'Uttar Pradesh',
+
+        postalCode: '201313',
+
+        addressCountry: 'IN',
+      },
+
+      telephone: ['+91-120-2445252', '+91-120-4713600'],
+    };
+
+    // =====================================================
+    // WEBSITE
+    // =====================================================
+    const websiteSchema = {
+      '@type': 'WebSite',
+
+      '@id': `${baseUrl}/#website`,
+
+      url: `${baseUrl}/`,
+
+      name: 'Amity University Noida',
+
+      publisher: {
+        '@id': `${baseUrl}/#university`,
+      },
+
+      inLanguage: 'en-IN',
+    };
+
+    // =====================================================
+    // WEB PAGE
+    // =====================================================
+    const webPageSchema = {
+      '@type': 'WebPage',
+
+      '@id': `${pageUrl}#webpage`,
+
+      url: pageUrl,
+
+      name: title,
+
+      isPartOf: {
+        '@id': `${baseUrl}/#website`,
+      },
+
+      mainEntity: {
+        '@id': `${pageUrl}#article`,
+      },
+
+      breadcrumb: {
+        '@id': `${pageUrl}#breadcrumb`,
+      },
+
+      inLanguage: 'en-IN',
+    };
+
+    // =====================================================
+    // NEWS ARTICLE
+    // =====================================================
+    const newsArticleSchema: any = {
+      '@type': 'NewsArticle',
+
+      '@id': `${pageUrl}#article`,
+
+      url: pageUrl,
+
+      headline: title,
+
+      articleSection: articleSection,
+
+      publisher: {
+        '@id': `${baseUrl}/#university`,
+      },
+
+      mainEntityOfPage: {
+        '@id': `${pageUrl}#webpage`,
+      },
+
+      inLanguage: 'en-IN',
+    };
+
+    // Only add description when available
+    if (description) {
+      newsArticleSchema.description = description;
+    }
+
+    // Only add dates when valid
+    if (publishedDate) {
+      newsArticleSchema.datePublished = publishedDate;
+    }
+
+    if (modifiedDate) {
+      newsArticleSchema.dateModified = modifiedDate;
+    }
+
+    // Only add image when actual article image exists
+    if (imageUrl) {
+      newsArticleSchema.image = imageUrl;
+    }
+
+    // =====================================================
+    // CONTRIBUTORS
+    //
+    // IMPORTANT:
+    // Replace these property names with your actual API
+    // fields if they are different.
+    // =====================================================
+    const contributors: any[] = [];
+
+    if (blog?.ContributorName1) {
+      const contributorId1 = this.createSchemaSlug(blog.ContributorName1);
+
+      contributors.push({
+        '@type': 'Person',
+
+        '@id': `${pageUrl}#${contributorId1}`,
+
+        name: blog.ContributorName1,
+
+        ...(blog?.ContributorDesignation1 && {
+          jobTitle: blog.ContributorDesignation1,
+        }),
+
+        affiliation: {
+          '@id': `${baseUrl}/#university`,
+        },
+      });
+    }
+
+    if (blog?.ContributorName2) {
+      const contributorId2 = this.createSchemaSlug(blog.ContributorName2);
+
+      contributors.push({
+        '@type': 'Person',
+
+        '@id': `${pageUrl}#${contributorId2}`,
+
+        name: blog.ContributorName2,
+
+        ...(blog?.ContributorDesignation2 && {
+          jobTitle: blog.ContributorDesignation2,
+        }),
+
+        affiliation: {
+          '@id': `${baseUrl}/#university`,
+        },
+      });
+    }
+
+    // Reference contributors from NewsArticle
+    if (contributors.length) {
+      newsArticleSchema.contributor = contributors.map((person: any) => ({
+        '@id': person['@id'],
+      }));
+    }
+
+    // =====================================================
+    // SOURCE PUBLICATION / CREATIVE WORK
+    // =====================================================
+    let sourcePublicationSchema: any = null;
+
+    const sourcePublication =
+      blog?.SourcePublication || blog?.PublicationName || blog?.SourceName;
+
+    if (sourcePublication) {
+      sourcePublicationSchema = {
+        '@type': 'CreativeWork',
+
+        '@id': `${pageUrl}#source-publication`,
+
+        name: sourcePublication,
+      };
+
+      if (publishedDate) {
+        sourcePublicationSchema.datePublished = publishedDate;
+      }
+
+      newsArticleSchema.isBasedOn = {
+        '@id': `${pageUrl}#source-publication`,
+      };
+    }
+
+    // =====================================================
+    // BREADCRUMB
+    // =====================================================
+    const breadcrumbSchema = {
+      '@type': 'BreadcrumbList',
+
+      '@id': `${pageUrl}#breadcrumb`,
+
+      itemListElement: [
         {
-          '@type': ['NewsArticle', 'WebPage'],
-          '@id': pageUrl,
-          url: pageUrl,
-          headline: this.blogsData.Title,
-          description:
-            this.blogsData.ShortDescription || this.blogsData.Description,
-          articleSection: this.blogsData.Category || 'news',
-          datePublished: this.blogsData.PublishDate,
-          dateModified: this.blogsData.PublishDate,
-          image: this.blogsData.ImageUrl
-            ? `${baseUrl}/${this.blogsData.ImageUrl}`
-            : `${baseUrl}/assets/images/amity-logo.png`,
-          author: {
-            '@type': 'Organization',
-            name: 'Amity University Noida',
-            url: baseUrl,
-          },
-          publisher: { '@id': `${baseUrl}#university` },
-          isPartOf: { '@id': `${baseUrl}#university` },
-          breadcrumb: { '@id': `${pageUrl}#breadcrumb` },
+          '@type': 'ListItem',
+
+          position: 1,
+
+          name: 'Home',
+
+          item: `${baseUrl}/`,
         },
 
         {
-          '@type': [
-            'CollegeOrUniversity',
-            'EducationalOrganization',
-            'Organization',
-          ],
-          '@id': `${baseUrl}#university`,
-          name: 'Amity University Noida',
-          url: baseUrl,
-          logo: `${baseUrl}/assets/images/amity-logo.png`,
-          foundingDate: '2005',
-          description:
-            'Amity University Noida publishes the latest campus news, achievements, innovations, and institutional updates.',
-          address: {
-            '@type': 'PostalAddress',
-            streetAddress: 'Sector 125',
-            addressLocality: 'Noida',
-            addressRegion: 'Uttar Pradesh',
-            postalCode: '201313',
-            addressCountry: 'IN',
-          },
-          contactPoint: [
-            {
-              '@type': 'ContactPoint',
-              telephone: '0120-2445252',
-              email: 'media@amity.edu',
-              contactType: 'media inquiries',
-              areaServed: 'Worldwide',
-            },
-            {
-              '@type': 'ContactPoint',
-              telephone: '0120-4713600',
-              email: 'info@amity.edu',
-              contactType: 'general inquiries',
-              areaServed: 'IN',
-            },
-          ],
-          sameAs: [
-            'https://www.facebook.com/amityuni',
-            'https://twitter.com/AmityUni',
-            'https://www.instagram.com/amityuniversity/',
-            'https://www.linkedin.com/school/amity-university/',
-          ],
+          '@type': 'ListItem',
+
+          position: 2,
+
+          name: 'News',
+
+          item: `${baseUrl}/news`,
         },
 
         {
-          '@type': 'BreadcrumbList',
-          '@id': `${pageUrl}#breadcrumb`,
-          itemListElement: [
-            {
-              '@type': 'ListItem',
-              position: 1,
-              name: 'Home',
-              item: baseUrl,
-            },
-            {
-              '@type': 'ListItem',
-              position: 2,
-              name: 'News',
-              item: `${baseUrl}/news`,
-            },
-            {
-              '@type': 'ListItem',
-              position: 3,
-              name: this.blogsData.Category || 'Article',
-              item: `${baseUrl}/news/${this.blogsData.Category || 'article'}`,
-            },
-            {
-              '@type': 'ListItem',
-              position: 4,
-              name: this.blogsData.Title,
-              item: pageUrl,
-            },
-          ],
+          '@type': 'ListItem',
+
+          position: 3,
+
+          name: title,
+
+          item: pageUrl,
         },
       ],
     };
 
+    // =====================================================
+    // BUILD GRAPH
+    // =====================================================
+    const graph: any[] = [
+      universitySchema,
+      websiteSchema,
+      webPageSchema,
+      newsArticleSchema,
+    ];
+
+    // Add Person schemas
+    contributors.forEach((person) => {
+      graph.push(person);
+    });
+
+    // Add source publication only when available
+    if (sourcePublicationSchema) {
+      graph.push(sourcePublicationSchema);
+    }
+
+    graph.push(breadcrumbSchema);
+
+    // =====================================================
+    // FINAL JSON-LD
+    // =====================================================
+    const schema = {
+      '@context': 'https://schema.org',
+
+      '@graph': graph,
+    };
+
+    // =====================================================
+    // REMOVE EXISTING JSON-LD
+    // =====================================================
     const existingScript = document.getElementById('structured-data');
+
     if (existingScript) {
       existingScript.remove();
     }
 
+    // =====================================================
+    // INSERT JSON-LD
+    // =====================================================
     const script = document.createElement('script');
+
     script.type = 'application/ld+json';
+
     script.id = 'structured-data';
+
     script.text = JSON.stringify(schema);
+
     document.head.appendChild(script);
   }
 
@@ -411,5 +535,14 @@ export class BlogDetailsComponent {
 
     // Set the href attribute
     link.setAttribute('href', url);
+  }
+
+  private createSchemaSlug(value: string): string {
+    return value
+      .toLowerCase()
+      .trim()
+      .replace(/dr\.?/gi, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
   }
 }
