@@ -369,6 +369,12 @@ export class ApiService {
     );
   }
 
+  getCampusLifeMeta(): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/Amityapi/GetAllPageKeywords?url=${this.metaUrl}/campus-life`,
+    );
+  }
+
   getcampusSecurityMeta(): Observable<any> {
     return this.http.get<any>(
       `${this.apiUrl}/Amityapi/GetAllPageKeywords?url=${this.metaUrl}/campus-security`,

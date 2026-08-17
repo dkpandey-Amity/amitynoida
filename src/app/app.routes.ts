@@ -780,7 +780,7 @@ export const routes: Routes = [
     component: FeeStructureComponent,
   },
   {
-    path: 'campus-life', title: 'Campus Life at Amity University Noida | Student Life & Facilities',
+    path: 'campus-life',
     component: CampusLifeComponent,
   }
 
