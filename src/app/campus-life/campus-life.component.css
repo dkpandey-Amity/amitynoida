@@ -1,0 +1,36 @@
+
+@import url(../../../public/assets/campus-life/css/main.css);
+
+.marquee-wrapper {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.marquee-track {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    width: max-content;
+    animation: marquee 25s linear infinite;
+}
+
+.marquee-track img {
+    height: 70px;
+    width: auto;
+    flex-shrink: 0;
+}
+
+.marquee-wrapper:hover .marquee-track {
+    animation-play-state: paused;
+}
+
+@keyframes marquee {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}

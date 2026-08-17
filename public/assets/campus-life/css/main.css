@@ -1,0 +1,419 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+body {
+font-family: "Montserrat", sans-serif;
+}
+
+.section-title {
+margin-top: -12px;
+margin-bottom:20px;
+}
+
+.section-title__title {
+margin: 0;
+font-weight: 300;
+color: #111111;
+font-size: 42px;
+line-height: 50px;
+margin-bottom: 8px;
+letter-spacing: 1;
+}
+.section-title__title strong {
+font-weight: 600;
+}
+.section-title__title span{
+display:block;
+}
+.padding {
+padding: 60px 0;
+}
+
+/* Hero Section Base */
+.hero-section {
+width:100%;
+height:100%;
+}
+
+.hero-section video{
+width:100% !important;
+}
+
+/* Serious Study, Unserious Fun */
+.unserious-fun { background:url(../images/unserious-fun-bg.jpg) no-repeat center top #FFF; text-align: center;}
+.unserious-fun p{ font-size:14px; line-height:20px; color:#000;}
+/* Grid Layout for Content Columns */
+.content-grid {
+display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+gap: 25px;
+align-items: stretch;
+margin-top:2%;
+}
+
+/* Card Wrapper */
+.card {
+overflow: hidden;
+background:none;
+border:none;
+border-radius:0;
+position: relative;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+height: 100%;
+}
+
+.card:hover {
+transform: translateY(-5px);
+box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.card img {
+width: 100%;
+display: block;
+}
+.card iframe{
+width: 100%;
+height:100%;
+}
+
+/* Responsive Design for Tablets and Mobile */
+@media (max-width: 900px) {
+.content-grid {
+grid-template-columns: 1fr;
+gap: 30px;
+}
+}
+
+/* End Serious Study, Unserious Fun */
+
+
+/* Sports */
+.sports {position: relative; padding-top:0;}
+.sports-hero {
+height: 430px;
+position: relative;
+background-image: url(../images/sports-bg.jpg);
+background-size: cover;
+background-position: center top;
+}
+.hero-content{position:relative; z-index:2; margin-left:auto; padding:54px 70px 0 0px; float:right;}
+.hero-content h1{font-size:42px; color:#FFF; font-weight:300; letter-spacing:-1px; margin:0 0 14px}
+.hero-content h1 strong{font-weight:700}
+.hero-content p{max-width:430px;font-size:15px;line-height:1.45;margin:0;color:#fff}
+.sports-video-card{position:relative; z-index:5; width:min(700px,calc(100% - 40px));margin:-145px auto 30px;border-radius:14px;overflow:hidden;}
+.sports-video-card iframe{min-height:300px;}
+
+.gallery-wrap{max-width:1080px;margin:0 auto;padding:0 10px}
+.sport-carousel{overflow:hidden;position:relative}
+.sport-track{display:flex;gap:25px;will-change:transform;transition:transform .65s ease}
+.sport-slide{flex:0 0 calc((100% - 125px)/6);aspect-ratio:1/1.14;overflow:hidden;background:#eee;display:block}
+.sport-slide img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
+.sport-slide:hover img{transform:scale(1.06)}
+/* End Sports */
+
+
+/* A Community That Looks After Its Own */
+.community { background:url(../images/community-bg.jpg) no-repeat center top #FFF; text-align: center;}
+.community p{ font-size:14px; line-height:20px; color:#000;}
+.clients-mt {
+margin-top: 2%;
+}
+.clients-logo {
+background:#dfdfdf;
+border:solid 1px #c1c1c1;
+border-radius:10px;
+box-shadow: 0 50px 100px 0 rgb(0 0 0 / 20%);
+}
+.clients-logo img {
+margin: 20px;
+margin-bottom:0;
+}
+ul, li {
+list-style: none;
+}
+.marquee {
+margin: 0 auto;
+overflow: hidden;
+}
+.marquee ul.flex {
+display: flex;
+align-items: center;
+}
+.marquee-wrapper {
+width: 100%;
+overflow: hidden;
+}
+/* End A Community That Looks After Its Own */
+
+
+/* Safety First, Always */
+.safety { background:#fff; text-align: center;}
+.safety p{ font-size:14px; line-height:20px; color:#000;}
+
+/* Main Grid Layout */
+.main-grid {
+display: grid;
+grid-template-columns: 220px 1fr 220px;
+gap: 20px;
+align-items: start;
+margin-top:2%;
+}
+.main-grid iframe{ min-height:380px;}
+
+/* Side Grid (4 stacked images) */
+.side-collage {
+display: grid;
+grid-template-rows: repeat(4, 115px);
+gap: 12px;
+}
+
+.img-box {
+width: 100%;
+height: 100%;
+border-radius: 8px;
+overflow: hidden;
+background-color: #eee;
+}
+
+.img-box img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+}
+
+/* Center Column Layout */
+.center-column {
+display: flex;
+flex-direction: column;
+gap: 20px;
+}
+
+/* Icons Container Below Video */
+.icons-grid {
+display: grid;
+grid-template-columns: repeat(6, 1fr);
+gap: 12px;
+}
+
+/* Dark Rounded Icon Box */
+.icon-box {
+background-color: #0b1a30;
+height: 95px;
+border-radius: 12px;
+display: flex;
+justify-content: center;
+align-items: center;
+transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.icon-box:hover {
+transform: translateY(-3px);
+background-color: #122847;
+}
+
+/* Neon Icon Style */
+.icon-box i {
+font-size: 2rem;
+color: #00d2ff;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+.main-grid {
+grid-template-columns: 1fr;
+}
+
+.side-collage {
+grid-template-columns: repeat(4, 1fr);
+grid-template-rows: 120px;
+}
+
+.icons-grid {
+grid-template-columns: repeat(3, 1fr);
+}
+}
+
+@media (max-width: 600px) {
+.side-collage {
+grid-template-columns: repeat(2, 1fr);
+grid-template-rows: repeat(2, 100px);
+}
+
+.icons-grid {
+grid-template-columns: repeat(2, 1fr);
+}
+}
+/* Safety First, Always */
+
+
+/* Leads */
+.leads-banner {
+width: 100%;
+max-width: 1100px;
+background:url(../images/leads-bg.jpg) no-repeat center top;
+border-radius: 24px;
+padding: 40px;
+box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+position: relative;
+overflow: hidden;
+margin:auto;
+}
+
+/* Content Layout */
+.banner-content {
+display: grid;
+grid-template-columns: 320px 1fr;
+gap: 40px;
+align-items: center;
+}
+
+/* Right Side Layout */
+.right-content {
+display: flex;
+flex-direction: column;
+gap: 25px;
+}
+
+/* Text Section */
+.text-section .main-title {
+font-size: 2.8rem;
+color: #111;
+font-weight: 400;
+letter-spacing: -0.5px;
+margin-bottom: 10px;
+}
+
+.text-section .main-title strong {
+font-weight: 700;
+}
+
+.text-section .description {
+font-size: 14px;
+color: #333;
+}
+.text-section .description span{
+display:block;
+}
+
+/* Image Collage Grid */
+.collage-grid {
+display: grid;
+grid-template-columns: 1.2fr 0.8fr;
+grid-template-rows: 170px 170px;
+gap: 12px;
+overflow: hidden;
+}
+
+.collage-item {
+width: 100%;
+height: 100%;
+overflow: hidden;
+background-color: #ddd;
+}
+
+.collage-item img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+border-radius: 0px;
+}
+
+/* Top Left Nested Grid (Two images side by side) */
+.top-left-group {
+display: grid;
+grid-template-columns: 1fr 1.5fr;
+gap: 12px;
+}
+
+/* Bottom Right Large Vertical image spanning or single position */
+.collage-item.tall {
+grid-row: span 2;
+}
+
+/* Responsive Layout */
+@media (max-width: 900px) {
+.banner-content {
+grid-template-columns: 1fr;
+}
+.collage-grid {
+grid-template-columns: 1fr;
+grid-template-rows: auto;
+}
+.top-left-group {
+grid-template-columns: 1fr;
+}
+
+.text-section {
+text-align: center;
+}
+}
+/* End Leads */
+
+
+.campus-event-button {
+background: linear-gradient(90deg, #fdf196 0%, #76ebff 100%);
+color: #1a1a1a;
+display: inline-block;
+width: 100%;
+padding: 12px 15px;
+font-size: 18px;
+font-weight: 500;
+text-decoration: none;
+text-align: center;
+transition: all 0.3s ease;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+white-space: nowrap;
+}
+
+/* Hover effect */
+.campus-event-button:hover {
+color: #000000;
+opacity: 0.9;
+transform: translateY(-2px);
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Click effect */
+.campus-event-button:active {
+transform: translateY(0);
+}
+
+
+@media only screen and (min-width: 320px) and (max-width: 769px) {
+.section-title__title, .hero-content h1, .text-section .main-title {font-size: 28px; line-height: 36px;}
+.section-title__title strong { display:block;}
+
+.hero-section{height: auto;}
+.video-card video{ height:auto;}
+.sports-hero{height: 360px; background:#5c6e9c;}
+.hero-content {
+padding: 40px 0 0 0;
+text-align:center;
+}
+
+.leads-banner {
+background: linear-gradient(135deg, #e5ea63 0%, #a8e0a2 40%, #52d2f7 100%);
+}
+.right-content {
+order: 1;
+}
+.text-section .description span {
+display: inline;
+}
+
+.card iframe {
+min-height: 500px;
+}
+.sports-video-card{
+width: min(700px,calc(100% - 20px));
+}
+.sports-video-card iframe{
+min-height:200px;
+}
+.leads-banner{
+padding:20px;
+}
+.main-grid iframe{
+min-height:200px;
+}
+}

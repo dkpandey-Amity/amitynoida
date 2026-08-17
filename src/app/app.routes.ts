@@ -100,6 +100,7 @@ import { ProgramBrochuresComponent } from './program-brochures/program-brochures
 import { StudentInnovationComponent } from './student-innovation/student-innovation.component';
 import { OldUrlRedirecComponent } from './old-url-redirec/old-url-redirec.component';
 import { FeeStructureComponent } from './fee-structure/fee-structure.component';
+import { CampusLifeComponent } from './campus-life/campus-life.component';
 
 export function doubleHyphenMatcher(segments: UrlSegment[]) {
   if (
@@ -778,6 +779,11 @@ export const routes: Routes = [
     path: 'fee-structure',
     component: FeeStructureComponent,
   },
+  {
+    path: 'campus-life', title: 'Campus Life at Amity University Noida | Student Life & Facilities',
+    component: CampusLifeComponent,
+  }
+
   // {
   //   path: '**',
   //   component: PagenotfoundComponent,
