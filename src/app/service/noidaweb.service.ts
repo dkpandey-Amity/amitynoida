@@ -633,6 +633,12 @@ export class ApiService {
     );
   }
 
+  getAcaiNewInnovationsMeta(): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/Amityapi/GetAllPageKeywords?url=${this.metaUrl}/selected-publications`,
+    );
+  }
+
   getAcaiStudentInnovationMeta(): Observable<any> {
     return this.http.get<any>(
       `${this.apiUrl}/Amityapi/GetAllPageKeywords?url=${this.metaUrl}/student-innovation`,
@@ -800,6 +806,10 @@ export class ApiService {
 
   GetAllBrouchre(): Observable<Course[]> {
     return this.http.get<any>(`${this.apiUrl}/Amityapi/GetBrouchre`);
+  }
+
+  GetAcaiselectedpublications(): Observable<any> {
+    return this.http.get<any>(`https://amity.edu/amitywebapi/api/Institute/GetAcaiNewInnovations`);
   }
 
   GetAcaiStudentInnovation(): Observable<any> {

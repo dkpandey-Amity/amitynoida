@@ -101,6 +101,7 @@ import { StudentInnovationComponent } from './student-innovation/student-innovat
 import { OldUrlRedirecComponent } from './old-url-redirec/old-url-redirec.component';
 import { FeeStructureComponent } from './fee-structure/fee-structure.component';
 import { CampusLifeComponent } from './campus-life/campus-life.component';
+import { SelectedPublicationsComponent } from './selected-publications/selected-publications.component';
 
 export function doubleHyphenMatcher(segments: UrlSegment[]) {
   if (
@@ -766,7 +767,7 @@ export const routes: Routes = [
   //   path: 'work-integrated-programs',
   //   component: WorkIntegratedProgramsComponent,
   // },
-  
+
   {
     path: 'program-brochures',
     component: ProgramBrochuresComponent,
@@ -782,7 +783,11 @@ export const routes: Routes = [
   {
     path: 'campus-life',
     component: CampusLifeComponent,
-  }
+  },
+  {
+    path: 'selected-publications',
+    component: SelectedPublicationsComponent,
+  },
 
   // {
   //   path: '**',
