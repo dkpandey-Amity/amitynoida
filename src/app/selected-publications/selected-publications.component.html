@@ -1,11 +1,11 @@
 <div>
-    <img src="assets/img/SelectedPublication.webp" class="img-fluid w-100 mb-4" alt="Student innovation banner">
+    <img src="assets/img/SelectedPublication.png" class="img-fluid w-100 mb-4" alt="Student innovation banner">
 </div>
 <section class="background-sec">
-    <!-- <div class="why-sec-v2 overflow-hidden space" style="padding-bottom: 0px;">
+    <div class="why-sec-v2 overflow-hidden space" style="padding-bottom: 0px;">
         <div class="container">
-            <div class="title-area wow fadeInUp">
-                <h2 class="sec-title" style="font-weight: 100">Student Innovation at Amity University Noida</h2>
+            <div class="title-area wow fadeInUp mb-0">
+                <h2 class="sec-title" style="font-weight: 100">Selected Publications at Amity University Noida</h2>
             </div>
         </div>
         <div class="container">
@@ -14,242 +14,393 @@
                     <div class="wcu-wrap2">
                         <div class="title-area mb-xl-5">
                             <p>
-                                At Amity University Noida, student innovation thrives through cutting-edge AI, deep
-                                learning, and real-world research projects that solve complex global challenges. From
-                                healthcare and cybersecurity to smart agriculture and computer vision, students
-                                transform ideas into impactful innovations
+                                Showcasing research that reflects Amity University’s commitment to innovation,
+                                excellence, and global scholarly contribution.
+                                <br>
+                                <b>Research that Matters. Impact that Lasts.</b>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div> -->
-    
+    </div>
+
     <div class="container m" style="padding: 0px 0px 50px 0px;">
         <div class="row">
 
             <ng-container *ngFor="let item of studentList; let i = index">
 
                 <!-- CARD -->
-                <div style="cursor: pointer;" class="col-sm-4">
+                <div class="col-lg-4 col-md-4 mb-4" style="cursor:pointer;" data-bs-toggle="modal"
+                    [attr.data-bs-target]="'#modal_' + i">
 
-                    <div class="card" data-bs-toggle="modal" [attr.data-bs-target]="'#modal_' + i">
+                    <div class="modern-card">
 
-                        <div class="card-top-bar"></div>
+                        <div class="card-content">
 
-                        <div class="card-body">
+                            <h5 class="card-title">
 
-                            <h6 class="title">{{ item.Title }}</h6>
+                                {{ item.Title?.length > 105
+                                ? (item.Title | slice:0:105) + '...'
+                                : item.Title }}
 
-                            <div class="arch-box" *ngIf="item.ImagePath">
-                                <img [src]="item.ImagePath" [alt]="item.Title">
-                            </div>
+                            </h5>
 
-                            <div class="author-card" *ngIf="item.Photo_Description">
-                                <div class="avatar avatar-at">
-                                    <img *ngIf="item.Facult_ImagePath" [src]="item.Facult_ImagePath" alt="">
-                                </div>
 
-                                <div class="author-info-new">
-                                    <div class="author-name">
-                                        {{ item.Photo_Description }}
+                            <!-- Author / Publisher Section -->
+                            <div class="author-section">
+
+                                <div class="row">
+
+                                    <!-- Left -->
+                                    <div class="col-6">
+
+                                        <div class="author-name">
+                                            {{ item.Photo_Description }}
+                                        </div>
+
+                                        <div class="author-role">
+                                            {{ item.Facult_Title1 }}
+                                        </div>
+
                                     </div>
 
-                                    <div class="author-role">
-                                        {{ item.Facult_Title1 }}
+                                    <!-- Right -->
+                                    <div class="col-6 text-start">
+
+                                        <span class="publisher-label">
+                                            Publisher :
+                                        </span>
+
+                                        <span class="publisher-name">
+                                            {{ item.Publisher }}
+                                        </span>
+
+                                        <div *ngIf="item.PublisherIconPath">
+
+                                            <img [src]="item.PublisherIconPath" class="publisher-logo" alt="Publisher">
+
+                                        </div>
+
                                     </div>
+
                                 </div>
+
+                                <!-- Journal -->
+                                <div class="row mt-2">
+
+                                    <div class="col-12">
+
+                                        <div class="author-name">
+                                            Journal :
+                                        </div>
+
+                                        <div class="author-role">
+                                            {{ item.Journal }}
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
                             </div>
 
                         </div>
 
-                        <p style="text-align:center">
-                            <b style="color:#0c49a3">Read More...</b>
+                        <!-- Area -->
+                        <span class="badge-area" *ngIf="item.AreaName">
+
+                            <b>AREA:</b> {{ item.AreaName }}
+
+                        </span>
+
+                        <p class="read-more-text">
+                            <b>Read More...</b>
                         </p>
 
                     </div>
+
                 </div>
 
                 <!-- MODAL -->
                 <div class="modal fade" [id]="'modal_' + i" tabindex="-1">
-
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-
-                            <!-- HEADER -->
-                            <div class="modal-header">
-                                <h4 class="modal-title">{{ item.Title }}</h4>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-
-                            <!-- BODY -->
+                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                        <div class="modal-content publication-modal">
                             <div class="modal-body">
-                                <div class="card-body p-0">
+                                <button type="button" class="btn-close modal-close" data-bs-dismiss="modal"></button>
 
-                                    <div class="main-grid1">
-
-                                        <!-- LEFT SECTION -->
-                                        <div>
-
-                                            <p>
-                                                <strong>Research Area:</strong>
-                                                {{ item.ResearchArea }}
-                                            </p>
-
-                                            <div class="arch-box" *ngIf="item.ImagePath">
-                                                <div class="arch-box-body">
-                                                    <img [src]="item.ImagePath" [alt]="item.Title"
-                                                        class="img-fluid rounded">
-                                                </div>
+                                <div class="row">
+                                    <!-- LEFT COLUMN - Shows on all devices -->
+                                    <div class="col-lg-8">
+                                        <!-- Header -->
+                                        <div class="mb-3">
+                                            <h3 class="publication-title">{{ item.Title }}</h3>
+                                            <div class="mt-3">
+                                                <strong>Research Area :</strong> {{ item.ResearchArea }}
                                             </div>
-
-                                            <!-- Description -->
-                                            <div *ngIf="item.Description" class="mt-3">
-                                                <p><strong>Description:</strong></p>
-
-                                                <div class="scroll-box">
-                                                    <div [innerHTML]="item.Description"></div>
-                                                </div>
-                                            </div>
-
+                                            <hr>
                                         </div>
 
-                                        <!-- RIGHT SECTION -->
-                                        <div>
-
-                                            <!-- Author 1 -->
-                                            <div class="author-card" *ngIf="item.Photo_Description">
-                                                <div class="avatar avatar-at">
-                                                    <img *ngIf="item.Facult_ImagePath" [src]="item.Facult_ImagePath"
-                                                        [alt]="item.Photo_Description">
-                                                </div>
-
-                                                <div class="author-info-new">
-                                                    <div class="author-name">
-                                                        {{ item.Photo_Description }}
-                                                    </div>
-
-                                                    <div class="author-role">
-                                                        {{ item.Facult_Title1 }}
+                                        <!-- Mobile Author Slider (shows on mobile only) -->
+                                        <div id="mobileAuthor{{i}}" class="carousel slide d-lg-none mb-4"
+                                            data-bs-ride="carousel" data-bs-interval="1000" data-bs-pause="hover">
+                                            <div class="carousel-inner">
+                                                <div class="carousel-item active" *ngIf="item.Facult_ImagePath">
+                                                    <div class="author-slide text-center">
+                                                        <img [src]="item.Facult_ImagePath" class="rounded-circle"
+                                                            alt="Author">
+                                                        <h5 class="mt-2">{{item.Photo_Description}}</h5>
+                                                        <p>{{item.Facult_Title1}}</p>
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                            <!-- Author 2 -->
-                                            <div class="author-card" *ngIf="item.Photo2_Description">
-                                                <div class="avatar avatar-at">
-                                                    <img *ngIf="item.Facult_ImagePath2" [src]="item.Facult_ImagePath2"
-                                                        [alt]="item.Photo2_Description">
-                                                </div>
-
-                                                <div class="author-info-new">
-                                                    <div class="author-name">
-                                                        {{ item.Photo2_Description }}
-                                                    </div>
-
-                                                    <div class="author-role">
-                                                        {{ item.Facult_Title2 }}
+                                                <div class="carousel-item" *ngIf="item.Facult_ImagePath2">
+                                                    <div class="author-slide text-center">
+                                                        <img [src]="item.Facult_ImagePath2" class="rounded-circle"
+                                                            alt="Author">
+                                                        <h5 class="mt-2">{{item.Photo2_Description}}</h5>
+                                                        <p>{{item.Facult_Title2}}</p>
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                            <!-- Author 3 -->
-                                            <div class="author-card" *ngIf="item.Photo3_Description">
-                                                <div class="avatar avatar-at">
-                                                    <img *ngIf="item.Facult_ImagePath3" [src]="item.Facult_ImagePath3"
-                                                        [alt]="item.Photo3_Description">
-                                                </div>
-
-                                                <div class="author-info-new">
-                                                    <div class="author-name">
-                                                        {{ item.Photo3_Description }}
+                                                <div class="carousel-item" *ngIf="item.Facult_ImagePath3">
+                                                    <div class="author-slide text-center">
+                                                        <img [src]="item.Facult_ImagePath3" class="rounded-circle"
+                                                            alt="Author">
+                                                        <h5 class="mt-2">{{item.Photo3_Description}}</h5>
+                                                        <p>{{item.Facult_Title3}}</p>
                                                     </div>
-
-                                                    <div class="author-role">
-                                                        {{ item.Facult_Title3 }}
+                                                </div>
+                                                <div class="carousel-item" *ngIf="item.Facult_ImagePath4">
+                                                    <div class="author-slide text-center">
+                                                        <img [src]="item.Facult_ImagePath4" class="rounded-circle"
+                                                            alt="Author">
+                                                        <h5 class="mt-2">{{item.Photo4_Description}}</h5>
+                                                        <p>{{item.Facult_Title4}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item" *ngIf="item.Facult_ImagePath5">
+                                                    <div class="author-slide text-center">
+                                                        <img [src]="item.Facult_ImagePath5" class="rounded-circle"
+                                                            alt="Author">
+                                                        <h5 class="mt-2">{{item.Photo5_Description}}</h5>
+                                                        <p>{{item.Facult_Title5}}</p>
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <!-- Key Contribution -->
-                                            <div *ngIf="item.KeyContribution" class="mt-3">
-                                                <p><strong>Key Highlights:</strong></p>
-
-                                                <div class="scroll-box">
-                                                    <div [innerHTML]="item.KeyContribution"></div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Collaborator -->
-                                            <div *ngIf="item.Collaborator" class="mt-3">
-                                                <p><strong>Collaborator:</strong></p>
-
-                                                <div class="d-flex align-items-center gap-2">
-
-                                                    <img *ngIf="item.CollaboratorIconPath"
-                                                        [src]="item.CollaboratorIconPath"
-                                                        style="width:40px;height:40px;object-fit:contain;">
-
-                                                    <span>{{ item.Collaborator }}</span>
-                                                </div>
-                                            </div>
-
-                                            <!-- Publisher -->
-                                            <div *ngIf="item.Publisher" class="mt-3">
-                                                <p><strong>Publisher:</strong></p>
-
-                                                <div class="d-flex align-items-center gap-2">
-
-                                                    <img *ngIf="item.PublisherIconPath" [src]="item.PublisherIconPath"
-                                                        style="width:40px;height:40px;object-fit:contain;">
-
-                                                    <span>{{ item.Publisher }}</span>
-                                                </div>
-                                            </div>
-
+                                            <button class="carousel-control-prev" type="button"
+                                                [attr.data-bs-target]="'#mobileAuthor'+i" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon"></span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button"
+                                                [attr.data-bs-target]="'#mobileAuthor'+i" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon"></span>
+                                            </button>
                                         </div>
 
+                                        <!-- Mobile Image Slider (shows on mobile only) -->
+                                        <div id="mobileImage{{i}}" class="carousel slide d-lg-none mb-4"
+                                            data-bs-ride="carousel" data-bs-interval="1000" data-bs-pause="hover">
+                                            <div class="carousel-inner">
+                                                <div class="carousel-item active" *ngIf="item.ImagePath">
+                                                    <img [src]="item.ImagePath" class="d-block w-100 publication-image"
+                                                        alt="Publication Image">
+                                                </div>
+                                                <div class="carousel-item" *ngIf="item.ImagePath2">
+                                                    <img [src]="item.ImagePath2" class="d-block w-100 publication-image"
+                                                        alt="Publication Image">
+                                                </div>
+                                                <div class="carousel-item" *ngIf="item.ImagePath3">
+                                                    <img [src]="item.ImagePath3" class="d-block w-100 publication-image"
+                                                        alt="Publication Image">
+                                                </div>
+                                            </div>
+                                            <button class="carousel-control-prev" type="button"
+                                                [attr.data-bs-target]="'#mobileImage'+i" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon"></span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button"
+                                                [attr.data-bs-target]="'#mobileImage'+i" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon"></span>
+                                            </button>
+                                        </div>
+
+                                        <!-- Abstract / Highlights -->
+                                        <div *ngIf="item.Description">
+                                            <h5 class="section-title">Abstract / Highlights</h5>
+                                            <div class="scroll-box">
+                                                <div [innerHTML]="item.Description"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Key Contribution -->
+                                        <div *ngIf="item.KeyContribution" class="mt-4">
+                                            <h5 class="section-title">Key Contribution</h5>
+                                            <div class="scroll-box">
+                                                <div [innerHTML]="item.KeyContribution"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Relevant Publication -->
+                                        <div *ngIf="item.ResearchPublication" class="mt-4">
+                                            <h5 class="section-title">Relevant Publication</h5>
+                                            <div class="scroll-box">
+                                                <div [innerHTML]="item.ResearchPublication"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Collaborators -->
+                                        <div *ngIf="item.Collaborator || item.Collaborator2 || item.Collaborator3"
+                                            class="mt-4">
+                                            <h5 class="section-title">Collaborators</h5>
+                                            <div class="d-flex flex-wrap gap-4 justify-content-center">
+                                                <div *ngIf="item.CollaboratorIconPath" class="text-center">
+                                                    <img [src]="item.CollaboratorIconPath" class="collab-logo"
+                                                        alt="Collaborator">
+                                                    <div>{{item.Collaborator}}</div>
+                                                </div>
+                                                <div *ngIf="item.CollaboratorIconPath2" class="text-center">
+                                                    <img [src]="item.CollaboratorIconPath2" class="collab-logo"
+                                                        alt="Collaborator">
+                                                    <div>{{item.Collaborator2}}</div>
+                                                </div>
+                                                <div *ngIf="item.CollaboratorIconPath3" class="text-center">
+                                                    <img [src]="item.CollaboratorIconPath3" class="collab-logo"
+                                                        alt="Collaborator">
+                                                    <div>{{item.Collaborator3}}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Mobile Action Buttons & Publisher -->
+                                        <div class="d-lg-none mt-4">
+                                            <a *ngIf="item.PaperFilePath" [href]="item.PaperFilePath" target="_blank"
+                                                class="btn btn-primary w-100 mb-2">
+                                                Click Here to Read the Paper
+                                            </a>
+                                            <a *ngIf="item.GitHubUrl" [href]="item.GitHubUrl" target="_blank"
+                                                class="btn btn-success w-100 mb-2">
+                                                Click Here See the App / Github Code
+                                            </a>
+                                            <div *ngIf="item.Publisher" class="publisher-box mt-4 text-center">
+                                                <h5>Publisher</h5>
+                                                <img *ngIf="item.PublisherIconPath" [src]="item.PublisherIconPath"
+                                                    alt="Publisher Logo" style="max-width:100px;">
+                                                <p>{{item.Publisher}}</p>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <!-- Publication Link -->
-                                    <div *ngIf="item.PaperFilePath" class="mt-4">
-                                        <p>
-                                            <strong>Research Paper:</strong>
-                                        </p>
+                                    <!-- RIGHT COLUMN - Desktop Only -->
+                                    <div class="col-lg-4 d-none d-lg-block">
+                                        <!-- Desktop Author Slider -->
+                                        <div id="authorSlider{{i}}" class="carousel slide mb-4" data-bs-ride="carousel"
+                                            data-bs-interval="2500" data-bs-pause="hover">
+                                            <div class="carousel-inner">
+                                                <div class="carousel-item active" *ngIf="item.Facult_ImagePath">
+                                                    <div class="author-slide text-center">
+                                                        <img [src]="item.Facult_ImagePath" class="rounded-circle"
+                                                            alt="Author">
+                                                        <h5 class="mt-2">{{item.Photo_Description}}</h5>
+                                                        <p>{{item.Facult_Title1}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item" *ngIf="item.Facult_ImagePath2">
+                                                    <div class="author-slide text-center">
+                                                        <img [src]="item.Facult_ImagePath2" class="rounded-circle"
+                                                            alt="Author">
+                                                        <h5 class="mt-2">{{item.Photo2_Description}}</h5>
+                                                        <p>{{item.Facult_Title2}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item" *ngIf="item.Facult_ImagePath3">
+                                                    <div class="author-slide text-center">
+                                                        <img [src]="item.Facult_ImagePath3" class="rounded-circle"
+                                                            alt="Author">
+                                                        <h5 class="mt-2">{{item.Photo3_Description}}</h5>
+                                                        <p>{{item.Facult_Title3}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item" *ngIf="item.Facult_ImagePath4">
+                                                    <div class="author-slide text-center">
+                                                        <img [src]="item.Facult_ImagePath4" class="rounded-circle"
+                                                            alt="Author">
+                                                        <h5 class="mt-2">{{item.Photo4_Description}}</h5>
+                                                        <p>{{item.Facult_Title4}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item" *ngIf="item.Facult_ImagePath5">
+                                                    <div class="author-slide text-center">
+                                                        <img [src]="item.Facult_ImagePath5" class="rounded-circle"
+                                                            alt="Author">
+                                                        <h5 class="mt-2">{{item.Photo5_Description}}</h5>
+                                                        <p>{{item.Facult_Title5}}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="carousel-control-prev" type="button"
+                                                [attr.data-bs-target]="'#authorSlider'+i" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon"></span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button"
+                                                [attr.data-bs-target]="'#authorSlider'+i" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon"></span>
+                                            </button>
+                                        </div>
 
-                                        <a class="btn btn-primary" [href]="item.PaperFilePath" target="_blank">
-                                            View Publication
+                                        <!-- Desktop Image Slider -->
+                                        <div id="imageSlider{{i}}" class="carousel slide mb-4" data-bs-ride="carousel"
+                                            data-bs-interval="1000" data-bs-pause="hover">
+                                            <div class="carousel-inner">
+                                                <div class="carousel-item active" *ngIf="item.ImagePath">
+                                                    <img [src]="item.ImagePath" class="d-block w-100 publication-image"
+                                                        alt="Publication Image">
+                                                </div>
+                                                <div class="carousel-item" *ngIf="item.ImagePath2">
+                                                    <img [src]="item.ImagePath2" class="d-block w-100 publication-image"
+                                                        alt="Publication Image">
+                                                </div>
+                                                <div class="carousel-item" *ngIf="item.ImagePath3">
+                                                    <img [src]="item.ImagePath3" class="d-block w-100 publication-image"
+                                                        alt="Publication Image">
+                                                </div>
+                                            </div>
+                                            <button class="carousel-control-prev" type="button"
+                                                [attr.data-bs-target]="'#imageSlider'+i" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon"></span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button"
+                                                [attr.data-bs-target]="'#imageSlider'+i" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon"></span>
+                                            </button>
+                                        </div>
+
+                                        <!-- Desktop Action Buttons -->
+                                        <a *ngIf="item.PaperFilePath" [href]="item.PaperFilePath" target="_blank"
+                                            class="btn btn-primary w-100 mt-2">
+                                            Click Here to Read the Paper
                                         </a>
-                                    </div>
+                                        <a *ngIf="item.GitHubUrl" [href]="item.GitHubUrl" target="_blank"
+                                            class="btn btn-success w-100 mt-2">
+                                            Click Here See the App / Github Code
+                                        </a>
 
-                                    <!-- Publication Details -->
-                                    <div *ngIf="item.ResearchPublication" class="mt-4">
-
-                                        <p>
-                                            <strong>Relevant Publication / Patents / Achievements:</strong>
-                                        </p>
-
-                                        <div
-                                            style="max-height:200px;overflow:auto;border:1px solid #ddd;padding:10px;border-radius:10px;">
-                                            <div [innerHTML]="item.ResearchPublication"></div>
+                                        <!-- Desktop Publisher -->
+                                        <div *ngIf="item.Publisher" class="publisher-box mt-4 text-center">
+                                            <h5>Publisher</h5>
+                                            <img *ngIf="item.PublisherIconPath" [src]="item.PublisherIconPath"
+                                                alt="Publisher Logo" style="max-width:100px;">
+                                            <p>{{item.Publisher}}</p>
                                         </div>
-
                                     </div>
-
                                 </div>
                             </div>
 
-                            <!-- FOOTER -->
+                            <!-- Footer -->
                             <div class="modal-footer">
-                                <button class="btn btn-solid" data-bs-dismiss="modal">
-                                    Close
-                                </button>
+                                <button class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                             </div>
-
                         </div>
                     </div>
-
                 </div>
 
             </ng-container>

@@ -646,3 +646,240 @@ ul.about_list li {
 .fa-linkedin {
   color: #0077b5;
 }
+
+
+.modern-card {
+    background: #fff;
+    border-radius: 22px;
+    padding: 20px;
+    height: 100%;
+    box-shadow: 0 10px 25px rgba(0,0,0,.08);
+    transition: .3s;
+    position: relative;
+}
+
+.modern-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,.15);
+}
+
+.card-title {
+    color: #0c49a3;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.4;
+    min-height: 75px;
+}
+
+.card-img-wrapper {
+    text-align: center;
+    margin: 15px 0;
+}
+
+.card-img {
+    width: 100%;
+    height: 220px;
+    object-fit: contain;
+    border: 1px solid #e5e5e5;
+    border-radius: 15px;
+}
+
+.author-section {
+    min-height: 145px;
+    padding-top: 15px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.author-name {
+    color: #d84315;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.author-role {
+    color: #333;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.publisher-label {
+    font-weight: 700;
+    color: #1d2a57;
+}
+
+.publisher-name {
+    color: #333;
+}
+
+.publisher-logo {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    margin-top: 8px;
+    margin-left: 80px;
+    margin-top: 7px;
+}
+
+.badge-area {
+    display: inline-block;
+    margin-top: 15px;
+    background: linear-gradient(135deg, #5b2be0, #2563eb);
+    color: #fff;
+    padding: 2px 15px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.read-more-text {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.read-more-text b {
+    color: #0c49a3;
+}
+.publication-modal{
+    border-radius:20px;
+}
+
+.publication-title{
+    font-size: 18px !important;
+    line-height: 22px !important;
+    color: #0b2e62 !important;
+}
+
+.publication-image{
+    height:350px;
+    object-fit:contain;
+    border-radius:12px;
+    border:1px solid #ddd;
+}
+
+.author-slide{
+    text-align:center;
+    padding:20px;
+}
+
+.author-slide img{
+    width:120px;
+    height:120px;
+    object-fit:cover;
+    border-radius:50%;
+    border:4px solid #f1f1f1;
+}
+
+.author-slide h5{
+    font-size: 14px;
+    color: #8c7a5c;
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+    line-height: 14px;
+
+}
+
+.author-slide p{
+  font-size: 13px;
+    font-weight: 600;
+    color: #1c1400;
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+    margin-top: 7px;
+    line-height: 18px;
+}
+
+.section-title{
+    color: #0b2e62 !important;
+    font-size: 16px !important;
+    text-align: left;
+    letter-spacing: 0px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.publisher-box{
+    border:1px solid #ddd;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+}
+
+.publisher-box img{
+    max-width:100px;
+    margin-bottom:15px;
+}
+
+.collab-logo{
+    height:70px;
+    object-fit:contain;
+}
+
+.modal-close{
+    position:absolute;
+    top:15px;
+    right:15px;
+    z-index:1000;
+}
+
+.publication-modal {
+    border-radius: 10px;
+}
+
+.right-panel {
+    background: #faf7ef;
+    padding: 10px;
+    height: 100%;
+}
+
+.author-box {
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background: #fff;
+}
+
+.author-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.gallery-img {
+    width: 100%;
+    height: 130px;
+    object-fit: contain;
+    background: #fff;
+    border: 1px solid #ddd;
+}
+
+.read-paper-btn {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.publisher-box {
+    margin-top: 15px;
+    text-align: center;
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+}
+
+.publisher-box img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.scroll-box {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.modal-dialog {
+    max-width: 1295px !important;
+}

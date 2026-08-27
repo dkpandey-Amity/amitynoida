@@ -38,7 +38,7 @@ width:100% !important;
 }
 
 /* Serious Study, Unserious Fun */
-.unserious-fun { background:url(../images/unserious-fun-bg.jpg) no-repeat center top #FFF; text-align: center;}
+.unserious-fun { background:url(../../../assets/campus-life/images/unserious-fun-bg.jpg) no-repeat center top #FFF; text-align: center;}
 .unserious-fun p{ font-size:14px; line-height:20px; color:#000;}
 /* Grid Layout for Content Columns */
 .content-grid {

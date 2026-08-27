@@ -633,7 +633,7 @@ export class ApiService {
     );
   }
 
-  getAcaiNewInnovationsMeta(): Observable<any> {
+  getAcaiNewSelectedInnovationsMeta(): Observable<any> {
     return this.http.get<any>(
       `${this.apiUrl}/Amityapi/GetAllPageKeywords?url=${this.metaUrl}/selected-publications`,
     );
