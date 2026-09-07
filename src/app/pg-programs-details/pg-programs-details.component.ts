@@ -515,43 +515,6 @@ export class PgProgramsDetailsComponent implements OnInit {
     });
   }
 
-  // ngOnInit(): void {
-  //   this.getAllProgramMetas();
-
-  //   const discipline = this.route.snapshot.params['Disciplineslugname'];
-  //   const programSlug = this.route.snapshot.params['SlugName'];
-
-  //   this.apiService.getAllPGProgramsDetails(discipline, programSlug).subscribe({
-  //     next: (data: any[]) => {
-  //       if (!data?.length) return;
-
-  //       this.getPgProgramData = data;
-  //       this.programCD = data[0].CourseCD;
-
-  //       this.getPgProgramDetailsSemester(this.programCD);
-  //     },
-  //     error: (err) => console.error(err),
-  //   });
-  // }
-
-  // this.sCourseCode = this.route.snapshot.params['SlugName'];
-  // this.apiService.getAllPGProgramsDetails(this.sCourseCode).subscribe({
-  //   next: (data: any[]) => {
-  //     if (!data?.length) return;
-  //     console.log(data);
-
-  //     this.getPgProgramData = data;
-  //     this.programCD = data[0].CourseCD; // ✅ FIRST PROGRAM ONLY
-  //     this.getPgProgramDetailsSemester(this.programCD);
-
-  //     if (this.pageMetaData) {
-  //       this.injectStructuredData(this.pageMetaData);
-  //     }
-  //   },
-  //   error: (err) => console.error(err),
-  // });
-  //}
-
   loadPgProgramData(discipline: string, programSlug: string) {
     this.apiService.getAllPGProgramsDetails(discipline, programSlug).subscribe({
       next: (data: any[]) => {

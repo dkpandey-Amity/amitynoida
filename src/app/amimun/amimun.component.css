@@ -1,0 +1,281 @@
+/* =========================================================
+   AMIMUN ’27 - ULTRA SIMPLE
+========================================================= */
+
+.amimun-page {
+  --blue: #0b2d4c;
+  --blue-light: #173e84;
+  --yellow: #ffc107;
+  --white: #ffffff;
+  --text: #5f6f7d;
+
+  font-family: Arial, sans-serif;
+}
+
+.amimun-page * {
+  box-sizing: border-box;
+}
+
+.amimun-container {
+  width: min(1050px, calc(100% - 40px));
+  margin: auto;
+}
+
+/* ================= HERO ================= */
+
+.amimun-hero {
+  padding: 140px 0;
+
+  text-align: center;
+
+  background: var(--blue);
+
+  color: var(--white);
+}
+
+.amimun-hero h1 {
+  margin: 0;
+
+  font-family: Georgia, serif;
+
+  font-size: clamp(65px, 10vw, 120px);
+
+  font-weight: 500;
+  color: var(--white);
+}
+
+.amimun-hero h1 span {
+  color: var(--yellow);
+}
+
+.amimun-hero h2 {
+  margin: 15px 0 0;
+
+  font-family: Georgia, serif;
+
+  font-size: clamp(30px, 4vw, 48px);
+
+  font-weight: 400;
+  color: var(--white);
+}
+.amimun-subtitle {
+  margin: 20px 0 0;
+
+  font-size: 15px;
+  text-align: center;
+
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.amimun-date {
+  text-align: center;
+  margin: 20px 0 0;
+
+  font-size: 13px;
+
+  color: var(--yellow);
+}
+
+.amimun-intro {
+  max-width: 650px;
+
+  margin: 30px auto 0;
+
+  font-size: 14px;
+
+  line-height: 1.8;
+
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ================= SECTIONS ================= */
+
+.amimun-section {
+  padding: 0 0 50px;
+
+  background: var(--white);
+}
+
+.amimun-section h2 {
+  margin: 0;
+
+  font-family: Georgia, serif;
+
+  font-size: clamp(40px, 5vw, 62px);
+
+  font-weight: 500;
+
+  color: var(--blue);
+}
+
+.amimun-section h3 {
+  max-width: 850px;
+
+  margin: 20px 0 0;
+
+  font-family: Georgia, serif;
+
+  font-size: clamp(28px, 4vw, 45px);
+
+  font-weight: 400;
+
+  line-height: 1.2;
+
+  color: var(--blue-light);
+}
+
+.amimun-section p {
+  max-width: 700px;
+
+  margin: 30px 0 0;
+
+  font-size: 15px;
+
+  line-height: 1.9;
+
+  color: var(--text);
+}
+
+/* ================= BLUE SECTION ================= */
+
+.amimun-section-blue {
+  background: var(--blue);
+
+  color: var(--white);
+}
+
+.amimun-section-blue h2 {
+  color: var(--white);
+}
+
+.amimun-section-blue h3 {
+  color: var(--yellow);
+}
+
+.amimun-section-blue p {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ================= CLOSING ================= */
+
+.amimun-closing {
+  padding: 100px 0;
+
+  background: var(--blue-light);
+
+  color: var(--white);
+
+  text-align: center;
+}
+
+.amimun-closing h2 {
+  margin: 0;
+
+  font-family: Georgia, serif;
+
+  font-size: clamp(45px, 6vw, 70px);
+
+  font-weight: 500;
+
+  color: var(--yellow);
+}
+
+.amimun-closing p {
+  max-width: 800px;
+
+  margin: 20px auto 0;
+
+  font-family: Georgia, serif;
+
+  font-size: clamp(25px, 3vw, 40px);
+
+  line-height: 1.35;
+
+  color: var(--white);
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 600px) {
+  .amimun-container {
+    width: calc(100% - 30px);
+  }
+
+  .amimun-hero {
+    padding: 100px 0;
+  }
+
+  .amimun-hero h1 {
+    font-size: 60px;
+  }
+
+  .amimun-hero h2 {
+    font-size: 30px;
+  }
+
+  .amimun-section {
+    padding: 70px 0;
+  }
+
+  .amimun-section h2 {
+    font-size: 40px;
+  }
+
+  .amimun-section h3 {
+    font-size: 28px;
+  }
+
+  .amimun-section p {
+    font-size: 14px;
+  }
+
+  .amimun-closing {
+    padding: 75px 0;
+  }
+
+  .amimun-closing p {
+    font-size: 26px;
+  }
+}
+
+/* ================= VIDEO SECTION ================= */
+
+.amimun-video-section {
+  padding: 80px 0;
+  background: #f6f8fa;
+  text-align: center;
+}
+
+.amimun-video-section h2 {
+  margin: 0 0 35px;
+
+  font-family: Georgia, serif;
+
+  font-size: clamp(35px, 5vw, 55px);
+
+  font-weight: 500;
+
+  color: var(--blue);
+}
+
+.amimun-video {
+  max-width: 950px;
+  margin: auto;
+
+  overflow: hidden;
+
+  background: #000;
+
+  border-radius: 4px;
+}
+
+.amimun-video video {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  max-height: 540px;
+
+  object-fit: cover;
+}

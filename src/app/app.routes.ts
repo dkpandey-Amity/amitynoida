@@ -102,6 +102,7 @@ import { OldUrlRedirecComponent } from './old-url-redirec/old-url-redirec.compon
 import { FeeStructureComponent } from './fee-structure/fee-structure.component';
 import { CampusLifeComponent } from './campus-life/campus-life.component';
 import { SelectedPublicationsComponent } from './selected-publications/selected-publications.component';
+import { AmimunComponent } from './amimun/amimun.component';
 
 export function doubleHyphenMatcher(segments: UrlSegment[]) {
   if (
@@ -787,6 +788,10 @@ export const routes: Routes = [
   {
     path: 'selected-publications',
     component: SelectedPublicationsComponent,
+  },
+  {
+    path: 'amimun',
+    component: AmimunComponent,
   },
 
   // {

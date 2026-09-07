@@ -143,6 +143,7 @@
         </div>
     </div>
 
+    @if (getPgSemesterDetails.length > 0) {
     <div class="container">
         <div class="row gy-4 wow fadeInUp" style="justify-content: center;">
             <div class="col-md-12 col-xl-12"
@@ -897,7 +898,7 @@
             </div>
         </div>
     </div>
-
+    }
 </section>
 
 <div class="modal fade show" *ngIf="showBrochurePopup" style="display:block;background:rgba(0,0,0,.5)">
